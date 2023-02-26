@@ -29,7 +29,9 @@ export PROJECT_ID=[PROJECT_ID]
 Alternatively set `PROJECT_ID` in `.env` file and then apply it using:
 
 ```shell
-export $(grep -v '^#' .env | xargs)
+set -a # automatically export all variables
+source .env
+set +a
 ```
 
 Create the new project:

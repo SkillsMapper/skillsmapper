@@ -154,7 +154,7 @@ Like a project id this needs to be globally unique. As your project id is unique
 export BUCKET_NAME="${PROJECT_NAME}-[BUCKET_NAME]"
 ----
 
-Then use the gsutil command to create the bucket:
+Then use the gsutil command to create the new bucket:
 
 [source,bash]
 ----
@@ -260,6 +260,7 @@ func updateTags(w http.ResponseWriter, r *http.Request) {
 ----
 
 ==== Configuration
+
 Just like the bash script version the configuration for the cloud function should be externalised. In this case we don't have any secrets like passwords but we do have three arguments to pass as
 environment variables:
 
@@ -295,6 +296,12 @@ However, I like to declare an environment variable for the region we want to dep
 ----
 export REGION=[REGION]
 ----
+
+Then use this to set the default region for Cloud Functions:
+
+```shell
+gcloud config set functions/region $REGION
+```
 
 The services Cloud Functions needs are not enabled by default, so we need to enable them for the project. As we said under the covers the Cloud Build service is used for building a container. The
 container is stored in Artifact Registry, Google Cloud's container registry. The container is run using Google's Cloud Run service. This means we need the following services enabled:
@@ -428,11 +435,10 @@ Now we can redeploy the Cloud Function specifying that the newly created service
 
 [source,bash]
 ----
-gcloud functions deploy ${CLOUD_FUNCTION_NAME} \
+gcloud functions deploy $CLOUD_FUNCTION_NAME \
 --gen2 \
 --runtime=go119 \
---region=${REGION} \
---service-account=${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+--service-account="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
 --trigger-http \
 --no-allow-unauthenticated \
 --env-vars-file .env.yaml
@@ -442,7 +448,7 @@ When the command completes it will show the URI of the Cloud Function. Store thi
 
 [source,bash]
 ----
-export CLOUD_FUNCTION_URI=$(gcloud functions describe $CLOUD_FUNCTION_NAME --gen2 --region=$REGION --format='value(serviceConfig.uri)')
+export CLOUD_FUNCTION_URI=$(gcloud functions describe $CLOUD_FUNCTION_NAME --gen2 --format='value(serviceConfig.uri)')
 ----
 
 ==== Testing with cURL
