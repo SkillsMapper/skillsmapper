@@ -11,12 +11,11 @@ Create a new project and enable billing as described in the [Setup](../setup/REA
 Enable the APIs for the services used in this project:
 
 ```shell
-gcloud services enable \
-  cloudfunctions.googleapis.com \
-  cloudbuild.googleapis.com \
-  artifactregistry.googleapis.com \
-  run.googleapis.com \
-  cloudscheduler.googleapis.com
+gcloud services enable cloudfunctions.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
+gcloud services enable run.googleapis.com
+gcloud services enable cloudscheduler.googleapis.com
 ```
 
 ## Create a Cloud Storage Bucket
@@ -113,10 +112,55 @@ curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" $CLOUD_FUNCT
 
 ## Create a Cloud Function Invoker Service Account
 
+Create an environment variable to store the `INVOKER_SERVICE_ACCOUNT_NAME` e.g. `tag-updater-invoker-sa`:
+
+```shell
+export INVOKER_SERVICE_ACCOUNT_NAME=[INVOKER_SERVICE_ACCOUNT_NAME]
+```
+
+Create the invoker service account:
+
+```shell
+gcloud iam service-accounts create $INVOKER_SERVICE_ACCOUNT_NAME \
+--display-name "Tag Updater Invoker Service Account"
+```
+
+Grant the invoker service account the `run.invoker` role:
+
+```shell
+gcloud run services add-iam-policy-binding $CLOUD_FUNCTION_NAME \
+    --member=serviceAccount:$INVOKER_SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+    --role='roles/run.invoker'
+```
+
 ## Create a Cloud Scheduler Job
 
 Create an environment variable to store the `JOB_NAME` e.g. `tag-updater-job`:
 
 ```shell
 JOB_NAME='[JOB_NAME]'
+```
+
+Create the Cloud Scheduler job:
+
+```shell
+gcloud scheduler jobs create http ${JOB_NAME} \
+  --schedule="0 0 * * SUN" \
+  --uri=${CLOUD_FUNCTION_URI} \
+  --max-retry-attempts=3 \
+  --location=${REGION} \
+  --oidc-service-account-email="${INVOKER_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --oidc-token-audience="${CLOUD_FUNCTION_URI}"
+```
+
+Manually trigger the Cloud Scheduler job:
+
+```shell
+gcloud scheduler jobs run $JOB_NAME --location=$REGION
+```
+
+Check the job has been successful by counting the number of lines in the `tags.csv` file:
+
+```shell
+gsutil cat gs://$BUCKET_NAME/$OBJECT_NAME | wc -l
 ```
