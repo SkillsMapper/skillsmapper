@@ -1,0 +1,185 @@
+[[chapter_s1]]
+
+== Setup
+
+=== Create a Google Account
+
+* Reference any offers mentioned in chapter 14
+
+=== Install the gcloud CLI
+
+The gcloud CLI is a command line tool that allows you to interact with Google Cloud Platform services. It is available for Windows, macOS, and Linux. Follow the instructions in the Google Cloud
+Documentationfootnote:[https://cloud.google.com/sdk/docs/install] to install it on your local machine.
+
+Alternatively you can use the Google Cloud Shell. This is a browser-based command line tool that is pre-installed with the gcloud CLI. You can access the Google Cloud Shell from the Google Cloud Console. In the top right corner of the console, click the icon that looks like a command prompt labelled `Activate Cloud Shell`. This will give you an up-to-date gcloud client logged into your account and you can skip the next two steps.
+
+==== Update your gcloud client
+
+As Google updates gcloud components frequently, if you already have your gcloud client installed it is often worth updating to the latest versions before starting work. You can do that with this
+command:
+
+[source,bash]
+----
+gcloud components update
+----
+
+===== Login to gcloud
+
+With an up-to-date gcloud client you can now authenticate against your account using this command:
+
+[source,bash]
+----
+gcloud auth login
+----
+
+This will give you a link to open in your browser that will ask you to login and authenticate your client. You will then be ready to start working with Google Cloud.
+
+=== Create a project
+
+All Google Cloud Platform resources live within a project. A project is a container for resources that allows you to manage access and billing. Each project has a unique ID and a name. The name is
+unique to your account, but the ID is unique across all Google Cloud Platform accounts.
+
+I find it useful to store the project ID in an environment variable so that I can easily reference it later on.
+
+[source,bash]
+----
+export PROJECT_ID=[PROJECT_ID]
+----
+
+To create the new project enter the following gcloud command:
+
+[source,bash]
+----
+gcloud projects create $PROJECT_ID
+----
+
+Then set gcloud to use the new project as the default:
+
+[source,bash]
+----
+gcloud config set project $PROJECT_ID
+----
+
+If you ever want to set your current project to an environment variable again you can set it in a similar way:
+
+[source,bash]
+----
+export PROJECT_ID=$(gcloud config get project)
+----
+
+==== Enable Billing
+
+By default, projects do not have a billing account enabled, so you need to enable billing by linking your project with a billing account you have permission to use.
+
+First find `ACCOUNT_ID` for a billing account to use for the project by listing the billing accounts associated with your Google Cloud account. This is three blocks of six characters seperated by
+hyphens.
+
+[source,bash]
+----
+gcloud beta billing accounts list
+----
+
+Now assign it to an `BILLING_ACCOUNT_ID` environment variable like you did with `PROJECT_ID`
+
+[source,bash]
+----
+export BILLING_ACCOUNT_ID=[BILLING_ACCOUNT_ID]
+----
+
+You can then assign the billing account to the project using this command:
+
+[source,bash]
+----
+gcloud beta billing projects link $PROJECT_ID --billing-account $BILLING_ACCOUNT_ID
+----
+
+==== Checking Billing is Enabled
+
+You can check that billing is enabled on a project using the following command:
+
+[source,bash]
+----
+gcloud beta billing projects describe $PROJECT_ID --format="value(billingEnabled)"
+----
+
+This will return `True` if billing is enabled and `False` if it is not.
+
+==== Disable Billing
+
+A nice feature of Google Cloud is that you can also remove the billing accounts from projects and be confident that you will not be billed. This will shut down the services in your project so it is
+better to shut them down yourself first.
+
+However, having worked with AWS, I still find
+I am billed a few dollars a month for forgotten resources I have not tracked down and removed so I appreciate this Google Cloud feature.
+
+The command to unlink a billing account from your project is:
+
+[source,bash]
+----
+gcloud beta billing projects unlink $PROJECT_ID
+----
+
+At any time you can check your current project using:
+
+[source,bash]
+----
+gcloud config list project
+----
+
+==== Doing more with the gcloud CLI
+
+We will be using the gcloud CLI throughout this book. Although you can do nearly everything through the Google Cloud Console, as you get more familiar the gcloud CLI you will find your
+productivity rise.
+
+A good way to do this is to use the gcloud interactive environment by running the following command:
+
+[source,bash]
+----
+gcloud beta interactive
+----
+
+This gives you command completion and provides inline documentation helping you to learn the commands and options available.
+
+=== Additional Tools
+
+There are other tools that we will be using throughout this book. These are not essential but they will make your life easier.
+
+==== cURL
+
+Curl is a command line tool for sending HTTP requests. It is available for Windows, macOS, and Linux. Follow the instructions in the Curl Documentationfootnote:[https://curl.haxx.se/download.html] to
+install it
+on your local machine.
+
+==== Apache Bench
+
+Apache Bench is a tool for benchmarking web servers. It is a command line tool that can be used to send a large number of requests to a web server and measure the response time.
+
+If you are using a macOS Apache Bench is already installed. If you are using Linux you can install it using your package manager. If you are using Windows you can install it using Chocolatey.
+
+However, if you are using the Google Cloud Shell, Apache Bench is not installed by default. You can install it using the following command:
+
+[source,bash]
+----
+sudo apt-get install apache2-utils
+----
+
+=== Example Application
+
+Throughout this book we will be using an example application to introduce how Google Cloud services can be used. This application is Skills Mapper.
+
+===== Skills Mapper
+
+Moving to a cloud native style of development is not just about the technologies and techniques it is about the skills of the people building and supporting the applications. If you are working with others, understanding, the knowledge and experience available in your team and the broader organisation can be invaluable.
+
+When you are learning, it is also helpful to understand who else is interested in a topic, who else is learning and if there are any existing experts so you can support each other.
+
+This is where Skills Mapper comes in. It is a web application where people can track skills (tools, technologies, and techniques) they are interested in, learning, using, and moving away from. Skills are automatically mapped to a common ontology.
+
+For individuals, Skills Mapper provides an API that can be used to dynamically create a
+"living CV" to display on a webpage or as a section of their online resume. When multiple people use skills mapper, it shows how their combination of skills differs from their peers and suggests what to learn next as well as showing trends in interest.
+
+In an organization or community where people are using skills mapper, it can be used to find experts and construct profiles for job advertisements. It can also suggest communities of practice, learning groups, or support planning of training based on the skills people are using or wish to acquire.
+
+Throughout the book, we will be building out this project using microservices, starting with a tool for individuals and scaling to be an application suitable for thousands of users.
+
+=== Summary

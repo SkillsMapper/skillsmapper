@@ -1,0 +1,627 @@
+[[chapter_p1]]
+== Project 1 - Tag Updater
+
+In this chapter we will write the first service for the Skills Mapper application. We will introduce some higher level abstractions in Google Cloud and show how we can solve a real world problem at
+minimal cost.
+
+We will show how we can solve the requirement in three ways:
+
+1. Manually using the gcloud cli alone.
+2. Automated using a Cloud Function but with manual setup.
+3. Fully automated using the Cloud Function and Terraform to deploy.
+
+=== Requirements
+
+==== User Story
+
+The user story for this piece of functionality can be written as follows:
+
+[quote]
+----
+As a contributing user, I would like an up-to-date list of technical skills to choose from so the terms I use are consistent and comparable with my peers.
+----
+
+==== Elaborated Requirements
+
+We also have the following specific requirements:
+
+* The list of skills should include technologies, tools and techniques, be comprehensive and unambiguous.
+* Although new skills emerge frequently it is not every day so Limiting updates to weekly is sufficient.
+* The solution should be reliable, require minimal maintenance and be low-cost.
+* The resultant list of skills should be easy to consume by future services.
+
+=== Solution
+
+Maintaining a list of technical skills is a big undertaking. Fortunately StackOverflow:footnote[https://stackoverflow.com/] is already doing that by maintaining a crowdsourced list of over 63,000
+tags, terms which are used to categorise questions. Google Cloud makes provides all StackOverflow data including tags as a public dataset in BigQuery.
+
+To obtain an up-to-date list of technical skills we can extract them from the public dataset of BigQuery directly.
+
+With cloud-native solutions we favour simplicity. The simplest way of storing a list to terms in a file. Cloud Storage is the Google Cloud service for storing object data like this. If we store a file to Cloud Storage it will be easily consumable by other services.
+
+We need a small amount of code to extract StackOverflow tags from the BigQuery dataset and to store the resultant list of skills as a file in Cloud Storage. Cloud Functions is an effective way of running this type of glue code as we only pay for the short amount of time the code is running. This is a serverless solution meaning it is a fully managed service with no servers to maintain.
+
+We need to update the list of skills once a week. Cloud Scheduler is a fully managed service that runs jobs on a schedule. We can be use this to schedule the execution of a Cloud Functions. We can use this to create a new list of skills every week and retry if there is a
+failure.
+
+==== Architecture Diagram
+
+Here is a diagram of the architecture we will be implementing:
+
+[[faster-save-more]]
+.Tag Updater
+image::images/design.png[""]
+
+This has been drawn using tne Google Cloud Architecture Diagramming Toolfootnote:[https://googlecloudcheatsheet.withgoogle.com/architecture] which is a great tool for drawing cloud architectures.
+
+==== Summary of Services
+
+Here is a summary of the Google Cloud services we will be using in this solution.
+
+===== BigQuery
+
+BigQuery is Google data warehouse solution designed for performing analytics on vast amounts of data. It uses a SQL syntax like a relational database. However, here we will just be using it to query a relatively small set of public data.
+
+===== Cloud Storage
+
+Cloud Storage is Google Cloud's object store similar to S3 on AWS. This is designed to store objects, text and binary files containing unstructured data that does not need to be queried. It is a low-cost way of storing data.
+
+===== Cloud Functions
+
+Cloud Functions is Google Cloud's highest level abstraction for running code.  To start with we will use Cloud Functions as it is the simplest and most cost-effective. This is Google's serverless offering and the nearest equivalent to AWS Lambda or Azure Functions. It is great for running the sort of "glue code" we need for this service.
+
+If Cloud Functions was a means of transport it would be like a taxi, it takes you where you want to go but your involvement in driving is minimal. You just state the destination and Cloud Functions
+gets you there. It is ideally suited for short trips and maintenance of the car is not your concern.
+
+Cloud Functions has two generations. We will concentrate on generation 2 as it is more flexible and has a larger memory limit. This supports code written in Node.js, Python, Go, Java, Ruby, PHP or
+.Net Corefootnote:[https://cloud.google.com/functions/docs/concepts/execution-environment#runtimes].
+
+Code is automatically packaged into a managed container that is invoked by an event but the
+container itself is hidden from you. You can use a maximum of 16 GiB of memory, 4 vCPU cores and execute for a maximum of 60 minutesfootnotes:[https://cloud.google.com/functions/quotas].  This is a
+big improvement on generation 1 which had a maximum of 8 GiB of memory and 9 minutes of execution time. However,the default of a maximum of 60 seconds, 1 vCPU core and 256MB of memory for be sufficient for this.
+
+In fact Cloud Functions generation 2 is effectively a wrapper around two other service, Cloud Run and Cloud Build which we will use in the next chapter. Cloud Run is a managed container platform that
+allows you to run containers that are invocable via HTTP requests or events. Cloud Build is a managed build service that allows you to build containers.
+
+===== Cloud Scheduler
+
+Cloud Scheduler is a fully managed enterprise-grade cron job scheduler. In this case we are going to use it to schedule the execution of our Cloud Function.
+
+=== Command Line Implementation
+
+Before getting hands-on make sure you have a gcloud CLI client either on your local machine or in Cloud Shell and create a new project as describe in the previous chapter and making a note of the
+`PROJECT_ID`.
+
+==== BigQuery
+
+To start with we can use the `bq` command line tool to try out the query we will use to retrieve the StackOverflow tags names from the public data set. This tool is installed as part of the Google
+Cloud SDK.
+
+[source,bash]
+----
+bq query --max_rows=10 --nouse_legacy_sql --format=csv "SELECT tag_name FROM bigquery-public-data.stackoverflow.tags order by tag_name"
+----
+
+Here we are using the following flags:
+
+* `--max_rows` to limit the number of results to 10 instead of the default 100.
+* `--nouse_legacy_sql` to use Google Standard SQLfootnote:[https://cloud.google.com/bigquery/docs/reference/standard-sql/introduction] for the query.
+* `--format=csv` to format the result as a csv file.
+
+The results of this command should show the first ten StackOverflow tag names.
+We will use a similar query in our service. For now however let's output all the tags to a file named `tags.csv`. There are approximately 63,000 StackOverflow tags do setting max_rows to 100,000
+will retrieve them all.
+
+.Tip Costs
+[TIP]
+====
+It is good practice to always specify a max_rows with BigQuery as it is billed by the amount of data queried and one day you may accidentally write a query that queries trillions of rows.
+====
+
+Let's define an environment variable for the `FILE_NAME` e.g. 'tags.csv' as even when programming at the command line it is good to follow the cloud-native principle of externalising configuration:
+
+[source,bash]
+----
+export FILE_NAME=[FILE_NAME]
+----
+
+Now we can issue the bq command to write the tags to the file:
+
+[source,bash]
+----
+bq query --max_rows=100000 --nouse_legacy_sql --format=csv "SELECT tag_name FROM bigquery-public-data.stackoverflow.tags order by tag_name" > $FILE_NAME
+----
+
+We can check that it was successful by listing the number of lines in the file:
+
+[source,bash]
+----
+wc -l $FILE_NAME
+----
+
+If all goes well the result should be approximately 63,654 lines, allowing one for the csv header of course.
+
+==== Cloud Storage
+
+We now need to create a Cloud Storage bucket to store the file we generate from our query.
+We can do that with the `gsutil` command which is also included with the gcloud cli.
+
+First create a `BUCKET_NAME` environment variable with the bucket to use.
+Like a project id this needs to be globally unique. As your project id is unique you can use that as a prefix to the bucket-name e.g. `skillsmapper-tags`.
+
+[source,bash]
+----
+export BUCKET_NAME="${PROJECT_NAME}-[BUCKET_NAME]"
+----
+
+Then use the gsutil command to create the bucket:
+
+[source,bash]
+----
+gsutil mb gs://$BUCKET_NAME
+----
+
+With the bucket created we can then copy the file containing the list of tags to the bucket.
+
+[source,bash]
+----
+gsutil cp $FILE_NAME gs://$BUCKET_NAME/$FILE_NAME
+----
+
+We can check that the file has been created successfully by again counting the number of lines and making sure that matches the approximately 63,654 lines we had in the file we generated.
+
+[source,bash]
+----
+gsutil cat gs://$BUCKET_NAME/$FILE_NAME | wc -l
+----
+
+Running commands line this would be one way of keeping the tags up to date, and we could even automate it into a bash script like this:
+
+[source,bash]
+----
+#!/usr/bin/env bash
+
+BUCKET_NAME=$1
+FILE_NAME=$2
+
+bq query --max_rows=100000 --nouse_legacy_sql --format=csv "SELECT tag_name FROM bigquery-public-data.stackoverflow.tags order by tag_name" > $FILE_NAME
+echo "Number of tags in generated file:"
+wc -l $FILE_NAME
+
+gsutil cp $FILE_NAME gs://$BUCKET_NAME/$FILE_NAME
+echo "Uploaded $2 to $1"
+echo "Number of tags in uploaded file:"
+gsutil cat gs://$BUCKET_NAME/$FILE_NAME | wc -l
+----
+
+We could then manually run the script periodically or use a cron job on a machine with Google Cloud credentials however there is a better cloud native approach where we can do it programmatically
+using a Cloud Function.
+
+=== Cloud Native Implementation
+
+Here we will implement the same functionality as the manual implementation but using a Cloud Function scheduled with Cloud Scheduler. This will allow us to automatically update the tags periodically
+without any manual intervention.
+
+==== Cloud Functions
+
+We previously mentioned that code functions could only be written in certain programming languages. link:[main.go] is a Cloud Function written in Go. The effectively performs the same task as the
+gcloud CLI steps but using the BigQuery and Cloud Storage client libraries.
+
+Don't worry to much about the code if you are not familiar with Go but there are some key points to note:
+
+In this init block we create a BigQuery and Cloud Storage client. These are initialised once and then reused for each invocation of the function. This is good practice as it reduces the time needed
+to respond to requests.
+
+At the end of the block we register a function named `updateTags` with the HTTP trigger. This is the entry point for the function and is called when the function is invoked.
+
+[source,go]
+----
+func init() {
+	// err is pre-declared to avoid shadowing client.
+	var err error
+	bigQueryClient, err = bigquery.NewClient(ctxBg, projectID)
+	if err != nil {
+		log.Fatalf("bigquery.NewClient: %v", err)
+	}
+	storageClient, err = storage.NewClient(ctxBg)
+	if err != nil {
+		log.Fatalf("storage.NewClient: %v", err)
+	}
+	// register http function
+	functions.HTTP("tag-updater", updateTags)
+}
+----
+
+The `updateTags` function itself is handling an HTTP request. In response it calls a function that retrieves the tags from Bigquery using the BiqQuery client. It then calls another function that
+writes the tags to Cloud Storage using the Cloud Storage client in a similar way to the gcloud CLI steps.
+
+Note that errors are handled by logging the error and returning an HTTP error response and success is handled by logging the success and returning an HTTP success response. This is important as it
+is the HTTP response that is used to determine whether the function invocation was successful or not.
+
+[source,go]
+----
+func updateTags(w http.ResponseWriter, r *http.Request) {
+	var err error
+	numberOfTagsRetrieved, data, err := retrieveTags()
+	if err != nil {
+		log.Printf("failed to retrieve tags: %v\n", err)
+		http.Error(w, "retrieving tags failed", http.StatusInternalServerError)
+	}
+	err = writeFile(data)
+	if err != nil {
+		log.Printf("failed to write file: %v\n", err)
+		http.Error(w, "writing file failed", http.StatusInternalServerError)
+	}
+	message := fmt.Sprintf("%v tags retrieved and written to %s as %s", numberOfTagsRetrieved, bucketName, objectName)
+	log.Println(message)
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, message)
+}
+----
+
+==== Configuration
+Just like the bash script version the configuration for the cloud function should be externalised. In this case we don't have any secrets like passwords but we do have three arguments to pass as
+environment variables:
+
+.Environment Variables
+|===
+|Environment Variable | Description
+| PROJECT_ID | The ID of the Google Cloud Project
+| BUCKET_ID | The ID of the Cloud Storage bucket
+| OBJECT_NAME| More accurately files stored in Cloud Storage buckets are objects as opposed to files as Cloud Storage is an object store.
+|===
+
+We can provide these as a yaml file when we deploy the function. link:[.env.yaml] is an example of the structure.
+
+[source,yaml]
+----
+PROJECT_ID: [PROJECT_ID]
+BUCKET_NAME: [BUCKET_NAME]
+OBJECT_NAME: [OBJECT_NAME]
+----
+
+The main difference between this function and the bash script is that it writes the retrieved tags to an object in Cloud Storage direct rather than storing to a file and then uploading the file.
+
+Cloud Functions run in a Google Cloud region. We could specify a default region using the Google CLI using this command:
+
+[source,bash]
+----
+gcloud config set functions/region [REGION]
+----
+
+However, I like to declare an environment variable for the region we want to deploy to e.g. `europe-west2` so I explicitly know which region I am deploying to.
+
+[source,bash]
+----
+export REGION=[REGION]
+----
+
+The services Cloud Functions needs are not enabled by default, so we need to enable them for the project. As we said under the covers the Cloud Build service is used for building a container. The
+container is stored in Artifact Registry, Google Cloud's container registry. The container is run using Google's Cloud Run service. This means we need the following services enabled:
+
+* `cloudfunctions.googleapis.com` - Cloud Functions
+* `cloudbuild.googleapis.com` - Cloud Build
+* `artifactregistry.googleapis.com` - Artifact Registry
+* `run.googleapis.com` - Cloud Run
+
+You can enable the services with this command:
+
+[source,bash]
+----
+gcloud services enable cloudfunctions.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
+gcloud services enable run.googleapis.com
+----
+
+Now create and environment variable for the name of the function to deploy e.g. `tag-updater`.
+
+[source,bash]
+----
+export CLOUD_FUNCTION_NAME=[CLOUD_FUNCTION_NAME]
+----
+
+To deploy this code as a Cloud Function we can use the following gcloud command:
+
+[source,bash]
+----
+gcloud functions deploy $CLOUD_FUNCTION_NAME \
+--gen2 \
+--runtime=go119 \
+--region=$REGION \
+--trigger-http \
+--no-allow-unauthenticated \
+--env-vars-file .env.yaml
+----
+
+Here we are using the following flags:
+
+* `--gen2` - deploy a Cloud Function using generation 2.
+* `--runtime=go119` - use the Go 1.19 runtime.
+* `--region=$REGION` - the region to deploy to.
+* `--trigger-http` - the function should be triggered by an HTTP request.
+* `--no-allow-unauthenticated` - the function should not be publicly accessible.
+* `--env-vars-file env.yaml` - use the environment variables in the env.yaml file.
+
+Executing the command will take a few minutes as it works through building, deploying and testing the function is healthy. When completed you will see a URI for the function that looks like this:
+`https://$CLOUD_FUNCTION_NAME-something.a.run.app`. You can retrieve this using:
+
+[source,bash]
+----
+gcloud functions describe $CLOUD_FUNCTION_NAME --gen2 --region=$REGION --format='value(serviceConfig.uri)'
+----
+
+If you open this URI in a web browser you will see a permission denied message. This is a good thing as it means and unauthenticated person cannot trigger the function.
+
+You can also check the function has been deployed using the command:
+
+[source,bash]
+----
+gcloud functions list
+----
+
+This should show a result like this with the state showing active:
+
+[source,text]
+----
+NAME         STATE   TRIGGER       REGION        ENVIRONMENT
+tag-updater  ACTIVE  HTTP Trigger  europe-west2  2nd gen
+----
+
+You can then run the command using:
+
+[source,bash]
+----
+gcloud functions call $CLOUD_FUNCTION_NAME --gen2 --region=$REGION
+----
+
+To check the logs for the function you can use the following command:
+
+[source,bash]
+----
+gcloud functions logs read $CLOUD_FUNCTION_NAME --gen2 --region=$REGION
+----
+
+===== Using a Service Account
+
+By default, the Cloud Function will have used the default service account for the project  `service-ACCOUNT_ID@PROJECT_ID.iam.gserviceaccount.com`. This is not a great idea as it gives broad access to the project.
+
+We can create a new service account with the minimum permissions required for the function to work and no more. Specifically, the service account needs the following permissions:
+
+* Execute BigQuery queries using the `bigquery.jobUser` predefined role.
+* Write to Cloud Storage using the `storage.objectAdmin` predefined role as it will need to be able to both create new objects and delete previous ones.
+
+Create an environment variable to hold a service account name e.g. `tag-updater-sa`.
+
+[source,bash]
+----
+export SERVICE_ACCOUNT_NAME=[SERVICE_ACCOUNT_NAME]
+----
+
+We can then create the service account with the following command:
+
+[source,bash]
+----
+gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
+--display-name "Tag Updater Service Account"
+----
+
+Now grant the service account the permissions it needs:
+
+Add the BigQuery job user role:
+
+[source,bash]
+----
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member=serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+  --role=roles/bigquery.jobUser
+----
+
+Add the Cloud Storage objectAdmin role:
+
+[source,bash]
+----
+gsutil iam ch serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com:objectAdmin gs://$BUCKET_NAME
+----
+
+Now we can redeploy the Cloud Function specifying that the newly created service account is used with the `--service-account` flag:
+
+[source,bash]
+----
+gcloud functions deploy ${CLOUD_FUNCTION_NAME} \
+--gen2 \
+--runtime=go119 \
+--region=${REGION} \
+--service-account=${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+--trigger-http \
+--no-allow-unauthenticated \
+--env-vars-file .env.yaml
+----
+
+When the command completes it will show the URI of the Cloud Function. Store this in an environment variable so we can reference it later.
+
+[source,bash]
+----
+export CLOUD_FUNCTION_URI=$(gcloud functions describe $CLOUD_FUNCTION_NAME --gen2 --region=$REGION --format='value(serviceConfig.uri)')
+----
+
+==== Testing with cURL
+
+Our Cloud Function is secure in that it can only be evoked by an authenticated user with the correct permissions. If we try to invoke it using curl we will get a `403 Forbidden` error.
+
+[source,bash]
+----
+curl $CLOUD_FUNCTION_URI
+----
+
+This is a good thing as it means that anyone can't just invoke the function and cause it to run. However, there is a way to test it by passing a authentication token to the function.
+
+[source,bash]
+----
+curl -H "Authorization: Bearer $(gcloud auth print-identity-token)" $CLOUD_FUNCTION_URI
+----
+
+This will use the permissions of the current user to invoke the function. We will see in later chapters how this can be useful for automated testing without compromising the security of the function.
+
+==== Cloud Scheduler
+
+We now will schedule the Cloud Function to run every Sunday at midnight.
+
+First we need to enable to Cloud Scheduler:
+
+[source,bash]
+----
+gcloud services enable cloudscheduler.googleapis.com
+----
+
+Create and environment variable for the name of the job e.g. `tag-updater-job`.
+
+[source,bash]
+----
+export JOB_NAME=[JOB_NAME]
+----
+
+Unfortunately Cloud Scheduler will not be able to trigger the Cloud Functions at the moment as we do not allow unauthenticated invocations.
+
+We need to create another service account for the scheduler e.g. `invoker-sa`.
+
+[source,bash]
+----
+export INVOKER_SERVICE_ACCOUNT_NAME=[INVOKER_SERVICE_ACCOUNT_NAME]
+----
+
+[source,bash]
+----
+gcloud iam service-accounts create $INVOKER_SERVICE_ACCOUNT_NAME \
+--display-name "Tag Updater Invoker Service Account"
+----
+
+Now grant the new service account the `run.invoker` role. Note that as this is a gen2 Cloud Function the permission to invoke the function is granted on the underlying Cloud Run service.
+
+[source,bash]
+----
+gcloud run services add-iam-policy-binding $CLOUD_FUNCTION_NAME \
+    --member=serviceAccount:$INVOKER_SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+    --role='roles/run.invoker'
+----
+
+By default, Cloud Scheduler will retry a job 3 times if it fails. We can change this using the `--max-retry-attempts` flag.
+
+The way we authenticate is with an OIDC token which is linked to the service account that has the invoker role.
+
+[source,bash]
+----
+gcloud scheduler jobs create http ${JOB_NAME} \
+  --schedule="0 0 * * SUN" \
+  --uri=${CLOUD_FUNCTION_URI} \
+  --max-retry-attempts=3 \
+  --location=${REGION} \
+  --oidc-service-account-email="${INVOKER_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --oidc-token-audience="${CLOUD_FUNCTION_URI}"
+----
+
+Check the status of the job in the job list:
+
+[source,bash]
+----
+gcloud scheduler jobs list --location=${REGION}
+----
+
+To test the job we can trigger it manually regardless of schedule:
+
+[source,bash]
+----
+gcloud scheduler jobs run ${JOB_NAME} --location=${REGION}
+----
+
+Check the status of the job:
+
+[source,bash]
+----
+gcloud scheduler jobs describe ${JOB_NAME} --location=${REGION}
+----
+
+Check the log of the Cloud Function:
+
+[source,bash]
+----
+gcloud functions logs read ${CLOUD_FUNCTION_NAME} --gen2 --region=${REGION}
+----
+
+Alternatively you can stream logs directly from the underlying Cloud Run service.
+
+[source,bash]
+----
+gcloud beta run services logs tail ${CLOUD_FUNCTION_NAME} --project ${PROJECT_ID}
+----
+
+Check the data of the file in cloud storage as we did when running at the command line:
+
+[source,bash]
+----
+gsutil cat gs://$BUCKET_NAME/$OBJECT_NAME | wc -l
+----
+
+=== Terraform Implementation
+
+As you can see, although the solution is simple there are still many steps to set it up. In later chapters we will see how Terraform can be used to fully automate this type of deployment. For now, we just provide a Terraform implementation for reference.
+
+To use this Terraform implementation you will need to have Terraform installed and configured. You will also need to have created a Google Cloud project and then enabling the the required APIs using the following commands:
+
+[source,bash]
+----
+gcloud services enable cloudfunctions.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
+gcloud services enable run.googleapis.com
+gcloud services enable cloudscheduler.googleapis.com
+----
+
+Now we can deploy the solution using Terraform. From the `terraform` directory run the following command providing the `PROJECT_ID` environment variable of the project to deploy to:
+
+[source,bash]
+----
+terraform apply -var project_id=${PROJECT_ID}
+----
+
+To clear everything up run the following command:
+
+[source,bash]
+----
+terraform destory
+----
+
+=== Evaluation
+
+==== How will this solution scale?
+
+Scaling of this solution is not a great concern as it is a single task that runs on a weekly basis. It is also very unlikely that there will be a significant change in the number of tags to
+retrieve from the StackOverflow data set.
+
+However, if we did want to schedule the task more frequently or even add tasks to collect data from other sources we could easily do so by adding more Cloud Functions and changing the frequency
+of the Cloud Scheduler jobs.
+
+==== How much will this solution cost?
+
+The costs of this solution is very close to zero and I mean close. It is likely that the cost will be less than $0.01 per month.
+
+* *Cloud Storage* data is charged at $0.026 per GB per month. This solution using less than 1MB of storage so the cost is negligible.
+* *Cloud Functions* are charged at $0.0000002 per GB-s. This solution uses less than 256MB of memory for less than a minute per month so the cost is negligible.
+* *Cloud Scheduler* is charged at $0.01 per 100,000 invocations. This solution uses less than 5 invocations per month so the cost is negligible.
+* *BigQuery* queries are charged for after the first 1 TB of data scanned per month. This solution uses less than 10 MB of data per month so the cost is negligible.
+* We will also be charged for moving around small amounts of data between services. This too is negligible.
+
+This is the type of service that makes a lot of sense in a cloud native environment. What may previously have needed even a dedicated server can now be run for nothing.
+
+=== Summary
+
+We have built a solution that should be highly reliable and run for minimal cost. This service should just be able to sit in the background running for years uninterrupted if we wanted.
+
+We have introduced the following Google Cloud Services in the solution.
+
+* BigQuery - a large scale data warehouse
+* Cloud Storage - an easy way of storing unstructured data
+* Cloud Functions - a high level abstraction that runs code serverlessly
+* Cloud Scheduler - a fully managed cron job scheduler
+
+In the next project we will take the list of tags that this service has provided and make it available for a user to select skills from.

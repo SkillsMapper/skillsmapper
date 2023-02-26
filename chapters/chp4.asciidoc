@@ -1,0 +1,7 @@
+[[chapter_p4]]
+== Project 4 - Profile Builder
+
+* Go service
+* PubSub triggered
+* write to firestore
+* read from firestore

@@ -1,0 +1,559 @@
+[[chapter_p2]]
+== Project 2 - Skill Lookup
+
+In the last chapter we used a Cloud Function to extract StackOverflow tags from the BigQuery public data set and store the results in an object in Cloud Storage. Now for our next project we want to
+use these tags to allow a user to look up a skill with suggestions as they type.
+
+=== Requirements
+
+==== User Story
+
+The user story for this piece of functionality is as written as follows:
+
+[quote]
+----
+As a contributing user, I would like to look up a skill with suggestions as I type so that I find the most appropriate skill.
+----
+
+==== Elaborated Requirements
+
+We also have the following specific requirements:
+
+* Suggestions should be presented when a user types three of more characters.
+* 95% of suggestion request should return suggestions in less than 500ms as anything longer than this will be perceived as slow.
+* The solution should be reliable and low-cost.
+* The solution should scale to thousands of simultaneous requests without desegregation
+
+=== Solution
+
+==== Cloud Storage
+
+In the last chapter we wrote the tags collected from BigQuery's StackOverflow dataset to Cloud Storage. We will use retrieve the same object from Cloud Storage and use it populate the skills used to provide suggestions to the user. As the data is relatively small, and we want a fast response we will keep the data in memory in a trie data structure.
+
+==== Cloud Run
+
+In the previous chapter we used Cloud Functions to as the runtime for our application. However, while Cloud Functions are great for occasionally running code triggered by events, they are not
+intended to be for long-running services. As we will need to set up the trie data structure we don't want to have to do that each time there is a request. Instead, we want a long-running service or at least one that can handle a large number of requests once started.
+
+As we want a service that is long-running and can scale dynamically we will use Cloud Run. In Cloud Run we refer to instances as services rather than Cloud Function's functions.
+
+Cloud Run is the underlying technology of the Cloud Function we used in the previous chapter. Here by using it directly which gives us more control of the container and how it runs. Specifically,
+we can scale the service to handle thousands of simultaneous requests.
+
+If Cloud Run was a means of transport it would be like a rental car, you have more flexibility over it than a taxi, but you have to drive it yourself. However, you still don't have to worry about the maintenance and upkeep of the car.
+
+Cloud Run can scale different ways:
+
+* Multiple Instances - Cloud Run automatically scales up the number of container instances based on the number of requests. It can also scale down to zero when there are no requests.
+* Concurrency - For languages with good concurrency support like Go or Java it is possible to have multiple requests handled by a single instance rather than in Cloud Functions where a
+function handles a single request at a time.
+* Resources - As with Cloud Functions we can vertically scale an instance with more memory and CPU.
+
+However, Cloud Run cannot scale infinitely and there are limits on the number of instances and the amount of memory and CPU available. For example:
+
+* Concurrency is limited to a maximum 1000 synchronous requests per instance
+* Memory is limited to 32GB per instance
+* File system is limited to 32GB per instance
+* CPU is limited to 8 vCPUs per instance
+* The number of instances is limited to 100 per region
+* For larger CPU and memory the number of instances is limited a lower amount and this varies depending on the capacity in the Google Cloud region.
+
+See [https://cloud.google.com/run/quotas#compute_engine_instance_limits][Cloud Run Quotas] for more details.
+
+A single Cloud Run request is limited to 60 minutes of execution time. However, when Cloud Run does not receive requests it will throttle down to 0 CPU and will terminate the instance after 60 minutes of inactivity.
+
+.Tip
+[TIP]
+====
+When I first used Cloud Run I tried to deploy a containerised version of the Ghost blogging platform with it thinking if it did not receive much traffic it would scale to zero and this would be a cost-effective way of running it.
+
+However, my Ghost instance had a significant startup time, upwards of a minute. When the instance terminated after inactivity the next request would be met with a "Preparing Ghost" message while it
+started up again. This is understandable as Ghost was designed to run on a server as a long-running task and not a serverless platform.
+====
+
+Although, Cloud Run does have limits, they are generous, and it should be possible to build many services within the restrictions. Cloud Run is a great service to use if you can as it is very
+cost-effective as you are effectively allocating resources directly from Borg only when you need them and not paying for them when you don't.
+
+However, if you reach limitations or is you are using and existing application it may be necessary to consider a lower level server like Google Kubernetes Engine or GKE Autopilot.
+
+In our case even if Cloud Run scales down, and we need a new instance to serve requests the instance should be ready quickly and the user should not notice.
+
+=== Implementation
+
+Before getting hands-on make sure you have a gcloud cli client either on your local machine or in Cloud Shell and ensure you are using the Google Cloud project created the last chapter using the
+command:
+
+[source,shell]
+----
+gcloud config get project
+----
+
+You can the set a `PROJECT_ID` environment variable again to make it easier to copy and paste commands:
+
+[source,shell]
+----
+export PROJECT_ID=$(gcloud config get-value project)
+----
+
+If you are not using the correct project set it using the command:
+
+[source,shell]
+----
+gcloud config set project $PROJECT_ID
+----
+
+==== Deploy with Cloud Run
+
+We can use the defaults of Cloud Run to deploy directly from the command line to ensure it works. This will create a container and put it into the Artifact Registry for the project.
+
+Here we are using a Go application with no dependencies, so we can build directly from source alone. Set an environment variable for the service name e.g. `skill-lookup`:
+
+[source,shell]
+----
+export SERVICE_NAME=[SERVICE_NAME]
+----
+
+Then run the following command to deploy the service to Cloud Run:
+
+[source,shell]
+----
+gcloud run deploy $SERVICE_NAME --source . --env-vars-file=.env.yaml
+----
+
+Here we are deploying the service from source code in the current directory and passing an environment variable file as we did in the previous chapter with Cloud Functions.
+
+This command is a shortcut for two commands. There first command is:
+
+[source,shell]
+----
+gcloud builds submit --pack image=[IMAGE] .`
+----
+
+This builds a container using a Buildpack using Cloud Build and stores the container image in Google Artifact Registry where `[IMAGE]` would be a name for the image. In the shortcut command the image name is automatically generated.
+
+If there were a Dockerfile in the current directory it would use that to build the container instead of the Buildpack meaning you could use a custom container.
+
+This is one way of adding more flexibility if you need that customisation but the good thing about Cloud Run is that you don't need to worry about how the container is built if you don't want to.
+
+The second command is:
+
+[source,shell]
+----
+gcloud run deploy $SERVICE_NAME --image [IMAGE]
+----
+
+This deploys the container to Cloud Run. When you run this command you will be prompted to `Allow unauthenticated invocations to [SERVICE-NAME]`?`. Select `y` to this for now but we will come
+back to the significance of this later.
+
+As with Cloud Functions the command will take around a minute to complete. When the service deploys successful you will see a message like this:
+
+[source,shell]
+----
+Building using Buildpacks and deploying container to Cloud Run service [skill-lookup] in project [p1-tag-updater-manual] region [europe-west2]
+✓ Building and deploying... Done.
+  ✓ Uploading sources...
+  ✓ Building Container... Logs are available at [https://console.cloud.google...].
+  ✓ Creating Revision...
+  ✓ Routing traffic...
+Done.
+Service [skill-lookup] revision [skill-lookup-00008-sax] has been deployed and is serving 100 percent of traffic.
+Service URL: https://skill-lookup-xfefn34lsa-nw.a.run.app
+----
+
+Use the following command to store the URL of the service in an environment variable:
+
+[source,shell]
+----
+export SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --format='value(status.url)')
+----
+
+=== Smoke Testing
+
+We can now do a simple test of the service using curl. As the service is unauthenticated we can  use a GET request like this requesting suggestions for the word `java`:
+
+[source,shell]
+----
+curl -X GET "${SERVICE_URL}/autocomplete?prefix=java"
+----
+
+All being well you should get a response like this:
+
+[source,json]
+----
+{"results":["java","java-10","java-11","java-12","java-13","java-14","java-15","java-16","java-17","java-18"]}
+----
+
+If so the service is working correctly.
+
+=== Securing
+
+As with the previous chapter this service is now using a default service account with broad permissions.
+
+We are also allowing unauthenticated invocations of the service. This is may be ok for testing but in a production environment we would want to secure the service, and we will show how to do that in a later chapter.
+
+However, ultimately we have code that can be called by anyone on the internet using a service account with permissions that could do damage if code with security vulnerabilities was accidentally or maliciously deployed.
+
+For safety, we need to create a new service account with the minimum permissions required to run the service. In this case that will be permission to read the object from Cloud Storage and nothing more.
+
+===== Create a Service Account
+
+Create an environment variable to hold a service account name e.g. `skill-lookup-sa`.
+
+[source,bash]
+----
+export SERVICE_ACCOUNT_NAME=[SERVICE_ACCOUNT_NAME]
+----
+
+We can then create the service account with the following command:
+
+[source,bash]
+----
+gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
+--display-name "Skill Lookup Service Account"
+----
+
+Now grant the service account the permissions it needs by adding the Cloud Storage objectViewer role:
+
+[source,bash]
+----
+gsutil iam ch serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com:objectViewer gs://$BUCKET_NAME
+----
+
+We can then update the service using the new service account using the `gcloud run services update` command rather than redeploying the service:
+
+[source,bash]
+----
+gcloud run services update $SERVICE_NAME --service-account $SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com
+----
+
+=== Performance Testing
+
+As this service has its own UI we can test it manually by going to the Service URL.
+
+For example on a Mac you can open the URL in a browser using the following command:
+
+[source,shell]
+----
+open $SERVICE_URL
+----
+
+You will see a search box that gives suggestions as you type. This is a webpage calling the backend endpoint: `$SERVICE_URL/autocomplete?prefix=<query>`. However, we can also test it by going
+straight to the API with curl as we did before:
+
+[source,shell]
+----
+curl -X GET "${SERVICE_URL}/autocomplete?prefix=java"
+----
+
+We can also use the Apache Bench tool to make a single request too. This is a command line tool that can be used to test the performance of a http request. This command will make a single request to the service:
+
+[source,shell]
+----
+ab -n 1 -c 1 -rk "${SERVICE_URL}/autocomplete?prefix=java"
+----
+
+You will see a very detailed response including the time taken to process the request:
+
+[source,shell]
+----
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       77   77   0.0     77      77
+Processing:   150  150   0.0    150     150
+Waiting:      150  150   0.0    150     150
+Total:        227  227   0.0    227     227
+----
+
+A time of 227ms is good as it is less than 500ms which is the target for this service.
+
+However, this is just one query. We can test the performance of the service by sending multiple requests sequentially to see how the response varies.
+
+This command will send 100 requests (`-n`) from a single user (`-c`) to the service:
+
+[source,shell]
+----
+ab -n 100 -c 1 -rk "${SERVICE_URL}/autocomplete?prefix=java"
+----
+
+The response will look something like this:
+
+[source,shell]
+----
+Percentage of the requests served within a certain time (ms)
+  50%    144
+  66%    146
+  75%    147
+  80%    148
+  90%    160
+  95%    288
+  98%    323
+  99%    345
+ 100%    345 (longest request)
+----
+
+The results look ok, with the average request time of 144ms and the longest request taking 345ms. Most important for us is the 95% percentile which is 288ms. This means that 95% of the requests are
+completed in less than 288ms which is under the target of 500ms.
+
+Now let's try 100 requests from 10 concurrent users using the following command:
+
+[source,shell]
+----
+ab -n 100 -c 10 -rk "${SERVICE_URL}/autocomplete?prefix=java"
+----
+
+This has very different results with the 95% percentile now being 1669ms. This means that 95% of the requests are completed in less than 1669ms which is way over the target of 500ms. Everyone is
+having a bad experience.
+
+Let's see if we can understand what is going on.
+
+=== Logging
+
+By default, Cloud Logging will log stdout as INFO and stderr as ERROR. We can look at the logs for the service to see the requests being handled by the service.
+
+[source,shell]
+----
+gcloud beta run services logs read $SERVICE_NAME
+----
+
+However, Cloud Logging, the Google Logging service supports structured logging which provides much richer information. To see an example of structured logging, let's look at the last log message for
+the Cloud Run service.
+
+[source,shell]
+----
+gcloud logging read "resource.labels.service_name: ${SERVICE_NAME}" --limit 1
+----
+
+You will see a that a single log message that looks like this:
+
+[source,yaml]
+----
+httpRequest:
+  latency: 0.189538428s
+  protocol: HTTP/1.1
+  remoteIp: 82.xx.xx.xx
+  requestMethod: GET
+  requestSize: '372'
+  requestUrl: https://skill-lookup-xfefn34lsa-nw.a.run.app/autocomplete?prefix=java
+  responseSize: '755'
+  serverIp: 216.239.34.53
+  status: 200
+  userAgent: ApacheBench/2.3
+insertId: 63ed415f0005bb0d6ea1fbd0
+labels:
+  instanceId: 00f8b6bdb81dec1b6587a81c09bcb444c2c83222fc91d65eb71e410c99d852a51d68bbbb5bc93185f6ca718ffe4bbcd8d0e08ef1f2e15a6a63664e2cd1921a
+logName: projects/p1-tag-updater-manual/logs/run.googleapis.com%2Frequests
+receiveTimestamp: '2023-02-15T20:32:31.669398873Z'
+resource:
+  labels:
+    configuration_name: skill-lookup
+    location: europe-west2
+    project_id: p1-tag-updater-manual
+    revision_name: skill-lookup-00019-tan
+    service_name: skill-lookup
+  type: cloud_run_revision
+severity: INFO
+spanId: '8866891408317688295'
+timestamp: '2023-02-15T20:32:31.375565Z'
+trace: projects/p1-tag-updater-manual/traces/b50ba47749e17f15efa689cebf05b4bd
+----
+
+This provides a comprehensive, structured log entry with levels of severity and labels. Structured logging is a way of logging that makes it easier to filter and search logs. It is also easier to
+parse logs and extract information from them.
+
+We can create structured logging using the Cloud Logging client libraries in your service. Before doing this the service account your service runs with needs to be granted the `logging.logWriter`
+role.
+
+You can add this role to the service account using the following command:
+
+[source,bash]
+----
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member=serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+  --role=roles/logging.logWriter
+----
+
+Now we can add structured logging to the service. In the case of Go we use the `cloud.google.com/go/logging` package. In the init function we initialise the logging client as we have the cloud
+storage and bigquery clients previously. We then create a logger for the service.
+
+[source,go]
+----
+	ctx := context.Background()
+	loggingClient, err := logging.NewClient(ctx, projectID)
+	if err != nil {
+		log.Fatalf("failed to create client: %v", err)
+	}
+	logger = loggingClient.Logger(serviceName)
+----
+
+Logging is then added to record the time taken to populate the trie from the cloud storage object and the time taken to search the trie using structured log statements like this:
+
+[source,go]
+----
+	logger.Log(logging.Entry{
+		Severity: logging.Debug,
+		Payload:  fmt.Sprintf("populate took %v", duration)})
+----
+
+After updating the service we can look at the logs again to see the structured logging.
+
+For example, we can look at the logs:
+
+* for our service
+* with the `textPayload` containing "populate took"
+* in the last minute `freshness 1m`
+* limiting the results to 5
+
+[source,shell]
+----
+gcloud logging read "resource.labels.service_name: ${SERVICE_NAME} textPayload: populate took" --limit 5 --freshness 1m
+----
+
+And we can just return the textPayload field (the one we are interested in) using this command:
+
+[source,shell]
+----
+gcloud logging read "resource.labels.service_name: ${SERVICE_NAME} textPayload: populate took" --limit 5 --freshness 1m --format="value(textPayload)"
+----
+
+This returns results like this:
+
+[source, text]
+----
+populate took 1.004742261s
+populate took 1.125826744s
+populate took 1.007365607s
+populate took 1.042601112s
+populate took 1.018384088s
+----
+
+This shows us it takes about a second to populate the trie from the cloud storage object.
+
+Similarly, we can look at the logs for the search function which starts with a "autocomplete for" prefix using:
+
+[source,shell]
+----
+gcloud logging read "resource.labels.service_name: ${SERVICE_NAME} textPayload: autocomplete for" --limit 5 --freshness 1m --format="value(textPayload)"
+----
+
+And we get results like this:
+
+[source, text]
+----
+autocomplete for java took 161.854392ms
+autocomplete for java took 228.471095ms
+autocomplete for java took 205.602819ms
+autocomplete for java took 262.176097ms
+autocomplete for java took 109.83006ms
+----
+
+This shows us that it takes between 100ms and 250ms to search the trie for the autocomplete results.
+
+Let's see if we can use this to improve the performance of the service.
+
+=== Improving Performance
+
+We have deployed to Cloud Run using the default settings which are:
+
+* 1 vCPU
+* 512MB Memory
+* Concurrency: 80
+* Minimum instances: 0
+* Maximum instances: 100
+
+We can go to the Cloud Run console and look at the metrics for the service to see what is happening and how we could improve response time.
+
+[source,shell]
+----
+open "https://console.cloud.google.com/run/detail/${REGION}/${SERVICE_NAME}/metrics?project=${PROJECT_ID}"
+----
+
+There are two things I can see. The first is that the `Container startup latency` is approximately two seconds. This means if a container is not running it takes about two seconds to start a new
+container. What we could do is set the minimum number of instances to 1 instead of 0 so that there is always one container running.
+
+I can also that the CPU of the container gets high reaching above 80%. This means that the container is not able to process requests as fast as it could. We could increase the number of CPUs to for a container from 1 to 2 or reduce the concurrency from 80 to 40 to reduce the number of requests that are processed at the same time.
+
+The beauty of Cloud Run is that we can change these settings without redeploying the service. We can change the settings of the service using the `gcloud run services update` command.
+
+First lets make sure we have the latest version of the service:
+
+[source,shell]
+----
+gcloud run services update $SERVICE_NAME --min-instances 1
+----
+
+Then run three tests
+
+  50%   1367
+  66%   1477
+  75%   1541
+  80%   1582
+  90%   1695
+  95%   1863
+  98%   2151
+  99%   2330
+ 100%   2330 (longest request)
+
+Doubling the CPU:
+
+[source,shell]
+----
+gcloud run services update $SERVICE_NAME --cpu 2
+----
+
+Gives the following results:
+
+[source,shell]
+----
+Percentage of the requests served within a certain time (ms)
+50%    640
+66%    675
+75%    709
+80%    716
+90%    768
+95%    811
+98%    847
+99%    853
+100%   853 (longest request)
+----
+
+Halving the concurrency:
+
+[source,shell]
+----
+gcloud run services update $SERVICE_NAME --cpu 1 --concurrency 40
+----
+
+Rerunning the test of 1000 requests from 10 concurrent users using the following command:
+
+[source,shell]
+----
+ab -n 1000 -c 10 -rk "${SERVICE_URL}/autocomplete?prefix=java"
+----
+
+[source,shell]
+----
+Percentage of the requests served within a certain time (ms)
+50%    586
+66%    680
+75%    716
+80%    740
+90%    801
+95%   1081
+98%   1375
+99%   1603
+100%  1870 (longest request)
+----
+
+=== Costs
+
+Cloud Run is charged for based on three factors:
+
+* CPU and Memory per 100ms of execution
+* A cost per request, the first 1m requests are free per month then they are $0.40 per 1m requests. When you start to get into 100s of millions of requests per month GKE autopilot becomes a
+more cost-effective option.
+option.
+* Network ingress and egress
+
+=== Summary
+
+We have shown how to deploy a service to Cloud Run and how to monitor the performance of the service.

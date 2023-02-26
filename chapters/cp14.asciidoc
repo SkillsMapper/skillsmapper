@@ -1,0 +1,7 @@
+[[chapter_14]]
+== Appendix
+
+To get started with Google Cloud you can create a free account with $300 of credit.
+
+To create a free account go to the https://cloud.google.com/free/[Google Cloud Free Trial page] and click the `Start Free` button in the top write of the page.
+
