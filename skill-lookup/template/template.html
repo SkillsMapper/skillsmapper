@@ -1,0 +1,67 @@
+<!-- autocomplete.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Autocomplete</title>
+    <style>
+        .suggestions {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .suggestions li {
+            padding: 0.5em;
+            cursor: pointer;
+        }
+        .suggestions li:hover {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+<label for="search"></label><input type="text" id="search" placeholder="Search...">
+<ul class="suggestions"></ul>
+<script>
+    document.getElementById("search").addEventListener("input", function(event) {
+        // Get the search input element
+        var searchInput = event.target;
+
+        // Get the search prefix
+        var prefix = searchInput.value;
+
+        // Set up the HTTP request
+        var request = new XMLHttpRequest();
+        request.open("GET", "/autocomplete?prefix=" + prefix, true);
+
+        // Set the callback function for when the request finishes
+        request.onload = function() {
+            if (request.status >= 200 && request.status < 400) {
+                // Parse the response as JSON
+                var response = JSON.parse(request.responseText);
+
+                // Get the suggestions list element
+                var suggestions = document.querySelector(".suggestions");
+
+                // Clear the list
+                suggestions.innerHTML = "";
+
+                // Add the suggestions to the list
+                response.results.forEach(function(result) {
+                    var li = document.createElement("li");
+                    li.textContent = result;
+                    li.addEventListener("click", function() {
+                        searchInput.value = result;
+                        suggestions.innerHTML = "";
+                    });
+                    suggestions.appendChild(li);
+                });
+            }
+        };
+
+        // Send the request
+        request.send();
+    });
+</script>
+</body>
+</html>
