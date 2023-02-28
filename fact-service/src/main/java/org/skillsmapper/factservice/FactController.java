@@ -53,12 +53,22 @@ public class FactController {
 
     @PostMapping("/facts")
     @ResponseBody
-    Fact createFact(@RequestBody FactDTO factDto) {
+    Fact createFact(@RequestBody FactDTO factDTO) {
         Fact fact = new Fact();
-        fact.setLevel(factDto.getLevel());
-        fact.setSkill(factDto.getSkill());
+        fact.setLevel(factDTO.getLevel());
+        fact.setSkill(factDTO.getSkill());
         return repository.save(fact);
     }
+
+    /*
+    @RequestMapping(value = "/facts", method = RequestMethod.POST)
+    public String createFactForm(@ModelAttribute FactDTO factDTO) {
+        logger.info("first Name : {}", firstName);
+        logger.info("Last Name : {}", lastName);
+        logger.info("Role: {}", role);
+        return ResponseEntity.ok().body(firstName);
+    }
+     */
 
     // Single item
     @GetMapping("/facts/{id}")

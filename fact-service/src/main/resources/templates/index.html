@@ -27,7 +27,6 @@
         <div class="col s12">
             <div class="row">
                 <div class="input-field col s12">
-                    <i class="material-icons prefix">textsms</i>
                     <input type="text" id="skill" class="autocomplete">
                     <label for="skill">Skill</label>
                 </div>
@@ -36,23 +35,29 @@
     </div>
     <div class="row">
         <div class="input-field col s12">
-            <select>
+            <select id="level">
                 <option value="interested" selected>Interested in</option>
                 <option value="learning">Learning</option>
                 <option value="using">Using</option>
                 <option value="used">Have used</option>
             </select>
-            <label for>Level</label>
+            <label for="level">Level</label>
         </div>
     </div>
     <div class="row">
         <div class="input-field col s12">
-            <button class="btn" id="addFact" onclick='addFact("${skill}", "${level.value}")'>Add Fact</button>
+            <button class="btn" id="addFact">Add Fact</button>
         </div>
     </div>
 </div>
 <script>
     document.getElementById('signInButton').addEventListener("click", toggle)
+
+    document.getElementById("addFact").addEventListener("click", function () {
+        var skill = document.getElementById("skill").value;
+        var level = document.getElementById("level").value;
+        addFact(skill, level);
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
         var elems = document.querySelectorAll('select');
