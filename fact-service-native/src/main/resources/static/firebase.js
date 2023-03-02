@@ -50,7 +50,6 @@ function toggle() {
   }
 }
 
-// [START cloudrun_end_user_token]
 async function addFact(skill, level) {
   if (firebase.auth().currentUser) {
     // Retrieve JWT to identify the user to the Identity Platform service.
@@ -81,4 +80,3 @@ async function addFact(skill, level) {
     window.alert('User not signed in.');
   }
 }
-// [END cloudrun_end_user_token]
