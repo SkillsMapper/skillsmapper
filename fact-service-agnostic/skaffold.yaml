@@ -1,0 +1,12 @@
+apiVersion: skaffold/v4beta2
+kind: Config
+build:
+  artifacts:
+    - image: eu.gcr.io/p1-tag-updater-manual/fact-service
+      jib:
+        fromImage: 'gcr.io/distroless/java:11'
+manifests:
+  rawYaml:
+    - k8s/*.yaml
+deploy:
+  kubectl: { }

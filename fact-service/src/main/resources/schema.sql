@@ -1,5 +1,0 @@
-CREATE TABLE facts
-(
-    time TIMESTAMP    NOT NULL,
-    uid  VARCHAR(128) NOT NULL
-);

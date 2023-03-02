@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fact-service
+  namespace: facts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fact-service
+  template:
+    metadata:
+      labels:
+        app: fact-service
+    spec:
+      serviceAccountName: facts-sa
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"
+      containers:
+        - name: fact-service
+          image: eu.gcr.io/p1-tag-updater-manual/fact-service
+          env:
+            - name: spring_profiles_active
+              value: postgresql
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: facts-db-secret
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: facts-db-secret
+                  key: password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: facts-db-secret
+                  key: database
+            - name: DATABASE_HOST
+              value: "localhost"
+            - name: DATABASE_PORT
+              value: "5432"
+          resources:
+            requests:
+              cpu: "0.5"
+              memory: "1Gi"
+          readinessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            failureThreshold: 3
+            httpGet:
+              scheme: HTTP
+              path: /actuator/health/readiness
+              port: 8080
+          livenessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            failureThreshold: 3
+            httpGet:
+              scheme: HTTP
+              path: /actuator/health/liveness
+              port: 8080
+        - name: cloud-sql-proxy
+          image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.0.0
+          args:
+            - "--structured-logs"
+            - "p1-tag-updater-manual:us-central1:postgres-instance-fb7c22c7"
+          securityContext:
+            runAsNonRoot: true
+          resources:
+            requests:
+              cpu: "0.25"
+              memory: "512Mi"
+
