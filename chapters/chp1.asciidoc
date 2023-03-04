@@ -537,14 +537,14 @@ To test the job we can trigger it manually regardless of schedule:
 
 [source,bash]
 ----
-gcloud scheduler jobs run ${JOB_NAME} --location=${REGION}
+gcloud scheduler jobs run $JOB_NAME --location=$REGION
 ----
 
 Check the status of the job:
 
 [source,bash]
 ----
-gcloud scheduler jobs describe ${JOB_NAME} --location=${REGION}
+gcloud scheduler jobs describe $JOB_NAME --location=$REGION
 ----
 
 Check the log of the Cloud Function:

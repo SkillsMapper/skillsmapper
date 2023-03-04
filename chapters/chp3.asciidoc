@@ -1,8 +1,56 @@
 [[chapter_p3]]
-== Project 3 - Fact Service
+== Project 3 - Fact Service - Native
+
+For the next project we are going to build the core of the Skills Mapper system, a REST API that allows users to add and remove skills to their profile.
+
+=== Requirements
+
+==== User Story
+
+The user story for this piece of functionality is as written as follows:
+
+[quote]
+----
+As a contributing user, I would like to be able to add and remove skills to my profile so that I can keep my profile up to date.
+----
+
+==== Elaborated Requirements
+
+We also have the following specific requirements:
+
+* The user should be able to add a skill to their profile.
+* The user should be able to remove a skill from their profile.
+* When adding skills to a profile, the user should be able to specify the level of interest or proficiency they have in that skill.
+* The API should be always available and should be able to handle multiple simultaneous requests.
+* Due to support requirements the implementation should be in Java and Spring Boot and the database should be a relational database that can be queried using SQL.
+* The service must have a secure connection to the database.
+* Any credentials used to connect to the database must be stored securely.
+
+=== Solution
+
+== Services Used
 
 * Java application
-* Secrets
+* Secrets Manager
+
+== Implementation
+
+In previous chapters we  embarrassed cloud native development. We have made full use of the serverless Cloud Functions and Cloud Run and the Go programming language which due to its fast startup time is ideal for Cloud Run and autoscaling in particular.
+
+However, we are now faced with a use case that is more traditional, a long-running REST API service persisting data to a relational database. If you are coming to cloud from an enterprise environment, this is the kind of service you are likely to be used to.
+
+This is a more typical situation if you are constrained by the languages and frameworks you and your team are used to. In this case, we are going to use Java and Spring Boot, however we will show
+how we still have options for making this a cloud native application.
+
+There are three main variables for how we implement this project:
+
+* Where to run the compute - given we have a long-running task we don't need the responsiveness of Cloud Run, but we do need the scalability. We will show how we can use Cloud Run or switch to GKE
+Autopilot to get the best of both worlds.
+* What type of database to use? - We will use Cloud SQL, but we will also show how we can use Cloud Spanner.
+* How to connect to the database? - How dependent on Google-specific APIs do we want to be? - We will show how we can use Google APIs in code but how we can also make out code cloud-agnostic.
+
+== Start with Cloud Native
+
 
 === Start with Cloud Run
 
@@ -10,6 +58,9 @@
 * Cloud Run with a Dockerfile
 * Cloud SQL with a proxy
 * Can Cloud run do multi-region
+
+Disadvantages:
+* Notice how slow it is to upload and deploy compared to Go.
 
 === When to switch to GKE Autopilot
 

@@ -11,6 +11,12 @@
 The gcloud CLI is a command line tool that allows you to interact with Google Cloud Platform services. It is available for Windows, macOS, and Linux. Follow the instructions in the Google Cloud
 Documentationfootnote:[https://cloud.google.com/sdk/docs/install] to install it on your local machine.
 
+If like me, you are using a Mac with Homebrew you can shortcut the install process by running:
+
+```shell
+brew install google-cloud-sdk
+```
+
 Alternatively you can use the Google Cloud Shell. This is a browser-based command line tool that is pre-installed with the gcloud CLI. You can access the Google Cloud Shell from the Google Cloud Console. In the top right corner of the console, click the icon that looks like a command prompt labelled `Activate Cloud Shell`. This will give you an up-to-date gcloud client logged into your account and you can skip the next two steps.
 
 ==== Update your gcloud client
