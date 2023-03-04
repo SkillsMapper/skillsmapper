@@ -2,17 +2,18 @@
 
 ## Pre-requisites
 
-1. [Setup](./setup/README.md)
+1. [Setup](./setup/README.md) (Ready for testing)
 
 ## Projects
 
-1. [Tag Updater](./tag-updater/README.md)
-2. [Skill Lookup](./skill-lookup/README.md)
-3. [Fact Service](./fact-service/README.md)
-4. [Profile Builder](./profile-builder/README.md)
+1. [Tag Updater](./tag-updater/README.md) (Ready for testing)
+2. [Skill Lookup](./skill-lookup/README.md) (Ready for testing)
+3. [Fact Service - Native](./fact-service-native/README.md) (In Progress)
+4. [Fact Service - Agnostic](./fact-service-agnostic/README.md) (Not started)
+5. [Profile Builder](./profile-builder/README.md) (Not started)
 
 ## Facilities
 
-1. Laboratory
-2. Factory
-3. Citadel
+1. [Laboratory](.lab/README.md) (Not started)
+2. [Factory](./factory/README.md) (Not started)
+3. [Citadel](./citadel/README.md) (In Progress)

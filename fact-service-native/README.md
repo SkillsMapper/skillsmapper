@@ -2,11 +2,19 @@
 
 This is a summary of [Chapter P3](../chapters/chp3.asciidoc)
 
+## Services Used
+
+* Cloud Run
+* Cloud SQL
+* Cloud Key Management
+* Identity Platform
+
 ## Build Locally
 
 Apply local .env:
 
 ```shell
+set -a; source ../.env; set +a 
 set -a; source .env; set +a
 ```
 
@@ -92,9 +100,9 @@ gcloud sql instances patch $INSTANCE_NAME \
 Create a secret in Secrets Manager to store the database password:
 
 ```shell    
-gcloud secrets create fact-service-db-password \
+gcloud secrets create $FACT_SERVICE_DB_PASSWORD_SECRET_NAME \
     --replication-policy=automatic \
-    --data-file=<(echo $FACT_SERVICE_PASSWORD)
+    --data-file=<(echo $DATABASE_PASSWORD)
 ```
 
 ## Cloud Run
@@ -111,6 +119,52 @@ Deploy to Cloud Run:
 gcloud run deploy $FACT_SERVICE_NAME --source . --env-vars-file=.env.yaml --allow-unauthenticated
 ```
 
+## Create a Service Account
+
+Create a service account:
+
+```shell
+gcloud iam service-accounts create $FACT_SERVICE_SERVICE_ACCOUNT_NAME \
+    --description="Service account for ${FACT_SERVICE_NAME}"
+```
+
+Grant the service account the `Cloud SQL Client` role:
+
+```shell
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+--member=serviceAccount:$FACT_SERVICE_SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+--role=roles/cloudsql.client
+```
+
+Grant the service account the `Secret Manager Secret Accessor` role:
+```shell
+gcloud secrets add-iam-policy-binding $FACT_SERVICE_DB_PASSWORD_SECRET_NAME \
+--member=serviceAccount:$FACT_SERVICE_SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+--role=roles/secretmanager.secretAccessor
+```
+
+## Connect to Cloud SQL
+
+Update the Cloud Run service to connect to Cloud SQL and use the service account:
+
+```shell
+gcloud run services update $FACT_SERVICE_NAME \
+    --service-account ${FACT_SERVICE_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+    --add-cloudsql-instances ${PROJECT_ID}:${REGION}:${INSTANCE_NAME} \
+    --update-secrets=DATABASE_PASSWORD=${FACT_SERVICE_DB_PASSWORD_SECRET_NAME}:latest
+```
+
+## Testing with Curl
+
+Get the key:
+
+```shell
+curl -X POST \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=client_credentials" \
+  https://oauth2.googleapis.com/token
+```
+
 ## Identity Platform
 
 From [https://cloud.google.com/run/docs/tutorials/identity-platform](https://cloud.google.com/run/docs/tutorials/identity-platform)
@@ -121,19 +175,10 @@ Enable the Identity Platform API:
 gcloud services enable identityplatform.googleapis.com
 ```
 
-Download the OAuth 2.0 Client ID: 
+Download the OAuth 2.0 Client ID:
 
 ```shell
 gclo
-```
-
-## Connect to Cloud SQL
-
-```shell
-gcloud run services update $FACT_SERVICE_NAME \
-    --service-account ${SERVICE_ACCOUNT}@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com \
-    --add-cloudsql-instances ${GOOGLE_CLOUD_PROJECT}:${GOOGLE_CLOUD_REGION}:${CLOUD_SQL_INSTANCE_NAME} \
-    --update-secrets CLOUD_SQL_CREDENTIALS_SECRET=${SECRET_NAME}:latest
 ```
 
 ## Database connection options
@@ -144,8 +189,8 @@ Private IP:
 
 Public IP:
 * Connect via socket (internal only if not in authorised network)
-* Connect via IP (if on autorised network)
-* Connect via socket from authorised exteral network
+* Connect via IP (if on authorised network)
+* Connect via socket from authorised external network
 * Connect via Cloud SQL Proxy (Cloud Run provides a proxy)
 
 Requires Google Libraries:

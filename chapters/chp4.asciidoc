@@ -1,11 +1,1 @@
-[[chapter_p4]]
-== Project 4 - Fact Service - Agnostic
-
-In the last chapter we showed how a relatively traditional application built with Java and Spring Boot can make use of Google-specific APIs and services. This is a great way to use Google Cloud if you fully committed, for example a startup building exclusively on Google Cloud. This is the approach Google would encourage you to take, because why not? You are fully integrated and dependent on the platform.
-
-This it is not the only way to use Google Cloud. In fact, it is not the only way to use any cloud platform. In some organisations becoming committed to a cloud in this way can make leaders nervous of lock in. However, you can build applications that are agnostic to the underlying cloud provider but still follow cloud native principles. This is a great way to build applications that can be deployed to multiple cloud providers, or even on-premises.
-
-In this chapter we will re-visit the same application, but this time we will make it agnostic to the underlying cloud provider.
-
-== Implementation
-
+/Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp4.asciidoc

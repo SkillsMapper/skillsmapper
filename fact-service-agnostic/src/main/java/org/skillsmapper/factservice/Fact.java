@@ -1,5 +1,8 @@
 package org.skillsmapper.factservice;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +15,9 @@ public class Fact {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String person;
+    private LocalDateTime timestamp;
+
+    private String userUID;
 
     private String level;
 
@@ -21,8 +26,9 @@ public class Fact {
     protected Fact() {
     }
 
-    public Fact(String person, String level, String skill) {
-        this.person = person;
+    public Fact(String userUID, String level, String skill) {
+        this.userUID = userUID;
+        this.timestamp = LocalDateTime.now();
         this.level = level;
         this.skill = skill;
     }
@@ -39,22 +45,49 @@ public class Fact {
         return skill;
     }
 
-    public String getPerson() {
-        return person;
+    public String getUserUID() {
+        return userUID;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(final LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override
     public String toString() {
         return "Fact{" +
                 "id=" + id +
-                ", person='" + person + '\'' +
-                ", type='" + level + '\'' +
+                ", timestamp=" + timestamp +
+                ", userUID='" + userUID + '\'' +
+                ", level='" + level + '\'' +
                 ", skill='" + skill + '\'' +
                 '}';
     }
 
-    public void setPerson(final String person) {
-        this.person = person;
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Fact fact = (Fact) o;
+        return Objects.equals(id, fact.id) && Objects.equals(timestamp, fact.timestamp) && Objects.equals(userUID, fact.userUID) && Objects.equals(level,
+                fact.level) && Objects.equals(skill, fact.skill);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, timestamp, userUID, level, skill);
+    }
+
+    public void setUserUID(final String person) {
+        this.userUID = person;
     }
 
     public void setSkill(final String skill) {

@@ -1,1 +1,1 @@
-../../chapters/chp3.asciidoc
+/Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp3.asciidoc

@@ -1,5 +1,6 @@
 package org.skillsmapper.factservice;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,11 +63,12 @@ public class FactController {
     @PostMapping("/facts")
     @ResponseBody
     Fact createFact(@RequestHeader Map<String, String> headers, @RequestBody FactDTO factDTO) {
-        String uid = authenticateJwt(headers);
-        logger.info("uid : {}", uid);
         Fact fact = new Fact();
+        fact.setUserUID(authenticateJwt(headers));
+        fact.setTimestamp(LocalDateTime.now());
         fact.setLevel(factDTO.getLevel());
         fact.setSkill(factDTO.getSkill());
+        logger.info("Saving fact: " + fact.toString());
         return repository.save(fact);
     }
 

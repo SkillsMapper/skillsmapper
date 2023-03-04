@@ -1,1 +1,3 @@
 /.env
+!/skill-lookup/.env
+/fact-service-native/.env.yaml
