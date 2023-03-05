@@ -1,12 +1,14 @@
 #!/bin/bash
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/cp14.asciidoc chapters/cp14.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chs1.asciidoc chapters/chs1.asciidoc
+ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp6.asciidoc chapters/chp6.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp5.asciidoc chapters/chp5.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp4.asciidoc chapters/chp4.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp3.asciidoc chapters/chp3.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp2.asciidoc chapters/chp2.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp1.asciidoc chapters/chp1.asciidoc
 
+ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp6.asciidoc ui/chapter/chp6.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp5.asciidoc profile-builder/chapter/chp5.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp4.asciidoc fact-service-agnostic/chapter/chp4.asciidoc
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp3.asciidoc fact-service-native/chapter/chp3.asciidoc
