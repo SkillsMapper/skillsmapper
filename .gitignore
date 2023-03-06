@@ -1,3 +1,4 @@
 /.env
 !/skill-lookup/.env
 /fact-service-native/.env.yaml
+/user-interface/src/js/config.js
