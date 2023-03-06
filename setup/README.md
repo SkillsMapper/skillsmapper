@@ -65,3 +65,6 @@ Link the Billing Account to the Project:
 ```shell
 gcloud beta billing projects link $PROJECT_ID --billing-account $BILLING_ACCOUNT_ID
 ```
+
+## Setup Cloud Workstations
+
