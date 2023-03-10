@@ -66,5 +66,16 @@ Link the Billing Account to the Project:
 gcloud beta billing projects link $PROJECT_ID --billing-account $BILLING_ACCOUNT_ID
 ```
 
+---
+
+## Setup Cloud Source Repositories
+
+Clone this project to your Cloud Repo
+
 ## Setup Cloud Workstations
 
+Enable the Cloud Workstation API:
+
+```shell
+gcloud beta services enable workstation.googleapis.com
+```

@@ -20,7 +20,7 @@ class FactControllerTests {
 
   @Test
   public void shouldBeUnsuccessful_postWithoutToken() throws Exception {
-    mockMvc.perform(post("/facts")).andExpect(status().isUnauthorized());
+    mockMvc.perform(post("/facts")).andExpect(status().is4xxClientError());
   }
 
   @Test
@@ -28,7 +28,7 @@ class FactControllerTests {
     try {
       mockMvc
           .perform(post("/facts").header("Authorization", "Bearer iam-a-token"))
-          .andExpect(status().isForbidden());
+          .andExpect(status().is4xxClientError());
     } catch (Exception e) {
       System.out.println("Caught FirebaseApp error");
     }

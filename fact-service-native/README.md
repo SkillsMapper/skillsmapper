@@ -6,10 +6,10 @@ This is a summary of [Chapter P3](../chapters/chp3.asciidoc)
 
 * Cloud Run
 * Cloud SQL
-* Cloud Key Management
+* Secret Manager
 * Identity Platform
 
-## Build Locally
+## Local Development
 
 Apply local .env:
 
@@ -18,8 +18,21 @@ set -a; source ../.env; set +a
 set -a; source .env; set +a
 ```
 
+### Run Locally
+
 ```shell
 mvn spring-boot:run
+```
+
+### Building the Container
+
+Build the container locally using Jib:
+
+```shell
+PROJECT_ID=$(gcloud config get-value project)
+
+./mvnw compile com.google.cloud.tools:jib-maven-plugin:2.4.0:build \
+  -Dimage=gcr.io/${PROJECT_ID}/${FACT_SERVICE_NAME}
 ```
 
 ## Pre-requisites

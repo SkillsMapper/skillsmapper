@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
@@ -29,6 +30,7 @@ public class FactController {
     private final FactRepository repository;
 
     private static final Logger logger = LoggerFactory.getLogger(FactController.class);
+
     FactController(FactRepository repository) {
         this.repository = repository;
     }
@@ -55,13 +57,14 @@ public class FactController {
     // tag::get-aggregate-root[]
     @GetMapping("/facts")
     @ResponseBody
-    Iterable<Fact> all() {
-        return repository.findAll();
+    Iterable<Fact> all(@RequestHeader Map<String, String> headers) {
+        return repository.findByUserUID(authenticateJwt(headers));
     }
     // end::get-aggregate-root[]
 
     @PostMapping("/facts")
     @ResponseBody
+    @ResponseStatus( HttpStatus.CREATED )
     Fact createFact(@RequestHeader Map<String, String> headers, @RequestBody FactDTO factDTO) {
         Fact fact = new Fact();
         fact.setUserUID(authenticateJwt(headers));
@@ -103,7 +106,9 @@ public class FactController {
         repository.deleteById(id);
     }
 
-    /** Extract and verify Id Token from header */
+    /**
+     * Extract and verify Id Token from header
+     */
     private String authenticateJwt(Map<String, String> headers) {
         String authHeader =
                 (headers.get("authorization") != null)

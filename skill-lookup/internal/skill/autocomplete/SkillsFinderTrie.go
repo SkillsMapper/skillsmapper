@@ -15,10 +15,9 @@ const (
 	shortStringLevenshteinLimit  uint8 = 0
 	mediumStringLevenshteinLimit uint8 = 1
 	longStringLevenshteinLimit   uint8 = 2
-
-	shortStringThreshold  uint8 = 0
-	mediumStringThreshold uint8 = 3
-	longStringThreshold   uint8 = 5
+	shortStringThreshold         uint8 = 0
+	mediumStringThreshold        uint8 = 3
+	longStringThreshold          uint8 = 5
 )
 
 // Trie is a data structure for storing common prefixes to strings for efficient comparison

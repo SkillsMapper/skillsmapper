@@ -16,3 +16,4 @@ ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-g
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/chp1.asciidoc tag-updater/chapter/chp1.asciidoc
 
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch04.asciidoc laboratory/chapter/ch04.asciidoc
+ln -s /Users/danielvaughan/Development/git/book/gcp-book/src/technologies.md chapters/technologies.md

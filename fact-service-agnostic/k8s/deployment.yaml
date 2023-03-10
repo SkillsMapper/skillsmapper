@@ -18,7 +18,7 @@ spec:
         iam.gke.io/gke-metadata-server-enabled: "true"
       containers:
         - name: fact-service
-          image: eu.gcr.io/p1-tag-updater-manual/fact-service
+          image: gcr.io/skillsmapper-org/fact-service:latest
           env:
             - name: spring_profiles_active
               value: postgresql
@@ -69,7 +69,7 @@ spec:
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.0.0
           args:
             - "--structured-logs"
-            - "p1-tag-updater-manual:us-central1:postgres-instance-fb7c22c7"
+            - "skillsmapper-org:us-central1:facts-instance"
           securityContext:
             runAsNonRoot: true
           resources:

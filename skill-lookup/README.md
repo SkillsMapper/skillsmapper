@@ -1,5 +1,20 @@
 # Skill Lookup
 
+## Pre-requisites
+
+First follow the instructions in the [Setup](../setup/README.md) to get a project up and running.
+
+If returning to this project after installation reinitalise environment variables using:
+
+```shell
+set -a # automatically export all variables
+source ../.env
+source .env
+set +a
+```
+
+## Installation
+
 Create an environment variable to store the `SKILL_LOOKUP_SERVICE_NAME`:
 
 ```shell
@@ -25,6 +40,14 @@ Grant the service account the `objectViewer` role for the bucket that contains `
 
 ```shell
 gsutil iam ch serviceAccount:$SKILL_LOOKUP_SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com:objectViewer gs://$BUCKET_NAME
+```
+
+Grant the service account the `logging.logWriter` role:
+
+```shell
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+--member=serviceAccount:$SKILL_LOOKUP_SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+--role=roles/logging.logWriter
 ```
 
 ## Create a Cloud Run Service
