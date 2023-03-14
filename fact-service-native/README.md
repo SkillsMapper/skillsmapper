@@ -24,13 +24,11 @@ set -a; source .env; set +a
 mvn spring-boot:run
 ```
 
-### Building the Container
+### Building the Container Locally
 
 Build the container locally using Jib:
 
 ```shell
-PROJECT_ID=$(gcloud config get-value project)
-
 ./mvnw compile com.google.cloud.tools:jib-maven-plugin:2.4.0:build \
   -Dimage=gcr.io/${PROJECT_ID}/${FACT_SERVICE_NAME}
 ```

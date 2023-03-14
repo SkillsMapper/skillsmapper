@@ -1,6 +1,7 @@
 package org.skillsmapper.factservice;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.PreDestroy;
 
@@ -23,8 +24,23 @@ public class FactApplication {
 
 		// Initialize Firebase Admin SDK
 		GoogleCredentials credentials = GoogleCredentials.getApplicationDefault();
-		FirebaseOptions options = FirebaseOptions.builder().setProjectId(projectId).setCredentials(credentials).build();
-		FirebaseApp.initializeApp(options);
+
+		FirebaseOptions options = FirebaseOptions.builder()
+				.setProjectId(projectId)
+				.setCredentials(credentials)
+				.build();
+
+		boolean hasBeenInitialized=false;
+		List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
+		for(FirebaseApp app : firebaseApps){
+			if(app.getName().equals(FirebaseApp.DEFAULT_APP_NAME)){
+				hasBeenInitialized=true;
+			}
+		}
+
+		if(!hasBeenInitialized){
+			FirebaseApp.initializeApp(options);
+		}
 
 		SpringApplication.run(FactApplication.class, args);
 	}
