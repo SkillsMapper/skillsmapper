@@ -19,3 +19,4 @@ ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-g
 ln -s /Users/danielvaughan/Development/git/book/gcp-book/src/technologies.md chapters/technologies.md
 
 ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/cloud-sql-proxy.png chapters/images/cloud-sql-proxy.png
+ln -s  /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/p3-postit.png chapters/images/p3-postit.png
