@@ -2,7 +2,7 @@
 
 This is a summary of [Chapter P4](../chapters/chp4.asciidoc)
 
-## Build Locally
+## Run Locally
 
 Apply local .env:
 
@@ -67,6 +67,45 @@ This will take a few minutes to create. On completion the cluster will be added 
 gcloud container clusters get-credentials $PROJECT_ID-gke --region $REGION --project $PROJECT_ID
 ```
 
+## Create a Secret
+
+```shell
+gcloud secrets create $FACT_SERVICE_DB_PASSWORD_SECRET_NAME \
+  --replication-policy=automatic \
+  --project=$PROJECT_ID
+```
+
+```shell
+```
+
+## Create Service Account
+
+```shell
+export FACT_SERVICE_SERVICE_ACCOUNT_NAME=fact-service-sa
+```
+
+```shell
+gcloud iam service-accounts create $FACT_SERVICE_SERVICE_ACCOUNT_NAME \
+  --project=$PROJECT_ID
+```
+
+Use the same service account as last time
+
+### Link the service account
+
+Bind the Kubernetes service account to the Google service account with the `iam.workloadIdentityUser` role:
+
+```shell
+gcloud iam service-accounts add-iam-policy-binding GSA_NAME@GSA_PROJECT.iam.gserviceaccount.com \
+--role roles/iam.workloadIdentityUser \
+--member "serviceAccount:PROJECT_ID.svc.id.goog[NAMESPACE/KSA_NAME]"
+```
+
+Annotated the Kubernetes service account with the Google service account:
+```shell
+kubectl annotate serviceaccount gke-sa iam.gke.io/gcp-service-account=gke_service_account@${PROJECT_ID}.iam.gserviceaccount.com
+```
+
 ## Deploy using Skaffold
 
 Set the Skaffold default repo:
@@ -74,3 +113,33 @@ Set the Skaffold default repo:
 ```shell
 export SKAFFOLD_DEFAULT_REPO=gcr.io/$PROJECT_ID
 ```
+
+Build and deploy the application using Skaffold:
+
+```shell
+skaffold run
+```
+
+```shell
+cat *.yaml | envsubst
+```
+
+## Debugging
+
+### Service Account Linking
+
+The Kubernetes deployments use workload identity to link the Kubernetes service account to the Google service account.
+
+To check the service account is linked correctly deploy the test pod:
+
+```shell
+kubectl apply -f workload-identity-test.yaml
+```
+
+Then exec into the pod:
+
+```shell
+kubectl exec -it workload-identity-test --namespace deduper -- /bin/bash
+```
+
+Then run the following command:

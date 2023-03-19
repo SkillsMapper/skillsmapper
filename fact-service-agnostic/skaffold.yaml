@@ -2,7 +2,7 @@ apiVersion: skaffold/v4beta2
 kind: Config
 build:
   artifacts:
-    - image: fact-service
+    - image: fact-service-k8s
       jib:
         fromImage: 'gcr.io/distroless/java:11'
 manifests:

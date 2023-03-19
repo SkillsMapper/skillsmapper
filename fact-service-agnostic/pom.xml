@@ -15,7 +15,6 @@
     <description>Skills Mapper fact service</description>
     <properties>
         <java.version>11</java.version>
-        <spring-cloud-gcp.version>3.4.4</spring-cloud-gcp.version>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
         <maven.build.timestamp.format>yyyyMMdd-HHmmssSSS</maven.build.timestamp.format>
     </properties>
@@ -62,13 +61,6 @@
             <artifactId>firebase-admin</artifactId>
             <version>8.2.0</version>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

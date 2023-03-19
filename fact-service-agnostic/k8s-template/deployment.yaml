@@ -18,12 +18,12 @@ spec:
         iam.gke.io/gke-metadata-server-enabled: "true"
       containers:
         - name: fact-service
-          image: fact-service-k8s
+          image: $IMAGE
           env:
             - name: spring_profiles_active
               value: postgresql
             - name: PROJECT_ID
-              value: skillsmapper-org
+              value: $PROJECT_ID
             - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
@@ -71,7 +71,7 @@ spec:
           image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.0.0
           args:
             - "--structured-logs"
-            - "skillsmapper-org:us-central1:facts-instance"
+            - "${PROJECT_ID}:${REGION}:${INSTANCE_NAME}"
           securityContext:
             runAsNonRoot: true
           resources:
