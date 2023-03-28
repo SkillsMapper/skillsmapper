@@ -29,6 +29,7 @@
                 <div class="input-field col s12">
                     <input type="text" id="skill" class="autocomplete">
                     <label for="skill">Skill</label>
+                    <ul class="suggestions"></ul>
                 </div>
             </div>
         </div>
@@ -70,5 +71,46 @@
     });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  document.getElementById("skill").addEventListener("input", function(event) {
+    // Get the search input element
+    var searchInput = event.target;
+
+    // Get the search prefix
+    var prefix = searchInput.value;
+
+    // Set up the HTTP request
+    var request = new XMLHttpRequest();
+    request.open("GET", "/skills/autocomplete?prefix=" + prefix, true);
+
+    // Set the callback function for when the request finishes
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        // Parse the response as JSON
+        var response = JSON.parse(request.responseText);
+
+        // Get the suggestions list element
+        var suggestions = document.querySelector(".suggestions");
+
+        // Clear the list
+        suggestions.innerHTML = "";
+
+        // Add the suggestions to the list
+        response.results.forEach(function(result) {
+          var li = document.createElement("li");
+          li.textContent = result;
+          li.addEventListener("click", function() {
+            searchInput.value = result;
+            suggestions.innerHTML = "";
+          });
+          suggestions.appendChild(li);
+        });
+      }
+    };
+
+    // Send the request
+    request.send();
+  });
+</script>
 </body>
 </html>
