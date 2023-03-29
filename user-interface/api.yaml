@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   title: skillsmapper
-  description: Skills Mapper service
+  description: Skills Mapper
   version: 1.0.0
 schemes:
   - "https"
@@ -10,11 +10,13 @@ consumes:
 produces:
   - "application/json"
 securityDefinitions:
-  BearerAuth:
-    type: "apiKey"
-    name: "Authorization"
-    in: "header"
-    description: "Bearer token"
+  firebase:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "https://securetoken.google.com/skillsmapper-org"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+#   x-google-audiences: "skillsmapper-org"
 paths:
   /:
     get:
@@ -94,7 +96,7 @@ paths:
       x-google-backend:
         address: https://fact-service-j7n5qulfna-uc.a.run.app/facts
       security:
-        - BearerAuth: []
+        - firebase: []
       produces:
         - "application/json"
       responses:
@@ -116,6 +118,8 @@ paths:
       operationId: postFacts
       x-google-backend:
         address: https://fact-service-j7n5qulfna-uc.a.run.app/facts
+      security:
+        - firebase: []
       consumes:
         - "application/json"
       produces:

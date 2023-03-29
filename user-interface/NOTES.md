@@ -19,3 +19,9 @@ The first option is to use Google Cloud Run to host a UI. This is a serverless o
 The second option is to use a Cloud Storage Bucket to host a UI. This is an even more cost-effective option.
 
 We will also show how we can use Identify Platform to support authentication using Google Sign-In rather than using just a simple username and password.
+
+https://cloud.google.com/load-balancing/docs/https/setting-up-https-serverless
+
+https://cloud.google.com/api-gateway/docs/authenticating-users-firebase
+
+https://medium.com/google-cloud/google-cloud-platform-api-gateway-d8eed0f2e024

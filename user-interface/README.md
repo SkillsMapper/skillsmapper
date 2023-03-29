@@ -133,3 +133,87 @@ export UI_URL=$(gcloud run services describe user-interface --format='value(stat
 export SKILL_LOOKUP_URL=$(gcloud run services describe skill-lookup --format='value(status.url)')
 export FACT_SERVICE_URL=$(gcloud run services describe fact-service --format='value(status.url)')
 ```
+
+## Create Backend
+
+```shell
+export PREFIX=skillsmapper
+```
+
+### Global IP address
+
+Reserve a global ip address:
+
+```shell
+gcloud compute addresses create ${PREFIX}-ip --global
+```
+
+### Create an SSL Certificate
+
+```shell
+export DOMAIN=skillsmapper.org
+```
+
+```shell
+gcloud compute ssl-certificates create ${PREFIX}-cert \
+--domains=$DOMAIN
+```
+
+Check status:
+```shell
+gcloud compute ssl-certificates describe ${PREFIX}-cert
+```
+
+### Create the load balancer
+
+Create a serverless NEG
+
+```shell
+gcloud beta compute network-endpoint-groups create ${PREFIX}-api-gateway-serverless-neg \
+   --region=$REGION \
+   --network-endpoint-type=serverless \
+   --serverless-deployment-platform=apigateway.googleapis.com \
+   --serverless-deployment-resource=${PREFIX}-gateway 
+````
+
+Create a backend service
+
+```shell
+gcloud compute backend-services create ${PREFIX}-backend \
+  --load-balancing-scheme=EXTERNAL \
+  --global
+```
+Add the serverless NEG as a backend to the backend service:
+
+```shell
+gcloud compute backend-services add-backend ${PREFIX}-backend \
+--global \
+--network-endpoint-group=${PREFIX}-api-gateway-serverless-neg  \
+--network-endpoint-group-region=${REGION}
+```
+
+Create a URL map to route incoming requests to the backend service:
+
+```shell
+gcloud compute url-maps create ${PREFIX}-url-map \
+--default-service=${PREFIX}-backend
+```
+
+Create a target HTTP(S) proxy to route requests to your URL map.
+
+```shell
+gcloud compute target-https-proxies create ${PREFIX}-https-proxy \
+    --url-map=${PREFIX}-url-map \
+    --ssl-certificates=${PREFIX}-cert
+```
+
+Create a forwarding rule to route incoming requests to the proxy
+```shell
+ gcloud compute forwarding-rules create ${PREFIX}-fw \
+   --load-balancing-scheme=EXTERNAL \
+   --network-tier=PREMIUM \
+   --address=${PREFIX}-ip \
+   --target-https-proxy=${PREFIX}-https-proxy \
+   --global \
+   --ports=443
+```
