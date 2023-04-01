@@ -16,6 +16,8 @@ resource "google_project_iam_binding" "service-account-logging-binding" {
 
 resource "google_service_account_iam_binding" "service-account-workload-identity-binding" {
   service_account_id = google_service_account.gke_service_account.name
-  members            = ["serviceAccount:${var.project_id}.svc.id.goog[${var.k8s_namespace}/${var.k8s_sa}]"]
+  members            = [
+    "serviceAccount:${var.project_id}.svc.id.goog[${var.k8s_namespace}/${var.k8s_sa}]"
+  ]
   role               = "roles/iam.workloadIdentityUser"
 }

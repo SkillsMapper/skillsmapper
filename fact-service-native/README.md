@@ -82,7 +82,8 @@ gcloud sql databases create $DATABASE_NAME \
 
 ## Create a Cloud SQL User
 
-Create an environment variable to store the `FACT_SERVICE_USER` e.g. `fact-service-user` and a `FACT_SERVICE_PASSWORD`. I recommend using a password manager to generate a secure password.
+Create an environment variable to store the `FACT_SERVICE_USER` e.g. `fact-service-user` and
+a `FACT_SERVICE_PASSWORD`. I recommend using a password manager to generate a secure password.
 
 ```shell
 export FACT_SERVICE_USER='[FACT_SERVICE_USER]'
@@ -99,7 +100,8 @@ gcloud sql users create $FACT_SERVICE_USER \
 
 ### Allow connection from own network (optional)
 
-To connect from your own network, you need to add a network to the instance. This is not required if you are connecting from the same network as the Cloud SQL instance.
+To connect from your own network, you need to add a network to the instance. This is not required if
+you are connecting from the same network as the Cloud SQL instance.
 
 ```shell
 gcloud sql instances patch $INSTANCE_NAME \
@@ -116,7 +118,8 @@ gcloud secrets create $FACT_SERVICE_DB_PASSWORD_SECRET_NAME \
     --data-file=<(echo -n $DATABASE_PASSWORD)
 ```
 
-NOTE: The `echo -n` is important as it removes the trailing newline character. With a newline the database authentication will fail with `Prohibited character` error.
+NOTE: The `echo -n` is important as it removes the trailing newline character. With a newline the
+database authentication will fail with `Prohibited character` error.
 
 ## Cloud Run
 
@@ -244,8 +247,8 @@ gcloud sql connect $INSTANCE_NAME --user=$FACT_SERVICE_DB_USER --database $DATAB
 
 ```
 
-Note: this also temporarily adds your IP address to the list of allowed IP addresses for the instance.
-
+Note: this also temporarily adds your IP address to the list of allowed IP addresses for the
+instance.
 
 ## Identity Platform
 

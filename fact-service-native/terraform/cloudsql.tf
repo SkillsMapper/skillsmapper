@@ -3,8 +3,8 @@ resource "random_id" "db_name_suffix" {
 }
 
 resource "google_sql_database" "database" {
-  name       = var.database_name
-  instance   = google_sql_database_instance.instance.name
+  name     = var.database_name
+  instance = google_sql_database_instance.instance.name
 }
 
 resource "google_sql_database_instance" "instance" {
