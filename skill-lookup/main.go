@@ -34,10 +34,6 @@ var (
 	storageClient *storage.Client
 )
 
-type App struct {
-	*http.Server
-}
-
 func init() {
 	bucketName = util.MustGetenv("BUCKET_NAME")
 	objectName = util.MustGetenv("OBJECT_NAME")
