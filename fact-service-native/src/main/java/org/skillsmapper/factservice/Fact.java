@@ -58,8 +58,20 @@ public class Fact {
     this.skill = skill;
   }
 
+  public LocalDateTime getTimestamp() {
+    return timestamp;
+  }
+
   public void setTimestamp(final LocalDateTime timestamp) {
     this.timestamp = timestamp;
+  }
+
+  public String getUserUID() {
+    return userUID;
+  }
+
+  public void setUserUID(final String person) {
+    this.userUID = person;
   }
 
   @Override
@@ -92,11 +104,4 @@ public class Fact {
     return Objects.hash(id, timestamp, userUID, level, skill);
   }
 
-  public String getUserUID() {
-    return userUID;
-  }
-
-  public void setUserUID(final String person) {
-    this.userUID = person;
-  }
 }

@@ -2,15 +2,17 @@
 
 ## TODO:
 
-* --HATEOS: https://www.baeldung.com/spring-hateoas-tutorial--
-* --Swagger--
-    * https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
-    * https://github.com/spring-guides/tut-rest/blob/main/rest/src/main/java/payroll/EmployeeController.java
+- [X] HATEOS: https://www.baeldung.com/spring-hateoas-tutorial--
+- [X] Swagger: 
+	- [X] https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
+	- [X] https://github.com/spring-guides/tut-rest/blob/main/rest/src/main/java/payroll/EmployeeController.java
+
+https://spring.io/guides/gs/messaging-gcp-pubsub/
 
 ## To add to chapter
 
-* OpenAPI instructions
-* Reiterate important concepts e.g. sigterm
+- [ ]  OpenAPI instructions 
+- [ ]  Reiterate important concepts e.g. sigterm
 
 ## Database connection options
 

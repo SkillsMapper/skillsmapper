@@ -3,6 +3,9 @@ package org.skillsmapper.factservice;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -10,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.skillsmapper.factservice.FactApplication.PubsubOutboundGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
@@ -34,9 +38,24 @@ public class FactController {
 
   private static final Logger logger = LoggerFactory.getLogger(FactController.class);
   private final FactRepository factRepository;
+  private final PubsubOutboundGateway messagingGateway;
 
-  FactController(FactRepository factRepository) {
+  public void factChanged(Fact fact) {
+    List<Fact> facts = factRepository.findByUserUID(fact.getUserUID());
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    try {
+      String jsonString = objectMapper.writeValueAsString(facts);
+      logger.info("Sending message to Pub/Sub: {}", jsonString);
+      messagingGateway.sendToPubsub(jsonString);
+    } catch (JsonProcessingException e) {
+      logger.error("Error serialising message send to Pub/Sub: {}", e.getMessage());
+    }
+  }
+
+  FactController(FactRepository factRepository, PubsubOutboundGateway messagingGateway) {
     this.factRepository = factRepository;
+    this.messagingGateway = messagingGateway;
   }
 
   // Aggregate root
@@ -58,14 +77,17 @@ public class FactController {
   @PostMapping
   @ResponseBody
   @ResponseStatus(HttpStatus.CREATED)
-  Fact createFact(@RequestHeader Map<String, String> headers, @RequestBody FactCreateRequest factCreateRequest) {
+  Fact createFact(@RequestHeader Map<String, String> headers,
+      @RequestBody FactCreateRequest factCreateRequest) {
     Fact fact = new Fact();
     fact.setUserUID(authenticateJwt(headers));
     fact.setTimestamp(LocalDateTime.now());
     fact.setLevel(factCreateRequest.getLevel());
     fact.setSkill(factCreateRequest.getSkill());
     logger.debug("Saving fact: {}", fact);
-    return factRepository.save(fact);
+    factRepository.save(fact);
+    factChanged(fact);
+    return fact;
   }
 
   // Single item
@@ -86,11 +108,12 @@ public class FactController {
     return factRepository
         .findById(id)
         .map(
-            f -> {
+            fact -> {
               // Only allow deletion of facts created by the authenticated user
-              if (f.getUserUID().equals(authenticateJwt(headers))) {
+              if (fact.getUserUID().equals(authenticateJwt(headers))) {
                 logger.debug("Deleting fact: {}", id);
                 factRepository.deleteById(id);
+                factChanged(fact);
               } else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                     "You are not allowed to delete this fact");
