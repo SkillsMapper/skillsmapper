@@ -5,11 +5,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,12 +41,15 @@ public class FactController {
   private final FactRepository factRepository;
   private final PubsubOutboundGateway messagingGateway;
 
-  public void factChanged(Fact fact) {
-    List<Fact> facts = factRepository.findByUserUID(fact.getUserUID());
+  public void factsChanged(Fact fact) {
+    List<Fact> facts = factRepository.findByUser(fact.getUser());
+    FactsChanged factsChanged = new FactsChanged(fact.getUser(), facts, OffsetDateTime.now());
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
+    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    objectMapper.disable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE);
     try {
-      String jsonString = objectMapper.writeValueAsString(facts);
+      String jsonString = objectMapper.writeValueAsString(factsChanged);
       logger.info("Sending message to Pub/Sub: {}", jsonString);
       messagingGateway.sendToPubsub(jsonString);
     } catch (JsonProcessingException e) {
@@ -63,7 +67,7 @@ public class FactController {
   @GetMapping
   @ResponseBody
   CollectionModel<EntityModel<Fact>> all(@RequestHeader Map<String, String> headers) {
-    List<EntityModel<Fact>> facts = factRepository.findByUserUID(authenticateJwt(headers)).stream()
+    List<EntityModel<Fact>> facts = factRepository.findByUser(authenticateJwt(headers)).stream()
         .map(fact -> EntityModel.of(fact,
             linkTo(methodOn(FactController.class).one(fact.getId(), headers)).withSelfRel(),
             linkTo(methodOn(FactController.class).delete(fact.getId(), headers)).withRel("delete"),
@@ -80,13 +84,13 @@ public class FactController {
   Fact createFact(@RequestHeader Map<String, String> headers,
       @RequestBody FactCreateRequest factCreateRequest) {
     Fact fact = new Fact();
-    fact.setUserUID(authenticateJwt(headers));
-    fact.setTimestamp(LocalDateTime.now());
+    fact.setUser(authenticateJwt(headers));
+    fact.setTimestamp(OffsetDateTime.now());
     fact.setLevel(factCreateRequest.getLevel());
     fact.setSkill(factCreateRequest.getSkill());
     logger.debug("Saving fact: {}", fact);
     factRepository.save(fact);
-    factChanged(fact);
+    factsChanged(fact);
     return fact;
   }
 
@@ -110,10 +114,10 @@ public class FactController {
         .map(
             fact -> {
               // Only allow deletion of facts created by the authenticated user
-              if (fact.getUserUID().equals(authenticateJwt(headers))) {
+              if (fact.getUser().equals(authenticateJwt(headers))) {
                 logger.debug("Deleting fact: {}", id);
                 factRepository.deleteById(id);
-                factChanged(fact);
+                factsChanged(fact);
               } else {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                     "You are not allowed to delete this fact");

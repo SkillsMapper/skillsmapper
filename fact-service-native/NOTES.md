@@ -13,6 +13,7 @@ https://spring.io/guides/gs/messaging-gcp-pubsub/
 
 - [ ]  OpenAPI instructions 
 - [ ]  Reiterate important concepts e.g. sigterm
+- [ ] Explain the importance of RFC3339 timestamps
 
 ## Database connection options
 

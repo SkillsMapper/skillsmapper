@@ -1,7 +1,8 @@
 package org.skillsmapper.factservice;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,9 +17,10 @@ public class Fact {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  private LocalDateTime timestamp;
+  private OffsetDateTime timestamp;
 
-  private String userUID;
+  @Column(name = "user_id")
+  private String user;
 
   private String level;
 
@@ -27,9 +29,9 @@ public class Fact {
   protected Fact() {
   }
 
-  public Fact(String userUID, String level, String skill) {
-    this.userUID = userUID;
-    this.timestamp = LocalDateTime.now();
+  public Fact(String user, String level, String skill) {
+    this.user = user;
+    this.timestamp = OffsetDateTime.now();
     this.level = level;
     this.skill = skill;
   }
@@ -58,20 +60,20 @@ public class Fact {
     this.skill = skill;
   }
 
-  public LocalDateTime getTimestamp() {
+  public OffsetDateTime getTimestamp() {
     return timestamp;
   }
 
-  public void setTimestamp(final LocalDateTime timestamp) {
+  public void setTimestamp(final OffsetDateTime timestamp) {
     this.timestamp = timestamp;
   }
 
-  public String getUserUID() {
-    return userUID;
+  public String getUser() {
+    return user;
   }
 
-  public void setUserUID(final String person) {
-    this.userUID = person;
+  public void setUser(final String person) {
+    this.user = person;
   }
 
   @Override
@@ -79,7 +81,7 @@ public class Fact {
     return "Fact{" +
         "id=" + id +
         ", timestamp=" + timestamp +
-        ", userUID='" + userUID + '\'' +
+        ", userUID='" + user + '\'' +
         ", level='" + level + '\'' +
         ", skill='" + skill + '\'' +
         '}';
@@ -95,13 +97,13 @@ public class Fact {
     }
     final Fact fact = (Fact) o;
     return Objects.equals(id, fact.id) && Objects.equals(timestamp, fact.timestamp)
-        && Objects.equals(userUID, fact.userUID) && Objects.equals(level,
+        && Objects.equals(user, fact.user) && Objects.equals(level,
         fact.level) && Objects.equals(skill, fact.skill);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestamp, userUID, level, skill);
+    return Objects.hash(id, timestamp, user, level, skill);
   }
 
 }
