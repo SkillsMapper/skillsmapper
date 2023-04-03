@@ -50,11 +50,19 @@ export PROFILE_BUILDER_SERVICE_URL=$(gcloud run services describe $PROFILE_BUILD
 
 ## Create a subscription
 
+Create a deadletter topic to send failed events to:
+
+```shell
+gcloud pubsub topics create $FACT_CHANGED_TOPIC-deadletter
+```
+
 Create a push subscription receive events from:
 
 ```shell
-gcloud pubsub subscriptions create $FACT_CHANGED_SUBSCRIPTION --topic $FACT_CHANGED_TOPIC --push-endpoint $PROFILE_BUILDER_SERVICE_URL
+gcloud pubsub subscriptions create $FACT_CHANGED_SUBSCRIPTION --topic $FACT_CHANGED_TOPIC --push-endpoint $PROFILE_BUILDER_SERVICE_URL --max-delivery-attempts=5 --dead-letter-topic=$FACT_CHANGED_TOPIC-deadletter
 ```
+
+* Don't want to keep trying, go to dead letter queue with exponential backoff
 
 Delete subscription if failing repeatedly:
 

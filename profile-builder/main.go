@@ -139,6 +139,7 @@ func processPubSub(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
+	//Unmarshal the message
 	if err := json.Unmarshal(body, &m); err != nil {
 		logger.Log(logging.Entry{
 			Severity: logging.Error,
@@ -147,8 +148,9 @@ func processPubSub(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
-	var transaction model.FactsChanged
-	if err := json.Unmarshal(m.Message.Data, &transaction); err != nil {
+	//Unmarshal the message data (factChanged)
+	var factsChanged model.FactsChanged
+	if err := json.Unmarshal(m.Message.Data, &factsChanged); err != nil {
 		logger.Log(logging.Entry{
 			Severity: logging.Error,
 			Payload:  fmt.Sprintf("json.Unmarshal: %v", err),
@@ -156,6 +158,10 @@ func processPubSub(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
+	logger.Log(logging.Entry{
+		Severity: logging.Info,
+		Payload:  fmt.Sprintf("factsChanged: %v", factsChanged),
+	})
 	generateProfile()
 }
 
