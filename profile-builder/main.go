@@ -48,13 +48,13 @@ func init() {
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 		))
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("failed to create loggin client: %v", err)
 	}
 	logger = loggingClient.Logger(serviceName, logging.RedirectAsJSON(os.Stderr))
 
-	firestoreClient, err = firestore.NewClient(ctx, "projectID")
+	firestoreClient, err = firestore.NewClient(ctx, projectID)
 	if err != nil {
-		// TODO: Handle error.
+		log.Fatalf("failed to create firestore client: %v", err)
 	}
 }
 
@@ -131,6 +131,10 @@ func liveness(w http.ResponseWriter, _ *http.Request) {
 func processPubSub(w http.ResponseWriter, r *http.Request) {
 	var m util.PubSubMessage
 	body, err := io.ReadAll(r.Body)
+	logger.Log(logging.Entry{
+		Severity: logging.Error,
+		Payload:  fmt.Sprintf("body: %s", body),
+	})
 	if err != nil {
 		logger.Log(logging.Entry{
 			Severity: logging.Error,
@@ -162,9 +166,42 @@ func processPubSub(w http.ResponseWriter, r *http.Request) {
 		Severity: logging.Info,
 		Payload:  fmt.Sprintf("factsChanged: %v", factsChanged),
 	})
-	generateProfile()
+	generateProfile(factsChanged.User, factsChanged.Facts)
 }
 
-func generateProfile() {
-	firestoreClient.Collection("profiles").Doc("profileID").Set(context.Background(), map[string]interface{}{})
+func generateProfile(user string, facts []model.Fact) {
+	ctx := context.Background()
+	wr, err := firestoreClient.Doc(fmt.Sprintf("profiles/%s", user)).Create(ctx, map[string]interface{}{
+		"capital": "Denver",
+		"pop":     5.5,
+	})
+	if err != nil {
+		log.Fatalf("firestore Doc Create error:%s\n", err)
+	}
+	fmt.Println(wr.UpdateTime)
+
+	//update
+	if true {
+		if _, err := firestoreClient.Doc(fmt.Sprintf("profiles/%s", user)).
+			Update(context.Background(), []firestore.Update{{"FlagColor", nil, "Red"}, {Path: "Location", Value: "Middle"}}); err != nil {
+			log.Fatalf("Update error: %s\n", err)
+		}
+	} /*
+		if err != nil {
+			logger.Log(logging.Entry{
+				Severity: logging.Error,
+				Payload:  fmt.Sprintf("firestoreClient.Collection(\"profiles\").Doc(user).Get(ctx): %v", err),
+			})
+		}
+		if doc.Exists() {
+			logger.Log(logging.Entry{
+				Severity: logging.Info,
+				Payload:  fmt.Sprintf("profile for user %s already exists", user),
+			})
+			return
+		}
+		logger.Log(logging.Entry{
+			Severity: logging.Info,
+			Payload:  fmt.Sprintf("generating profile for user %s, with %v", user, facts),
+		})*/
 }

@@ -69,12 +69,29 @@ Delete subscription if failing repeatedly:
 ```shell
 gcloud pubsub subscriptions delete $FACT_CHANGED_SUBSCRIPTION 
 ```
-
 ## Receive Event
 
 ## Query Service
 
 ## Create Profile
+
+Enable the firestore api:
+
+```shell
+gcloud services enable firestore.googleapis.com
+```
+
+Create a firestore database:
+
+```shell
+gcloud alpha firestore databases create --location=$REGION --database=$DATABASE_NAME --type=datastore-mode
+```
+
+```shell
+gcloud alpha firestore databases update --type=firestore-native
+```
+
+NOTE: you can only have one firestore/datastore database per project
 
 ## Write to Firestore
 

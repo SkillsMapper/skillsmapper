@@ -4,6 +4,7 @@ Trigger via change data capture?
 - [ ] sent all facts as the update message
 - [ ] use profile service to receive messages and update the profile with extras like photos etc.
 - [ ] This  demonstrates a java sending and go receiving
+- []
 
 ## TODO
 
@@ -12,4 +13,7 @@ Trigger via change data capture?
 https://cloud.google.com/blog/products/databases/you-can-now-use-cdc-from-cloudsql-for-postgresql
 
 Demonstrate how to use service-to-service communication to retrieve data.
+
+## Add to chapter
+ - [ ] Differences in firestore and datastore mode: https://cloud.google.com/datastore/docs/firestore-or-datastore
 
