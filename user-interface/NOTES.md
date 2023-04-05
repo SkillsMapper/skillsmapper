@@ -60,6 +60,8 @@ To gateway (post): 403
 
 Firebase ID token has incorrect \"aud\" (audience) claim
 
-
-
 https://www.youtube.com/watch?v=BPGpdwPRP6I
+
+If the service has not started:
+
+{"message":"upstream request timeout","code":504}

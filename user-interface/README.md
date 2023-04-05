@@ -14,7 +14,7 @@ set -a; source .env; set +a
 Updating docs:
 
 ```shell
-swagger-codegen generate -i api.yaml.template -l html2 -o ./src/api-docs
+swagger-codegen generate -i api.yaml -l html2 -o ./src/api-docs
 ```
 
 Generate config.js:
@@ -195,6 +195,8 @@ export ID_TOKEN=$(curl "https://www.googleapis.com/identitytoolkit/v3/relyingpar
 --data-binary "{\"email\":\"${TEST_EMAIL}\",\"password\":\"${TEST_PASSWORD}\",\"returnSecureToken\":true}" | jq -r '.idToken')
 ```
 
+### GET
+
 ```shell
 curl -X GET "https://${GATEWAY_URL}/facts" \
   -H "Authorization: Bearer ${ID_TOKEN}"
@@ -205,7 +207,7 @@ curl -X GET "https://${DOMAIN}/facts" \
   -H "Authorization: Bearer ${ID_TOKEN}"
 ```
 
-### Post
+### POST
 
 ```shell
 curl -X POST \
@@ -222,12 +224,22 @@ curl -X POST \
   -d '{ "skill": "java", "level": "learning" }`' \
   https://${DOMAIN}/facts
 ```
+### DELETE
+
+Gateway:
 
 ```shell
-"message" : "Error when authenticating: Firebase ID token has incorrect \"aud\" (audience) claim. Expected \"skillsmapper-org\" but got \"https://fact-service-j7n5qulfna-uc.a.run.app/facts\". Make sure the ID token comes from the same Firebase project as the service account used to authenticate this SDK. See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.",
+curl -X DELETE \
+  -H "Authorization: Bearer ${ID_TOKEN}" \
+  ${GATEWAY_URL}/facts/1
 ```
+Domain:
 
-https://stackoverflow.com/questions/71782426/google-cloud-api-gateway-cant-invoke-cloud-run-service-while-using-firebase-aut
+```shell
+curl -X DELETE \
+  -H "Authorization: Bearer ${ID_TOKEN}" \
+  ${DOMAIN}/facts/1
+```
 
 ### Troubleshooting
 
