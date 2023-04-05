@@ -14,7 +14,13 @@ set -a; source .env; set +a
 Updating docs:
 
 ```shell
-swagger-codegen generate -i api.yaml -l html2 -o ./src/api-docs
+swagger-codegen generate -i api.yaml.template -l html2 -o ./src/api-docs
+```
+
+Generate config.js:
+
+```shell
+envsubst < src/js/config.js.template > src/js/config.js
 ```
 
 ## Hosting with Cloud Run
@@ -32,6 +38,20 @@ Get the endpoint:
 gcloud run services describe user-interface --platform managed --region europe-west2 --format 'value(status.url)'
 ```
 
+## Get the endpoints
+
+```shell
+export UI_URL=$(gcloud run services describe user-interface --format='value(status.url)')
+export SKILL_LOOKUP_URL=$(gcloud run services describe skill-lookup --format='value(status.url)')
+export FACT_SERVICE_URL=$(gcloud run services describe fact-service --format='value(status.url)')
+```
+
+Create an api.yaml file from the `api.yaml.template` file:
+
+```shell
+envsubst < api.yaml.template > api.yaml
+```
+
 ## Create an API Gateway
 
 Enable API Gateway and Service Control
@@ -43,7 +63,7 @@ gcloud services enable servicecontrol.googleapis.com
 
 ```shell
 export API_NAME=skillsmapper
-export API_SPEC_FILE=api.yaml
+export API_SPEC_FILE=api.yaml.template
 ```
 
 Create both an API and an API Config:
@@ -63,6 +83,23 @@ gcloud api-gateway api-configs delete ${API_NAME}-config \
   --project=${PROJECT_ID}
 ```
 
+## Create a Service Account
+
+Create a service account with permission to invoke the Cloud Run service:
+
+```shell
+gcloud iam service-accounts create "${API_NAME}-gateway-sa" \
+  --display-name "Service account to invoke ${API_NAME} services"
+```
+
+Add Cloud Run Invoker role to the service account:
+
+```shell
+gcloud run services add-iam-policy-binding $FACT_SERVICE_NAME \
+  --role roles/run.invoker \
+  --member "serviceAccount:${API_NAME}-gateway-sa@${PROJECT_ID}.iam.gserviceaccount.com"
+```
+
 ## Create a Gateway
 
 Create an API Gateway:
@@ -73,6 +110,7 @@ gcloud api-gateway gateways create ${API_NAME}-gateway \
   --api-config=${API_NAME}-config \
   --location=${REGION} \
   --project=${PROJECT_ID}
+  --service-account=${API_NAME}-gateway-sa@${PROJECT_ID}.iam.gserviceaccount.com
 ```
 
 Delete the gateway:
@@ -87,13 +125,22 @@ Get the URL:
 export GATEWAY_URL=$(gcloud api-gateway gateways describe skillsmapper-gateway --location=${REGION} --project=${PROJECT_ID} --format 'value(defaultHostname)')
 ```
 
+### Remove allow unauthenticated
+
+Prevent unauthenticated access to the Cloud Run service:
+
+```shell
+gcloud run services update $FACT_SERVICE_NAME \
+    --allow-unauthenticated=false
+```
+
+
 ### Add endpoint to Authentication
 
 Add to Settings>Authorized Domains:
 
 skillsmapper-gateway-7dehhhx6.uc.gateway.dev
 
-Test the endpoint:
 
 ### UI
 
@@ -113,7 +160,34 @@ Via gateway
 curl -X GET "https://${GATEWAY_URL}/skills/autocomplete?prefix=java"
 ```
 
+Via domain
+```shell
+curl -X GET "https://${DOMAIN}/skills/autocomplete?prefix=java"
+```
+
 ### Facts
+
+#### Get a Token
+
+Get a token to test the secured endpoints:
+
+```shell
+export ID_TOKEN=$(curl "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${API_KEY}" \
+-H "Content-Type: application/json" \
+--data-binary "{\"email\":\"${TEST_EMAIL}\",\"password\":\"${TEST_PASSWORD}\",\"returnSecureToken\":true}" | jq -r '.idToken')
+```
+
+#### Test Token
+
+Decode a token by pasting the value of `echo $ID_TOKEN` into the following site:
+
+```shell
+https://jwt.io/
+```
+
+This will decode the token and show the claims. The `aud` claim should be the project ID and the `iss` claim should be `https://securetoken.google.com/${PROJECT_ID}`.
+
+Test the endpoint:
 
 ```shell
 export ID_TOKEN=$(curl "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${API_KEY}" \
@@ -126,13 +200,59 @@ curl -X GET "https://${GATEWAY_URL}/facts" \
   -H "Authorization: Bearer ${ID_TOKEN}"
 ```
 
-## Update Cloud Run to not allow unauthenticated access
+```shell
+curl -X GET "https://${DOMAIN}/facts" \
+  -H "Authorization: Bearer ${ID_TOKEN}"
+```
+
+### Post
 
 ```shell
-export UI_URL=$(gcloud run services describe user-interface --format='value(status.url)')
-export SKILL_LOOKUP_URL=$(gcloud run services describe skill-lookup --format='value(status.url)')
-export FACT_SERVICE_URL=$(gcloud run services describe fact-service --format='value(status.url)')
+curl -X POST \
+  -H "Authorization: Bearer ${ID_TOKEN}" \
+  -H 'Content-Type: application/json' \
+  -d '{ "skill": "java", "level": "learning" }`' \
+  https://${GATEWAY_URL}/facts
 ```
+
+```shell
+curl -X POST \
+  -H "Authorization: Bearer ${ID_TOKEN}" \
+  -H 'Content-Type: application/json' \
+  -d '{ "skill": "java", "level": "learning" }`' \
+  https://${DOMAIN}/facts
+```
+
+```shell
+"message" : "Error when authenticating: Firebase ID token has incorrect \"aud\" (audience) claim. Expected \"skillsmapper-org\" but got \"https://fact-service-j7n5qulfna-uc.a.run.app/facts\". Make sure the ID token comes from the same Firebase project as the service account used to authenticate this SDK. See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.",
+```
+
+https://stackoverflow.com/questions/71782426/google-cloud-api-gateway-cant-invoke-cloud-run-service-while-using-firebase-aut
+
+### Troubleshooting
+
+"Jwt issuer is not configured" - x-google-audiences is not set
+
+
+With Cloud Functions, the identity token created contains automatically the correct audience. It's not the case when you invoke Cloud Run, you have to explicitly mention the Cloud Run audience.
+
+Although documentation say:
+
+"If an operation uses x-google-backend but does not specify either jwt_audience or disable_auth, ESPv2 will automatically default the jwt_audience to match the address. If address is not set, ESPv2 will automatically set disable_auth to true."
+
+This is only true for Cloud Functions not Cloud Run.
+
+"message" : "Error when authenticating: Firebase ID token has incorrect \"aud\" (audience) claim. Expected \"skillsmapper-org\" but got \"https://fact-service-j7n5qulfna-uc.a.run.app\". Make sure the ID token comes from the same Firebase project as the service account used to authenticate this SDK. See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.",
+
+"message" : "Error when authenticating: Firebase ID token has incorrect \"iss\" (issuer) claim. Expected \"https://securetoken.google.com/skillsmapper-org\" but got \"https://accounts.google.com\". Make sure the ID token comes from the same Firebase project as the service account used to authenticate this SDK. See https://firebase.google.com/docs/auth/admin/verify-id-tokens for details on how to retrieve an ID token.",
+
+If a gateway's request to your Cloud Run service is rejected, ensure that the gateway's service account is granted the roles/run.invoker role, and that the gateway's service account has the run.routes.invoke permission. Learn more about the invoker roles and permissions in the Cloud Run IAM reference.
+
+API Gateway will send the authentication result in the X-Apigateway-Api-Userinfo to the backend API. It is recommended to use this header instead of the original Authorization header. This header is base64url encoded and contains the JWT payload.
+
+## Update Cloud Run to not allow unauthenticated access
+
+# Put a real domain
 
 ## Create Backend
 
@@ -160,6 +280,7 @@ gcloud compute ssl-certificates create ${PREFIX}-cert \
 ```
 
 Check status:
+
 ```shell
 gcloud compute ssl-certificates describe ${PREFIX}-cert
 ```
@@ -183,6 +304,7 @@ gcloud compute backend-services create ${PREFIX}-backend \
   --load-balancing-scheme=EXTERNAL \
   --global
 ```
+
 Add the serverless NEG as a backend to the backend service:
 
 ```shell
@@ -208,6 +330,7 @@ gcloud compute target-https-proxies create ${PREFIX}-https-proxy \
 ```
 
 Create a forwarding rule to route incoming requests to the proxy
+
 ```shell
  gcloud compute forwarding-rules create ${PREFIX}-fw \
    --load-balancing-scheme=EXTERNAL \

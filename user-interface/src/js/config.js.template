@@ -1,4 +1,4 @@
 const config = {
-  apiKey: "[apiKey]",
-  authDomain: "[authDomain]",
+  apiKey: "${API_KEY}",
+  authDomain: "${PROJECT_ID}.firebaseapp.com",
 };

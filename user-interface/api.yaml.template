@@ -1,29 +1,25 @@
 swagger: "2.0"
 info:
-  title: skillsmapper
+  title: ${API_NAME}
   description: Skills Mapper
   version: 1.0.0
 schemes:
   - "https"
-consumes:
-  - "application/json"
-produces:
-  - "application/json"
 securityDefinitions:
   firebase:
     authorizationUrl: ""
     flow: "implicit"
     type: "oauth2"
-    x-google-issuer: "https://securetoken.google.com/skillsmapper-org"
+    x-google-issuer: "https://securetoken.google.com/${PROJECT_ID}"
     x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-#   x-google-audiences: "skillsmapper-org"
+    x-google-audiences: ${PROJECT_ID}
 paths:
   /:
     get:
       summary: User Interface
       operationId: ui
       x-google-backend:
-        address: https://user-interface-j7n5qulfna-uc.a.run.app
+        address: ${UI_URL}
       responses:
         '200':
           description: A successful response
@@ -34,7 +30,7 @@ paths:
       summary: API Docs
       operationId: apiDocs
       x-google-backend:
-        address: https://user-interface-j7n5qulfna-uc.a.run.app/api-docs
+        address: ${UI_URL}/api-docs
       responses:
         '200':
           description: A successful response
@@ -45,7 +41,7 @@ paths:
       summary: User Interface
       operationId: firebasejs
       x-google-backend:
-        address: https://user-interface-j7n5qulfna-uc.a.run.app/js/firebase.js
+        address: ${UI_URL}/js/firebase.js
       responses:
         '200':
           description: A successful response
@@ -56,7 +52,7 @@ paths:
       summary: User Interface
       operationId: configjs
       x-google-backend:
-        address: https://user-interface-j7n5qulfna-uc.a.run.app/js/config.js
+        address: ${UI_URL}/js/config.js
       responses:
         '200':
           description: A successful response
@@ -68,7 +64,7 @@ paths:
       operationId: skillsAutocomplete
       description: Returns a list of skill suggestions based on the provided prefix
       x-google-backend:
-        address: https://skill-lookup-j7n5qulfna-uc.a.run.app/autocomplete
+        address: ${SKILL_LOOKUP_URL}/autocomplete
       parameters:
         - name: prefix
           in: query
@@ -94,9 +90,10 @@ paths:
       operationId: getFacts
       description: Get all facts for the authenticated user
       x-google-backend:
-        address: https://fact-service-j7n5qulfna-uc.a.run.app/facts
+        address: ${FACT_SERVICE_URL}/facts
+        jwt_audience: ${PROJECT_ID}
       security:
-        - firebase: []
+        - firebase: [ ]
       produces:
         - "application/json"
       responses:
@@ -117,9 +114,10 @@ paths:
       description: Creates a new interesting fact for the provided skill and level
       operationId: postFacts
       x-google-backend:
-        address: https://fact-service-j7n5qulfna-uc.a.run.app/facts
+        address: ${FACT_SERVICE_URL}/facts
+        jwt_audience: ${FACT_SERVICE_URL}
       security:
-        - firebase: []
+        - firebase: [ ]
       consumes:
         - "application/json"
       produces:
