@@ -131,25 +131,35 @@ public class FactController {
    * Extract and verify ID Token from header
    */
   private String authenticateJwt(Map<String, String> headers) {
-    String authHeader =
-        (headers.get("authorization") != null)
-            ? headers.get("authorization")
-            : headers.get("Authorization");
-    if (authHeader != null) {
-      String idToken = authHeader.split(" ")[1];
-      // If the provided ID token has the correct format, is not expired, and is
-      // properly signed, the method returns the decoded ID token
-      try {
-        FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
-        return decodedToken.getUid();
-      } catch (FirebaseAuthException e) {
-        logger.error("Error when authenticating: {}", e.getMessage());
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    String idToken = null;
+    headers.forEach((key, value) -> logger.info("Header: {} = {}", key, value));
+    String forwardedAuthHeader = headers.get("x-forwarded-authorization");
+    if (forwardedAuthHeader != null) {
+      logger.info("using 'x-forwarded-authorization' header for authentication");
+      idToken = forwardedAuthHeader.split(" ")[1];
+    }
+    if (idToken == null) {
+      String authHeader =
+          (headers.get("authorization") != null)
+              ? headers.get("authorization")
+              : headers.get("Authorization");
+      if (authHeader != null) {
+        logger.info("using 'authorization' header for authentication");
+        idToken = authHeader.split(" ")[1];
+      } else {
+        logger.error("Error: no authorization header");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
       }
-    } else {
-      logger.error("Error: no authorization header");
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    }
+    logger.info("idToken: {}", idToken);
+    // If the provided ID token has the correct format, is not expired, and is
+    // properly signed, the method returns the decoded ID token
+    try {
+      FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+      return decodedToken.getUid();
+    } catch (FirebaseAuthException e) {
+      logger.error("Error when authenticating: {}", e.getMessage());
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
   }
-
 }
