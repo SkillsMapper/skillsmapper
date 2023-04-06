@@ -134,7 +134,6 @@ gcloud run services update $FACT_SERVICE_NAME \
     --allow-unauthenticated=false
 ```
 
-
 ### Add endpoint to Authentication
 
 Add to Settings>Authorized Domains:
