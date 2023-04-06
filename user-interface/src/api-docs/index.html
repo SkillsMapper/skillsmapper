@@ -702,15 +702,6 @@
     }
   }
 };
-            defs["inline_response_200"] = {
-  "type" : "object",
-  "properties" : {
-    "fact" : {
-      "type" : "string",
-      "description" : "The random fact"
-    }
-  }
-};
             defs["inline_response_201"] = {
   "type" : "object",
   "properties" : {
@@ -743,14 +734,20 @@
                     <li data-group="Default" data-name="configjs" class="">
                       <a href="#api-Default-configjs">configjs</a>
                     </li>
+                    <li data-group="Default" data-name="createFact" class="">
+                      <a href="#api-Default-createFact">createFact</a>
+                    </li>
+                    <li data-group="Default" data-name="deleteFact" class="">
+                      <a href="#api-Default-deleteFact">deleteFact</a>
+                    </li>
                     <li data-group="Default" data-name="firebasejs" class="">
                       <a href="#api-Default-firebasejs">firebasejs</a>
                     </li>
+                    <li data-group="Default" data-name="getFact" class="">
+                      <a href="#api-Default-getFact">getFact</a>
+                    </li>
                     <li data-group="Default" data-name="getFacts" class="">
                       <a href="#api-Default-getFacts">getFacts</a>
-                    </li>
-                    <li data-group="Default" data-name="postFacts" class="">
-                      <a href="#api-Default-postFacts">postFacts</a>
                     </li>
                     <li data-group="Default" data-name="skillsAutocomplete" class="">
                       <a href="#api-Default-skillsAutocomplete">skillsAutocomplete</a>
@@ -812,7 +809,7 @@
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-apiDocs-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: application/json"\
+-H "Accept: text/html"\
 "//api-docs"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-apiDocs-0-java">
@@ -1003,15 +1000,15 @@ except ApiException as e:
                                         var schemaWrapper = {
   "description" : "A successful response",
   "content" : {
-    "application/json" : {
+    "text/html" : {
       "schema" : {
         "type" : "string",
-        "x-content-type" : "application/json"
+        "x-content-type" : "text/html"
       }
     }
   }
 };
-                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        var schema = schemaWrapper.content["text/html"].schema;
                                         if (schema.$ref != null) {
                                           schema = defsParser.$refs.get(schema.$ref);
                                         } else {
@@ -1071,7 +1068,7 @@ except ApiException as e:
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-configjs-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: application/json"\
+-H "Accept: text/javascript"\
 "//js/config.js"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-configjs-0-java">
@@ -1262,15 +1259,15 @@ except ApiException as e:
                                         var schemaWrapper = {
   "description" : "A successful response",
   "content" : {
-    "application/json" : {
+    "text/javascript" : {
       "schema" : {
         "type" : "string",
-        "x-content-type" : "application/json"
+        "x-content-type" : "text/javascript"
       }
     }
   }
 };
-                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        var schema = schemaWrapper.content["text/javascript"].schema;
                                         if (schema.$ref != null) {
                                           schema = defsParser.$refs.get(schema.$ref);
                                         } else {
@@ -1292,6 +1289,686 @@ except ApiException as e:
                                   </div>
                                   <input id='responses-configjs-200-schema-data' type='hidden' value=''></input>
                                 </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-createFact">
+                      <article id="api-Default-createFact-0" data-group="User" data-name="createFact" data-version="0">
+                        <div class="pull-left">
+                          <h1>createFact</h1>
+                          <p>Create a new fact</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Creates a new for the current user with the provided skill and level</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/facts</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-createFact-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-createFact-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-createFact-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-createFact-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-createFact-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-createFact-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-createFact-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-createFact-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-createFact-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-createFact-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-createFact-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-createFact-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+\
+-H "Accept: application/hal+json"\
+-H "Content-Type: application/json"\
+"//facts"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-createFact-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+        // Configure OAuth2 access token for authorization: firebase
+        OAuth firebase = (OAuth) defaultClient.getAuthentication("firebase");
+        firebase.setAccessToken("YOUR ACCESS TOKEN");
+
+        DefaultApi apiInstance = new DefaultApi();
+        Facts_body body = ; // Facts_body | The skill and level of the fact to create
+        String authorization = authorization_example; // String | Bearer token
+        try {
+            inline_response_201 result = apiInstance.createFact(body, authorization);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#createFact");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-createFact-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        Facts_body body = ; // Facts_body | The skill and level of the fact to create
+        String authorization = authorization_example; // String | Bearer token
+        try {
+            inline_response_201 result = apiInstance.createFact(body, authorization);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#createFact");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-createFact-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-createFact-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+// Configure OAuth2 access token for authorization: (authentication scheme: firebase)
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
+Facts_body *body = ; // The skill and level of the fact to create
+String *authorization = authorization_example; // Bearer token
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Create a new fact
+[apiInstance createFactWith:body
+    authorization:authorization
+              completionHandler: ^(inline_response_201 output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-createFact-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
+var defaultClient = Skillsmapper.ApiClient.instance;
+
+// Configure OAuth2 access token for authorization: firebase
+var firebase = defaultClient.authentications['firebase'];
+firebase.accessToken = "YOUR ACCESS TOKEN"
+
+var api = new Skillsmapper.DefaultApi()
+var body = ; // {{Facts_body}} The skill and level of the fact to create
+var authorization = authorization_example; // {{String}} Bearer token
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.createFact(bodyauthorization, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-createFact-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-createFact-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class createFactExample
+    {
+        public void main()
+        {
+
+            // Configure OAuth2 access token for authorization: firebase
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
+
+            var apiInstance = new DefaultApi();
+            var body = new Facts_body(); // Facts_body | The skill and level of the fact to create
+            var authorization = authorization_example;  // String | Bearer token
+
+            try
+            {
+                // Create a new fact
+                inline_response_201 result = apiInstance.createFact(body, authorization);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.createFact: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-createFact-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure OAuth2 access token for authorization: firebase
+Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+$body = ; // Facts_body | The skill and level of the fact to create
+$authorization = authorization_example; // String | Bearer token
+
+try {
+    $result = $api_instance->createFact($body, $authorization);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->createFact: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-createFact-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+# Configure OAuth2 access token for authorization: firebase
+$WWW::SwaggerClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+my $body = WWW::SwaggerClient::Object::Facts_body->new(); # Facts_body | The skill and level of the fact to create
+my $authorization = authorization_example; # String | Bearer token
+
+eval { 
+    my $result = $api_instance->createFact(body => $body, authorization => $authorization);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->createFact: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-createFact-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# Configure OAuth2 access token for authorization: firebase
+swagger_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body =  # Facts_body | The skill and level of the fact to create
+authorization = authorization_example # String | Bearer token
+
+try: 
+    # Create a new fact
+    api_response = api_instance.create_fact(body, authorization)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->createFact: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+                            <div class="methodsubtabletitle">Header parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                  <tr><td style="width:150px;">Authorization*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_createFact_authorization">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          Bearer token
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "description" : "The skill and level of the fact to create",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/facts_body"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_createFact_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_createFact_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 201 - The newly created fact </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-createFact-201-schema">Schema</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-createFact-201-schema">
+                                  <div id='responses-createFact-201-schema-201' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "The newly created fact",
+  "content" : {
+    "application/hal+json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_201"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/hal+json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-createFact-201-schema-data').val(stringify(schema));
+                                        var result = $('#responses-createFact-201-schema-201');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-createFact-201-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - Invalid request parameter(s) </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 401 - Unauthorized access </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 403 - Forbidden access </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 500 - An unexpected error occurred </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-deleteFact">
+                      <article id="api-Default-deleteFact-0" data-group="User" data-name="deleteFact" data-version="0">
+                        <div class="pull-left">
+                          <h1>deleteFact</h1>
+                          <p>Delete facts</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Delete a fact for the authenticated user</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/facts/{id}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-deleteFact-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-deleteFact-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-deleteFact-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-deleteFact-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-deleteFact-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-deleteFact-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-deleteFact-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-deleteFact-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-deleteFact-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-deleteFact-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-deleteFact-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-deleteFact-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
+\
+"//facts/{id}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-deleteFact-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+        // Configure OAuth2 access token for authorization: firebase
+        OAuth firebase = (OAuth) defaultClient.getAuthentication("firebase");
+        firebase.setAccessToken("YOUR ACCESS TOKEN");
+
+        DefaultApi apiInstance = new DefaultApi();
+        Integer id = 56; // Integer | ID of the fact to delete
+        try {
+            apiInstance.deleteFact(id);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#deleteFact");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-deleteFact-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        Integer id = 56; // Integer | ID of the fact to delete
+        try {
+            apiInstance.deleteFact(id);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#deleteFact");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-deleteFact-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-deleteFact-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+// Configure OAuth2 access token for authorization: (authentication scheme: firebase)
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
+Integer *id = 56; // ID of the fact to delete
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Delete facts
+[apiInstance deleteFactWith:id
+              completionHandler: ^(NSError* error) {
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-deleteFact-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
+var defaultClient = Skillsmapper.ApiClient.instance;
+
+// Configure OAuth2 access token for authorization: firebase
+var firebase = defaultClient.authentications['firebase'];
+firebase.accessToken = "YOUR ACCESS TOKEN"
+
+var api = new Skillsmapper.DefaultApi()
+var id = 56; // {{Integer}} ID of the fact to delete
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.deleteFact(id, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-deleteFact-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-deleteFact-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class deleteFactExample
+    {
+        public void main()
+        {
+
+            // Configure OAuth2 access token for authorization: firebase
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
+
+            var apiInstance = new DefaultApi();
+            var id = 56;  // Integer | ID of the fact to delete
+
+            try
+            {
+                // Delete facts
+                apiInstance.deleteFact(id);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.deleteFact: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-deleteFact-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure OAuth2 access token for authorization: firebase
+Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+$id = 56; // Integer | ID of the fact to delete
+
+try {
+    $api_instance->deleteFact($id);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->deleteFact: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-deleteFact-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+# Configure OAuth2 access token for authorization: firebase
+$WWW::SwaggerClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+my $id = 56; # Integer | ID of the fact to delete
+
+eval { 
+    $api_instance->deleteFact(id => $id);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->deleteFact: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-deleteFact-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# Configure OAuth2 access token for authorization: firebase
+swagger_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+id = 56 # Integer | ID of the fact to delete
+
+try: 
+    # Delete facts
+    api_instance.delete_fact(id)
+except ApiException as e:
+    print("Exception when calling DefaultApi->deleteFact: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_deleteFact_id">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      Integer
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          ID of the fact to delete
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 204 - No Content </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
                             </div>
 
                         </article>
@@ -1330,7 +2007,7 @@ except ApiException as e:
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-firebasejs-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: application/json"\
+-H "Accept: text/javascript"\
 "//js/firebase.js"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-firebasejs-0-java">
@@ -1521,15 +2198,15 @@ except ApiException as e:
                                         var schemaWrapper = {
   "description" : "A successful response",
   "content" : {
-    "application/json" : {
+    "text/javascript" : {
       "schema" : {
         "type" : "string",
-        "x-content-type" : "application/json"
+        "x-content-type" : "text/javascript"
       }
     }
   }
 };
-                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        var schema = schemaWrapper.content["text/javascript"].schema;
                                         if (schema.$ref != null) {
                                           schema = defsParser.$refs.get(schema.$ref);
                                         } else {
@@ -1551,6 +2228,278 @@ except ApiException as e:
                                   </div>
                                   <input id='responses-firebasejs-200-schema-data' type='hidden' value=''></input>
                                 </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-getFact">
+                      <article id="api-Default-getFact-0" data-group="User" data-name="getFact" data-version="0">
+                        <div class="pull-left">
+                          <h1>getFact</h1>
+                          <p>Get fact</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Get single fact for the authenticated user</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/facts/{id}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-getFact-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-getFact-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-getFact-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-getFact-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-getFact-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-getFact-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-getFact-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-getFact-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-getFact-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-getFact-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-getFact-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-getFact-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+\
+"//facts/{id}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-getFact-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+        // Configure OAuth2 access token for authorization: firebase
+        OAuth firebase = (OAuth) defaultClient.getAuthentication("firebase");
+        firebase.setAccessToken("YOUR ACCESS TOKEN");
+
+        DefaultApi apiInstance = new DefaultApi();
+        Integer id = 56; // Integer | ID of the fact to get
+        try {
+            apiInstance.getFact(id);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#getFact");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-getFact-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        Integer id = 56; // Integer | ID of the fact to get
+        try {
+            apiInstance.getFact(id);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#getFact");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-getFact-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-getFact-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+// Configure OAuth2 access token for authorization: (authentication scheme: firebase)
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
+Integer *id = 56; // ID of the fact to get
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Get fact
+[apiInstance getFactWith:id
+              completionHandler: ^(NSError* error) {
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-getFact-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
+var defaultClient = Skillsmapper.ApiClient.instance;
+
+// Configure OAuth2 access token for authorization: firebase
+var firebase = defaultClient.authentications['firebase'];
+firebase.accessToken = "YOUR ACCESS TOKEN"
+
+var api = new Skillsmapper.DefaultApi()
+var id = 56; // {{Integer}} ID of the fact to get
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.getFact(id, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-getFact-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-getFact-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class getFactExample
+    {
+        public void main()
+        {
+
+            // Configure OAuth2 access token for authorization: firebase
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
+
+            var apiInstance = new DefaultApi();
+            var id = 56;  // Integer | ID of the fact to get
+
+            try
+            {
+                // Get fact
+                apiInstance.getFact(id);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.getFact: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-getFact-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure OAuth2 access token for authorization: firebase
+Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+$id = 56; // Integer | ID of the fact to get
+
+try {
+    $api_instance->getFact($id);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->getFact: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-getFact-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+# Configure OAuth2 access token for authorization: firebase
+$WWW::SwaggerClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+my $id = 56; # Integer | ID of the fact to get
+
+eval { 
+    $api_instance->getFact(id => $id);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->getFact: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-getFact-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# Configure OAuth2 access token for authorization: firebase
+swagger_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+id = 56 # Integer | ID of the fact to get
+
+try: 
+    # Get fact
+    api_instance.get_fact(id)
+except ApiException as e:
+    print("Exception when calling DefaultApi->getFact: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_getFact_id">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      Integer
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          ID of the fact to get
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - OK </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
                             </div>
 
                         </article>
@@ -1590,7 +2539,6 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-getFacts-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 \
--H "Accept: application/json"\
 "//facts"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-getFacts-0-java">
@@ -1613,8 +2561,7 @@ public class DefaultApiExample {
 
         DefaultApi apiInstance = new DefaultApi();
         try {
-            inline_response_200 result = apiInstance.getFacts();
-            System.out.println(result);
+            apiInstance.getFacts();
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#getFacts");
             e.printStackTrace();
@@ -1631,8 +2578,7 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
         try {
-            inline_response_200 result = apiInstance.getFacts();
-            System.out.println(result);
+            apiInstance.getFacts();
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#getFacts");
             e.printStackTrace();
@@ -1653,10 +2599,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Get facts
 [apiInstance getFactsWithCompletionHandler: 
-              ^(inline_response_200 output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
+              ^(NSError* error) {
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -1677,7 +2620,7 @@ var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully. Returned data: ' + data);
+    console.log('API called successfully.');
   }
 };
 api.getFacts(callback);
@@ -1709,8 +2652,7 @@ namespace Example
             try
             {
                 // Get facts
-                inline_response_200 result = apiInstance.getFacts();
-                Debug.WriteLine(result);
+                apiInstance.getFacts();
             }
             catch (Exception e)
             {
@@ -1732,8 +2674,7 @@ Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_AC
 $api_instance = new Swagger\Client\ApiDefaultApi();
 
 try {
-    $result = $api_instance->getFacts();
-    print_r($result);
+    $api_instance->getFacts();
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->getFacts: ', $e->getMessage(), PHP_EOL;
 }
@@ -1751,8 +2692,7 @@ $WWW::SwaggerClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
 
 eval { 
-    my $result = $api_instance->getFacts();
-    print Dumper($result);
+    $api_instance->getFacts();
 };
 if ($@) {
     warn "Exception when calling DefaultApi->getFacts: $@\n";
@@ -1774,8 +2714,7 @@ api_instance = swagger_client.DefaultApi()
 
 try: 
     # Get facts
-    api_response = api_instance.get_facts()
-    pprint(api_response)
+    api_instance.get_facts()
 except ApiException as e:
     print("Exception when calling DefaultApi->getFacts: %s\n" % e)</code></pre>
                             </div>
@@ -1789,447 +2728,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - A random fact </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-getFacts-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-getFacts-200-schema">
-                                  <div id='responses-getFacts-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "A random fact",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/inline_response_200"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-getFacts-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-getFacts-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-getFacts-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                            <h3> Status: 401 - Unauthorized access </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                            </div>
-
-                            <h3> Status: 500 - An unexpected error occurred </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Default-postFacts">
-                      <article id="api-Default-postFacts-0" data-group="User" data-name="postFacts" data-version="0">
-                        <div class="pull-left">
-                          <h1>postFacts</h1>
-                          <p>Create a new fact</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked">Creates a new interesting fact for the provided skill and level</p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/facts</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-postFacts-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-postFacts-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-postFacts-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-postFacts-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-postFacts-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-postFacts-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-postFacts-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-postFacts-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-postFacts-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-postFacts-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-postFacts-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-postFacts-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
-\
--H "Accept: application/json"\
--H "Content-Type: application/json"\
-"//facts"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Default-postFacts-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.DefaultApi;
-
-import java.io.File;
-import java.util.*;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-
-        // Configure OAuth2 access token for authorization: firebase
-        OAuth firebase = (OAuth) defaultClient.getAuthentication("firebase");
-        firebase.setAccessToken("YOUR ACCESS TOKEN");
-
-        DefaultApi apiInstance = new DefaultApi();
-        Facts_body body = ; // Facts_body | The skill and level of the fact to create
-        String authorization = authorization_example; // String | Bearer token
-        try {
-            inline_response_201 result = apiInstance.postFacts(body, authorization);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#postFacts");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Default-postFacts-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        DefaultApi apiInstance = new DefaultApi();
-        Facts_body body = ; // Facts_body | The skill and level of the fact to create
-        String authorization = authorization_example; // String | Bearer token
-        try {
-            inline_response_201 result = apiInstance.postFacts(body, authorization);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#postFacts");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Default-postFacts-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Default-postFacts-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
-// Configure OAuth2 access token for authorization: (authentication scheme: firebase)
-[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
-Facts_body *body = ; // The skill and level of the fact to create
-String *authorization = authorization_example; // Bearer token
-
-DefaultApi *apiInstance = [[DefaultApi alloc] init];
-
-// Create a new fact
-[apiInstance postFactsWith:body
-    authorization:authorization
-              completionHandler: ^(inline_response_201 output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-postFacts-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
-var defaultClient = Skillsmapper.ApiClient.instance;
-
-// Configure OAuth2 access token for authorization: firebase
-var firebase = defaultClient.authentications['firebase'];
-firebase.accessToken = "YOUR ACCESS TOKEN"
-
-var api = new Skillsmapper.DefaultApi()
-var body = ; // {{Facts_body}} The skill and level of the fact to create
-var authorization = authorization_example; // {{String}} Bearer token
-
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.postFacts(bodyauthorization, callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Default-postFacts-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Default-postFacts-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class postFactsExample
-    {
-        public void main()
-        {
-
-            // Configure OAuth2 access token for authorization: firebase
-            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
-
-            var apiInstance = new DefaultApi();
-            var body = new Facts_body(); // Facts_body | The skill and level of the fact to create
-            var authorization = authorization_example;  // String | Bearer token
-
-            try
-            {
-                // Create a new fact
-                inline_response_201 result = apiInstance.postFacts(body, authorization);
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling DefaultApi.postFacts: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-postFacts-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-// Configure OAuth2 access token for authorization: firebase
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
-
-$api_instance = new Swagger\Client\ApiDefaultApi();
-$body = ; // Facts_body | The skill and level of the fact to create
-$authorization = authorization_example; // String | Bearer token
-
-try {
-    $result = $api_instance->postFacts($body, $authorization);
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->postFacts: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-postFacts-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::DefaultApi;
-
-# Configure OAuth2 access token for authorization: firebase
-$WWW::SwaggerClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
-
-my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $body = WWW::SwaggerClient::Object::Facts_body->new(); # Facts_body | The skill and level of the fact to create
-my $authorization = authorization_example; # String | Bearer token
-
-eval { 
-    my $result = $api_instance->postFacts(body => $body, authorization => $authorization);
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling DefaultApi->postFacts: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-postFacts-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# Configure OAuth2 access token for authorization: firebase
-swagger_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
-
-# create an instance of the API class
-api_instance = swagger_client.DefaultApi()
-body =  # Facts_body | The skill and level of the fact to create
-authorization = authorization_example # String | Bearer token
-
-try: 
-    # Create a new fact
-    api_response = api_instance.post_facts(body, authorization)
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling DefaultApi->postFacts: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-                            <div class="methodsubtabletitle">Header parameters</div>
-                            <table id="methodsubtable">
-                              <tr>
-                                <th width="150px">Name</th>
-                                <th>Description</th>
-                              </tr>
-                                  <tr><td style="width:150px;">Authorization*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_postFacts_authorization">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      String
-                                                  </span>
-                                  
-                                                      <div class="inner description">
-                                                          Bearer token
-                                                      </div>
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
-                            </table>
-
-                            <div class="methodsubtabletitle">Body parameters</div>
-                            <table id="methodsubtable">
-                              <tr>
-                                <th width="150px">Name</th>
-                                <th>Description</th>
-                              </tr>
-                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
-                                <td>
-                                
-                                
-                                <script>
-                                $(document).ready(function() {
-                                  var schemaWrapper = {
-  "description" : "The skill and level of the fact to create",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/facts_body"
-      }
-    }
-  },
-  "required" : true
-};
-                                  var schema = schemaWrapper.content["application/json"].schema;
-                                  if (schema.$ref != null) {
-                                    schema = defsParser.$refs.get(schema.$ref);
-                                  } else {
-                                    schemaWrapper.components = {};
-                                    schemaWrapper.components.schemas = Object.assign({}, defs);
-                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                      console.log(err);
-                                    });
-                                  }
-                                
-                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-                                  var result = $('#d2e199_postFacts_body');
-                                  result.empty();
-                                  result.append(view.render());
-                                });
-                                </script>
-                                <div id="d2e199_postFacts_body"></div>
-                                </td>
-                                </tr>
-                            </table>
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 201 - The newly created fact </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-postFacts-201-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-postFacts-201-schema">
-                                  <div id='responses-postFacts-201-schema-201' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "The newly created fact",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/inline_response_201"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-postFacts-201-schema-data').val(stringify(schema));
-                                        var result = $('#responses-postFacts-201-schema-201');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-postFacts-201-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                            <h3> Status: 400 - Invalid request parameter(s) </h3>
+                            <h3> Status: 200 - OK </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
@@ -2238,6 +2737,14 @@ except ApiException as e:
                             </div>
 
                             <h3> Status: 401 - Unauthorized access </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 403 - Forbidden access </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
@@ -2605,7 +3112,7 @@ except ApiException as e:
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-ui-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: application/json"\
+-H "Accept: text/html"\
 "//"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-ui-0-java">
@@ -2796,15 +3303,15 @@ except ApiException as e:
                                         var schemaWrapper = {
   "description" : "A successful response",
   "content" : {
-    "application/json" : {
+    "text/html" : {
       "schema" : {
         "type" : "string",
-        "x-content-type" : "application/json"
+        "x-content-type" : "text/html"
       }
     }
   }
 };
-                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        var schema = schemaWrapper.content["text/html"].schema;
                                         if (schema.$ref != null) {
                                           schema = defsParser.$refs.get(schema.$ref);
                                         } else {

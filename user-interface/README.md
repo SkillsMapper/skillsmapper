@@ -30,7 +30,7 @@ gcloud builds submit --tag gcr.io/${PROJECT_ID}/user-interface
 ```
 
 ```shell
-gcloud run deploy --image gcr.io/${PROJECT_ID}/user-interface
+gcloud run deploy user-interface --image gcr.io/${PROJECT_ID}/user-interface
 ```
 
 Get the endpoint:

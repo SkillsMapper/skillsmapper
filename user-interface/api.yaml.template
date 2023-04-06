@@ -20,6 +20,8 @@ paths:
       operationId: ui
       x-google-backend:
         address: ${UI_URL}
+      produces:
+        - "text/html"
       responses:
         '200':
           description: A successful response
@@ -31,6 +33,8 @@ paths:
       operationId: apiDocs
       x-google-backend:
         address: ${UI_URL}/api-docs
+      produces:
+        - "text/html"
       responses:
         '200':
           description: A successful response
@@ -42,6 +46,8 @@ paths:
       operationId: firebasejs
       x-google-backend:
         address: ${UI_URL}/js/firebase.js
+      produces:
+        - "text/javascript"
       responses:
         '200':
           description: A successful response
@@ -53,6 +59,8 @@ paths:
       operationId: configjs
       x-google-backend:
         address: ${UI_URL}/js/config.js
+      produces:
+        - "text/javascript"
       responses:
         '200':
           description: A successful response
@@ -95,24 +103,20 @@ paths:
       security:
         - firebase: [ ]
       produces:
-        - "application/json"
+        - "application/hal+json"
       responses:
         200:
-          description: A random fact
-          schema:
-            type: object
-            properties:
-              fact:
-                type: string
-                description: The random fact
+          description: OK
         401:
           description: Unauthorized access
+        403:
+          description: Forbidden access
         500:
           description: An unexpected error occurred
     post:
       summary: Create a new fact
-      description: Creates a new interesting fact for the provided skill and level
-      operationId: postFacts
+      description: Creates a new for the current user with the provided skill and level
+      operationId: createFact
       x-google-backend:
         address: ${FACT_SERVICE_URL}/facts
         jwt_audience: ${FACT_SERVICE_URL}
@@ -121,7 +125,7 @@ paths:
       consumes:
         - "application/json"
       produces:
-        - "application/json"
+        - "application/hal+json"
       parameters:
         - in: "header"
           name: "Authorization"
@@ -154,5 +158,48 @@ paths:
           description: Invalid request parameter(s)
         401:
           description: Unauthorized access
+        403:
+          description: Forbidden access
         500:
           description: An unexpected error occurred
+  /facts/{id}:
+    get:
+      summary: Get fact
+      operationId: getFact
+      description: Get single fact for the authenticated user
+      x-google-backend:
+        address: ${FACT_SERVICE_URL}/facts
+        jwt_audience: ${PROJECT_ID}
+      security:
+        - firebase: [ ]
+      produces:
+        - "application/hal+json"
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: ID of the fact to get
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: Delete facts
+      operationId: deleteFact
+      description: Delete a fact for the authenticated user
+      x-google-backend:
+        address: ${FACT_SERVICE_URL}/facts
+        jwt_audience: ${PROJECT_ID}
+      security:
+        - firebase: [ ]
+      produces:
+        - "application/hal+json"
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: ID of the fact to delete
+      responses:
+        '204':
+          description: No Content
