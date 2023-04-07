@@ -20,7 +20,7 @@ swagger-codegen generate -i api.yaml -l html2 -o ./src/api-docs
 Generate config.js:
 
 ```shell
-envsubst < src/js/config.js.template > src/js/config.js
+envsubst < config.js.template > src/js/config.js
 ```
 
 ## Hosting with Cloud Run
