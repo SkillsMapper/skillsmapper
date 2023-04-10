@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/compute/metadata v0.2.3
 	cloud.google.com/go/firestore v1.9.0
 	cloud.google.com/go/logging v1.7.0
+	github.com/gorilla/mux v1.8.0
 	google.golang.org/api v0.110.0
 	google.golang.org/grpc v1.53.0
 )
@@ -19,7 +20,6 @@ require (
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.3 // indirect
 	github.com/googleapis/gax-go/v2 v2.7.0 // indirect
-	github.com/gorilla/mux v1.8.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/net v0.7.0 // indirect
 	golang.org/x/oauth2 v0.5.0 // indirect

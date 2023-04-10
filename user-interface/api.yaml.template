@@ -203,3 +203,24 @@ paths:
       responses:
         '204':
           description: No Content
+  /profiles:
+    get:
+      summary: Get profile
+      operationId: getProfile
+      description: Get a profile for the authenticated user
+      x-google-backend:
+        address: ${PROFILE_SERVICE_URL}
+        jwt_audience: ${PROJECT_ID}
+      security:
+        - firebase: [ ]
+      produces:
+        - "application/hal+json"
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+          description: ID of the fact to get
+      responses:
+        '200':
+          description: OK

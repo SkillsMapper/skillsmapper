@@ -32,25 +32,26 @@ Add pubsub to `pom.xml`:
 
 ## Deploy to Cloud Run
 
-```shell
-export PROFILE_BUILDER_SERVICE_NAME=[PROFILE_BUILDER_SERVICE_NAME]
-```
+Create an environment variable to store the `PROFILE_SERVICE_NAME` e.g. `profile-builder':
 
+```shell
+export PROFILE_SERVICE_NAME=[PROFILE_SERVICE_NAME]
+```
 Build and deploy the Cloud Run service:
 
 ```shell
-gcloud run deploy $PROFILE_BUILDER_SERVICE_NAME --source . --env-vars-file=.env.yaml --allow-unauthenticated
+gcloud run deploy $PROFILE_SERVICE_NAME --source . --env-vars-file=.env.yaml --allow-unauthenticated
 ```
 
-Set the `SKILL_LOOKUP_SERVICE_URL` environment variable:
+Set the `PROFILE_SERVICE_URL` environment variable. We will use this to configure the Pub Sub subscription:
 
 ```shell
-export PROFILE_BUILDER_SERVICE_URL=$(gcloud run services describe $PROFILE_BUILDER_SERVICE_NAME --format='value(status.url)')
+export PROFILE_SERVICE_URL=$(gcloud run services describe $PROFILE_SERVICE_NAME --format='value(status.url)')
 ```
 
 ## Create a subscription
 
-Create a deadletter topic to send failed events to:
+Create a dead letter topic to send failed events to:
 
 ```shell
 gcloud pubsub topics create $FACT_CHANGED_TOPIC-deadletter
@@ -59,7 +60,7 @@ gcloud pubsub topics create $FACT_CHANGED_TOPIC-deadletter
 Create a push subscription receive events from:
 
 ```shell
-gcloud pubsub subscriptions create $FACT_CHANGED_SUBSCRIPTION --topic $FACT_CHANGED_TOPIC --push-endpoint $PROFILE_BUILDER_SERVICE_URL --max-delivery-attempts=5 --dead-letter-topic=$FACT_CHANGED_TOPIC-deadletter
+gcloud pubsub subscriptions create $FACT_CHANGED_SUBSCRIPTION --topic $FACT_CHANGED_TOPIC --push-endpoint $PROFILE_SERVICE_NAME --max-delivery-attempts=5 --dead-letter-topic=$FACT_CHANGED_TOPIC-deadletter
 ```
 
 * Don't want to keep trying, go to dead letter queue with exponential backoff

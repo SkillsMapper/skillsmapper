@@ -76,7 +76,8 @@ func main() {
 	isReady.Store(false)
 	r.HandleFunc("/liveness", liveness)
 	r.HandleFunc("/readiness", readiness(isReady))
-	r.HandleFunc("/", processPubSub)
+	r.HandleFunc("/", processPubSub).Methods("POST")
+	r.HandleFunc("/profile", getProfile).Methods("GET")
 	server.Handler = r
 
 	logger.Log(logging.Entry{
@@ -112,6 +113,32 @@ func main() {
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
 		Payload:  "shutdown complete"})
+}
+
+func getProfile(writer http.ResponseWriter, request *http.Request) {
+	ctx := context.Background()
+	_ = ctx
+	profile, err := model.Profile{ID: 1}, error(nil)
+	if err != nil {
+		logger.Log(logging.Entry{
+			Severity: logging.Error,
+			Payload:  fmt.Sprintf("error retrieving profile: %v", err),
+		})
+		http.Error(writer, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	profileJSON, err := json.Marshal(profile)
+	if err != nil {
+		logger.Log(logging.Entry{
+			Severity: logging.Error,
+			Payload:  fmt.Sprintf("error marshalling profile: %v", err),
+		})
+		http.Error(writer, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	_, err = writer.Write(profileJSON)
 }
 
 func readiness(isReady *atomic.Value) http.HandlerFunc {
