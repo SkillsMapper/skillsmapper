@@ -41,8 +41,8 @@ gcloud run services describe user-interface --platform managed --region europe-w
 ## Get the endpoints
 
 ```shell
-export UI_URL=$(gcloud run services describe user-interface --format='value(status.url)')
-export SKILL_LOOKUP_URL=$(gcloud run services describe skill-lookup --format='value(status.url)')
+export UI_SERVICE_URL=$(gcloud run services describe user-interface --format='value(status.url)')
+export SKILL_SERVICE_URL=$(gcloud run services describe skill-lookup --format='value(status.url)')
 export FACT_SERVICE_URL=$(gcloud run services describe fact-service --format='value(status.url)')
 ```
 
@@ -63,7 +63,7 @@ gcloud services enable servicecontrol.googleapis.com
 
 ```shell
 export API_NAME=skillsmapper
-export API_SPEC_FILE=api.yaml.template
+export API_SPEC_FILE=api.yaml
 ```
 
 Create both an API and an API Config:

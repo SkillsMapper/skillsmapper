@@ -19,7 +19,7 @@ paths:
       summary: User Interface
       operationId: ui
       x-google-backend:
-        address: ${UI_URL}
+        address: ${UI_SERVICE_URL}
       produces:
         - "text/html"
       responses:
@@ -32,7 +32,7 @@ paths:
       summary: API Docs
       operationId: apiDocs
       x-google-backend:
-        address: ${UI_URL}/api-docs
+        address: ${UI_SERVICE_URL}/api-docs
       produces:
         - "text/html"
       responses:
@@ -45,7 +45,7 @@ paths:
       summary: User Interface
       operationId: firebasejs
       x-google-backend:
-        address: ${UI_URL}/js/firebase.js
+        address: ${UI_SERVICE_URL}/js/firebase.js
       produces:
         - "text/javascript"
       responses:
@@ -58,7 +58,7 @@ paths:
       summary: User Interface
       operationId: configjs
       x-google-backend:
-        address: ${UI_URL}/js/config.js
+        address: ${UI_SERVICE_URL}/js/config.js
       produces:
         - "text/javascript"
       responses:
@@ -72,7 +72,7 @@ paths:
       operationId: skillsAutocomplete
       description: Returns a list of skill suggestions based on the provided prefix
       x-google-backend:
-        address: ${SKILL_LOOKUP_URL}/autocomplete
+        address: ${SKILL_SERVICE_URL}/autocomplete
       parameters:
         - name: prefix
           in: query
