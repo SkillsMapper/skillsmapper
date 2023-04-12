@@ -5,33 +5,36 @@ function initApp() {
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       // User is signed in.
-      document.getElementById('signInButton').innerText = 'Sign Out';
-      document.getElementById('form').style.display = '';
+      $('#signInButtonNav').text('Sign Out');
+      $('#signInButtonSide').text('Sign Out');
+      $('#loggedin').show();
     } else {
       // No user is signed in.
-      document.getElementById('signInButton').innerText = 'Sign In with Google';
-      document.getElementById('form').style.display = 'none';
+      $('#signInButtonNav').text('Sign In with Google');
+      $('#signInButtonSide').text('Sign In with Google');
+      $('#username').text(``);
+      $('#loggedin').hide();
     }
   });
 }
+
 window.onload = function() {
   initApp();
 }
 
-// [START cloudrun_end_user_firebase_sign_in]
 function signIn() {
   var provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope('https://www.googleapis.com/auth/userinfo.email');
   firebase.auth().signInWithPopup(provider).then(function(result) {
     // Returns the signed in user along with the provider's credential
     console.log(`${result.user.displayName} logged in.`);
-    window.alert(`Welcome ${result.user.displayName}!`);
+    $('#username').text(`${result.user.displayName}`);
   }).catch((err) => {
     console.log(`Error during sign in: ${err.message}`)
     window.alert(`Sign in failed. Retry or check your browser logs.`);
   });
 }
-// [END cloudrun_end_user_firebase_sign_in]
+
 
 function signOut() {
   firebase.auth().signOut().then(function(result) {
