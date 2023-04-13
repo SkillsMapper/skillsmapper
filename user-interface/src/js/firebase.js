@@ -27,8 +27,13 @@ function signIn() {
   provider.addScope('https://www.googleapis.com/auth/userinfo.email');
   firebase.auth().signInWithPopup(provider).then(function(result) {
     // Returns the signed in user along with the provider's credential
-    console.log(`${result.user.displayName} logged in.`);
-    $('#username').text(`${result.user.displayName}`);
+    var user = result.user;
+    var displayName = user.displayName;
+    var photoURL = user.photoURL;
+    console.log(`${displayName} logged in.`);
+    console.log(`photo: ${photoURL}`);
+    $('#user-name').text(`${displayName}`);
+    $('#user-photo').attr('src', `${photoURL}`);
   }).catch((err) => {
     console.log(`Error during sign in: ${err.message}`)
     window.alert(`Sign in failed. Retry or check your browser logs.`);
