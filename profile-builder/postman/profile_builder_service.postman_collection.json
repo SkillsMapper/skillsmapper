@@ -1,0 +1,54 @@
+{
+  "info": {
+    "_postman_id": "6a34db6e-80f1-4d09-b875-0b59f14d5779",
+    "name": "Profile Builder Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "FactsChanged",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"data\": \"eyJ1c2VyIjoidGVzdHVzZXIiLCJmYWN0cyI6W3siaWQiOjEsInRpbWVzdGFtcCI6IjIwMjMtMDQtMTVUMDk6MzA6MjIuMzQ2WiIsInVzZXIiOiJ0ZXN0dXNlciIsImxldmVsIjoidXNpbmciLCJza2lsbCI6IkdvIn0seyJpZCI6MiwidGltZXN0YW1wIjoiMjAyMy0wNC0xNVQwOTozMjoyMi4zNDZaIiwidXNlciI6InRlc3R1c2VyIiwibGV2ZWwiOiJ1c2VkIiwic2tpbGwiOiJQeXRob24ifV19\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/factschanged",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["factschanged"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Profile",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/profile?user=testuser",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["profile"],
+          "query": [
+            {
+              "key": "user",
+              "value": "testuser"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

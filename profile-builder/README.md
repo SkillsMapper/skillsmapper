@@ -30,6 +30,16 @@ Add pubsub to `pom.xml`:
 </dependency>
 ```
 
+## Grant Publish Permission
+
+Grant permission to publish to the fact changed topic to the service account:
+
+```shell
+gcloud pubsub topics add-iam-policy-binding ${FACT_CHANGED_TOPIC} \
+--member=serviceAccount:${FACT_SERVICE_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+--role=roles/pubsub.publisher
+```
+
 ## Deploy to Cloud Run
 
 Create an environment variable to store the `PROFILE_SERVICE_NAME` e.g. `profile-builder':
@@ -60,7 +70,7 @@ gcloud pubsub topics create $FACT_CHANGED_TOPIC-deadletter
 Create a push subscription receive events from:
 
 ```shell
-gcloud pubsub subscriptions create $FACT_CHANGED_SUBSCRIPTION --topic $FACT_CHANGED_TOPIC --push-endpoint $PROFILE_SERVICE_NAME --max-delivery-attempts=5 --dead-letter-topic=$FACT_CHANGED_TOPIC-deadletter
+gcloud pubsub subscriptions create $FACT_CHANGED_SUBSCRIPTION --topic $FACT_CHANGED_TOPIC --push-endpoint $PROFILE_SERVICE_URL/factschanged --max-delivery-attempts=5 --dead-letter-topic=$FACT_CHANGED_TOPIC-deadletter
 ```
 
 * Don't want to keep trying, go to dead letter queue with exponential backoff

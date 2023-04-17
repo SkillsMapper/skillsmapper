@@ -1,144 +1,242 @@
 package main
 
 import (
-	"cloud.google.com/go/compute/metadata"
 	"cloud.google.com/go/firestore"
-	"cloud.google.com/go/logging"
 	"context"
+	"encoding/base64"
 	"encoding/json"
-	"fmt"
-	"github.com/gorilla/mux"
-	"google.golang.org/api/option"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	firebase "firebase.google.com/go/v4"
+	"firebase.google.com/go/v4/auth"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"skillsmapper.org/profile-builder/internal/model"
-	"skillsmapper.org/profile-builder/internal/util"
+	"strings"
 	"sync/atomic"
 	"time"
 )
 
-var (
-	logger          *logging.Logger
-	firestoreClient *firestore.Client
-)
+type Fact struct {
+	ID        int       `json:"id"`
+	Timestamp time.Time `json:"timestamp"`
+	User      string    `json:"user"`
+	Level     string    `json:"level"`
+	Skill     string    `json:"skill"`
+}
 
-func init() {
-	var err error
-	serviceName := util.MustGetenv("SERVICE_NAME")
+type FactsChanged struct {
+	Timestamp time.Time `json:"timestamp"`
+	User      string    `json:"user"`
+	Facts     []Fact    `json:"facts"`
+}
 
-	ctx := context.Background()
-
-	projectID := os.Getenv("PROJECT_ID")
-	if projectID == "" {
-		projID, err := metadata.ProjectID()
-		if err != nil {
-			log.Fatalf("unable to detect Project ID from PROJECT_ID or metadata server: %v", err)
-		}
-		projectID = projID
-	}
-
-	loggingClient, err := logging.NewClient(ctx, projectID,
-		option.WithoutAuthentication(),
-		option.WithGRPCDialOption(
-			grpc.WithTransportCredentials(insecure.NewCredentials()),
-		))
-	if err != nil {
-		log.Fatalf("failed to create loggin client: %v", err)
-	}
-	logger = loggingClient.Logger(serviceName, logging.RedirectAsJSON(os.Stderr))
-
-	firestoreClient, err = firestore.NewClient(ctx, projectID)
-	if err != nil {
-		log.Fatalf("failed to create firestore client: %v", err)
-	}
+type Profile struct {
+	User       string   `firestore:"user"`
+	Name       string   `firestore:"name"`
+	PhotoURL   string   `firestore:"photo_url"`
+	Interested []string `firestore:"interested"`
+	Learning   []string `firestore:"learning"`
+	Using      []string `firestore:"using"`
+	Used       []string `firestore:"used"`
 }
 
 func main() {
+	ctx := context.Background()
+	projectID := os.Getenv("PROJECT_ID")
+
+	conf := &firebase.Config{ProjectID: projectID}
+	app, err := firebase.NewApp(ctx, conf)
+	if err != nil {
+		log.Fatalf("Failed to create Firebase app: %v", err)
+	}
+
+	authClient, err := app.Auth(ctx)
+	if err != nil {
+		log.Fatalf("Failed to create Firebase Auth client: %v", err)
+	}
+
+	// Set up Firestore client.
+	firestoreClient, err := firestore.NewClient(ctx, projectID)
+	if err != nil {
+		log.Fatalf("Failed to create Firestore client: %v", err)
+	}
+	defer firestoreClient.Close()
+
+	// Set up the HTTP server.
+	http.HandleFunc("/factschanged", func(w http.ResponseWriter, r *http.Request) {
+		handleFactsChanged(w, r, firestoreClient)
+	})
+	http.HandleFunc("/profiles/me", func(w http.ResponseWriter, req *http.Request) {
+		handleGetMyProfile(ctx, firestoreClient, authClient, w, req)
+	})
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	server := &http.Server{
-		Addr: ":" + port,
-		// Add some defaults, should be changed to suit your use case.
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
+	log.Printf("Starting HTTP server on port %s", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
+}
+func handleFactsChanged(w http.ResponseWriter, r *http.Request, firestoreClient *firestore.Client) {
+	type Message struct {
+		Data string `json:"data"`
 	}
-	r := mux.NewRouter()
 
-	isReady := &atomic.Value{}
-	isReady.Store(false)
-	r.HandleFunc("/liveness", liveness)
-	r.HandleFunc("/readiness", readiness(isReady))
-	r.HandleFunc("/", processPubSub).Methods("POST")
-	r.HandleFunc("/profile", getProfile).Methods("GET")
-	server.Handler = r
+	type PubSubMessage struct {
+		Message Message `json:"message"`
+	}
 
-	logger.Log(logging.Entry{
-		Severity: logging.Info,
-		Payload:  "starting HTTP server"})
+	var pubSubMessage PubSubMessage
+	body, err := io.ReadAll(r.Body)
+	log.Printf("body: %s", body)
+	if err != nil {
+		log.Printf("failed ioutil.ReadAll: %s", err.Error())
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+	// Unmarshal the message
+	if err := json.Unmarshal(body, &pubSubMessage); err != nil {
+		log.Printf("json.Unmarshal: %v", err)
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
 
-	go func() {
-		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("Server closed: %v", err)
-		}
-	}()
-	isReady.Store(true)
+	data, err := base64.StdEncoding.DecodeString(pubSubMessage.Message.Data)
+	if err != nil {
+		log.Printf("failed base64 decoding: %s", err.Error())
+		http.Error(w, "Invalid data in PubSub message", http.StatusBadRequest)
+		return
+	}
 
-	logger.Log(logging.Entry{
-		Severity: logging.Info,
-		Payload:  "service is ready"})
+	var factsChanged FactsChanged
+	err = json.Unmarshal(data, &factsChanged)
+	if err != nil {
+		http.Error(w, "Invalid data in PubSub message", http.StatusBadRequest)
+		return
+	}
 
-	ctx := context.Background()
-	// Listen for SIGINT to gracefully shutdown.
-	nctx, stop := signal.NotifyContext(ctx, os.Interrupt, os.Kill)
-	defer stop()
-	<-nctx.Done()
-	logger.Log(logging.Entry{
-		Severity: logging.Info,
-		Payload:  "shutdown initiated"})
+	profile := createOrUpdateProfile(context.Background(), firestoreClient, &factsChanged)
+	log.Printf("Updated profile: %v", profile)
 
-	// Cloud Run gives apps 10 seconds to shutdown. See
-	// https://cloud.google.com/blog/topics/developers-practitioners/graceful-shutdowns-cloud-run-deep-dive
-	// for more details.
-	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-	defer cancel()
-	server.Shutdown(ctx)
-	logger.Log(logging.Entry{
-		Severity: logging.Info,
-		Payload:  "shutdown complete"})
+	w.WriteHeader(http.StatusOK)
 }
 
-func getProfile(writer http.ResponseWriter, request *http.Request) {
-	ctx := context.Background()
-	_ = ctx
-	profile, err := model.Profile{ID: 1}, error(nil)
+func createOrUpdateProfile(ctx context.Context, firestoreClient *firestore.Client, event *FactsChanged) *Profile {
+	profileRef := firestoreClient.Collection("profiles").Doc(event.User)
+
+	// Check if the document exists
+	doc, err := profileRef.Get(ctx)
+	if err != nil && status.Code(err) == codes.NotFound {
+		// Create a new profile with default values
+
+		newProfile := &Profile{
+			User:       event.User,
+			Name:       "Profile",
+			Interested: []string{},
+			Learning:   []string{},
+			Using:      []string{},
+			Used:       []string{},
+		}
+		_, err := profileRef.Set(ctx, newProfile)
+		if err != nil {
+			log.Printf("Error creating new profile: %v", err)
+			return nil
+		}
+		doc, _ = profileRef.Get(ctx)
+	} else if err != nil {
+		log.Printf("Error getting profile: %v", err)
+		return nil
+	}
+
+	var profile Profile
+	doc.DataTo(&profile)
+
+	// Update the profile with the new facts
+	for _, fact := range event.Facts {
+		switch fact.Level {
+		case "interested":
+			profile.Interested = appendIfNotExists(profile.Interested, fact.Skill)
+		case "learning":
+			profile.Learning = appendIfNotExists(profile.Learning, fact.Skill)
+		case "using":
+			profile.Using = appendIfNotExists(profile.Using, fact.Skill)
+		case "used":
+			profile.Used = appendIfNotExists(profile.Used, fact.Skill)
+		default:
+			log.Printf("Invalid level: %s", fact.Level)
+		}
+	}
+
+	// Save the updated profile.
+	_, err = profileRef.Set(ctx, profile)
 	if err != nil {
-		logger.Log(logging.Entry{
-			Severity: logging.Error,
-			Payload:  fmt.Sprintf("error retrieving profile: %v", err),
-		})
-		http.Error(writer, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		log.Printf("Error updating profile: %v", err)
+		return nil
+	}
+
+	return &profile
+}
+
+func appendIfNotExists(slice []string, value string) []string {
+	for _, v := range slice {
+		if v == value {
+			return slice
+		}
+	}
+	return append(slice, value)
+}
+
+func handleGetMyProfile(ctx context.Context, firestoreClient *firestore.Client, authClient *auth.Client, w http.ResponseWriter, req *http.Request) {
+	authHeader := req.Header.Get("X-Forwarded-Authorization")
+	if authHeader == "" {
+		authHeader = req.Header.Get("Authorization")
+	}
+
+	if authHeader == "" {
+		http.Error(w, "Missing Authorization header", http.StatusUnauthorized)
 		return
 	}
-	profileJSON, err := json.Marshal(profile)
-	if err != nil {
-		logger.Log(logging.Entry{
-			Severity: logging.Error,
-			Payload:  fmt.Sprintf("error marshalling profile: %v", err),
-		})
-		http.Error(writer, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+
+	if tokenString == "" {
+		http.Error(w, "Invalid Authorization header", http.StatusUnauthorized)
 		return
 	}
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusOK)
-	_, err = writer.Write(profileJSON)
+
+	token, err := authClient.VerifyIDToken(ctx, tokenString)
+	if err != nil {
+		http.Error(w, "Invalid JWT token", http.StatusUnauthorized)
+		return
+	}
+
+	user := token.UID
+
+	profileRef := firestoreClient.Collection("profiles").Doc(user)
+	doc, err := profileRef.Get(ctx)
+	if err != nil && status.Code(err) == codes.NotFound {
+		http.Error(w, "Profile not found", http.StatusNotFound)
+	} else if err != nil {
+		http.Error(w, "Error retrieving profile", http.StatusInternalServerError)
+		log.Printf("Error getting profile: %v", err)
+		return
+	}
+
+	var profile Profile
+	doc.DataTo(&profile)
+
+	// Retrieve the user's display name and photo URL from the token
+	profile.User = user
+	if name, ok := token.Claims["name"].(string); ok {
+		profile.Name = name
+	}
+	if picture, ok := token.Claims["picture"].(string); ok {
+		profile.PhotoURL = picture
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(profile)
 }
 
 func readiness(isReady *atomic.Value) http.HandlerFunc {
@@ -153,82 +251,4 @@ func readiness(isReady *atomic.Value) http.HandlerFunc {
 
 func liveness(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
-}
-
-func processPubSub(w http.ResponseWriter, r *http.Request) {
-	var m util.PubSubMessage
-	body, err := io.ReadAll(r.Body)
-	logger.Log(logging.Entry{
-		Severity: logging.Error,
-		Payload:  fmt.Sprintf("body: %s", body),
-	})
-	if err != nil {
-		logger.Log(logging.Entry{
-			Severity: logging.Error,
-			Payload:  fmt.Sprintf("failed ioutil.ReadAll: %s", err.Error()),
-		})
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
-	}
-	//Unmarshal the message
-	if err := json.Unmarshal(body, &m); err != nil {
-		logger.Log(logging.Entry{
-			Severity: logging.Error,
-			Payload:  fmt.Sprintf("json.Unmarshal: %v", err),
-		})
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
-	}
-	//Unmarshal the message data (factChanged)
-	var factsChanged model.FactsChanged
-	if err := json.Unmarshal(m.Message.Data, &factsChanged); err != nil {
-		logger.Log(logging.Entry{
-			Severity: logging.Error,
-			Payload:  fmt.Sprintf("json.Unmarshal: %v", err),
-		})
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
-	}
-	logger.Log(logging.Entry{
-		Severity: logging.Info,
-		Payload:  fmt.Sprintf("factsChanged: %v", factsChanged),
-	})
-	generateProfile(factsChanged.User, factsChanged.Facts)
-}
-
-func generateProfile(user string, facts []model.Fact) {
-	ctx := context.Background()
-	wr, err := firestoreClient.Doc(fmt.Sprintf("profiles/%s", user)).Create(ctx, map[string]interface{}{
-		"capital": "Denver",
-		"pop":     5.5,
-	})
-	if err != nil {
-		log.Fatalf("firestore Doc Create error:%s\n", err)
-	}
-	fmt.Println(wr.UpdateTime)
-
-	//update
-	if true {
-		if _, err := firestoreClient.Doc(fmt.Sprintf("profiles/%s", user)).
-			Update(context.Background(), []firestore.Update{{"FlagColor", nil, "Red"}, {Path: "Location", Value: "Middle"}}); err != nil {
-			log.Fatalf("Update error: %s\n", err)
-		}
-	} /*
-		if err != nil {
-			logger.Log(logging.Entry{
-				Severity: logging.Error,
-				Payload:  fmt.Sprintf("firestoreClient.Collection(\"profiles\").Doc(user).Get(ctx): %v", err),
-			})
-		}
-		if doc.Exists() {
-			logger.Log(logging.Entry{
-				Severity: logging.Info,
-				Payload:  fmt.Sprintf("profile for user %s already exists", user),
-			})
-			return
-		}
-		logger.Log(logging.Entry{
-			Severity: logging.Info,
-			Payload:  fmt.Sprintf("generating profile for user %s, with %v", user, facts),
-		})*/
 }

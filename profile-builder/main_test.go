@@ -2,31 +2,156 @@ package main
 
 import (
 	"bytes"
+	"cloud.google.com/go/firestore"
+	"context"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 )
 
-func TestMessageHandler(t *testing.T) {
-	// Create a request with a JSON payload
-	msg := `{"deliveryAttempt":7,"message":{"attributes":{"replyChannel":"nullChannel"},"data":"eyJ1c2VyIjoidjlxZXBoN01MQmY1RWdGWWxVQ0tNVFl3UTZpMSIsImZhY3RzIjpbeyJpZCI6MSwidGltZXN0YW1wIjoiMjAyMy0wNC0wM1QxMDoyMzozOS4xMTM5NDIrMDE6MDAiLCJ1c2VyIjoidjlxZXBoN01MQmY1RWdGWWxVQ0tNVFl3UTZpMSIsImxldmVsIjoibGVhcm5pbmciLCJza2lsbCI6ImphdmEifSx7ImlkIjoyLCJ0aW1lc3RhbXAiOiIyMDIzLTA0LTAzVDEwOjI1OjQ0LjcxODgzNiswMTowMCIsInVzZXIiOiJ2OXFlcGg3TUxCZjVFZ0ZZbFVDS01UWXdRNmkxIiwibGV2ZWwiOiJsZWFybmluZyIsInNraWxsIjoiamF2YSJ9LHsiaWQiOjMsInRpbWVzdGFtcCI6IjIwMjMtMDQtMDNUMTA6MzE6MjAuMDgyOTE1KzAxOjAwIiwidXNlciI6InY5cWVwaDdNTEJmNUVnRllsVUNLTVRZd1E2aTEiLCJsZXZlbCI6ImxlYXJuaW5nIiwic2tpbGwiOiJqYXZhIn0seyJpZCI6NCwidGltZXN0YW1wIjoiMjAyMy0wNC0wM1QxMTozOTozNC4xMzcwNDkrMDE6MDAiLCJ1c2VyIjoidjlxZXBoN01MQmY1RWdGWWxVQ0tNVFl3UTZpMSIsImxldmVsIjoibGVhcm5pbmciLCJza2lsbCI6ImphdmEifSx7ImlkIjo1LCJ0aW1lc3RhbXAiOiIyMDIzLTA0LTAzVDEyOjQ0OjI4LjA1MTk2MSswMTowMCIsInVzZXIiOiJ2OXFlcGg3TUxCZjVFZ0ZZbFVDS01UWXdRNmkxIiwibGV2ZWwiOiJsZWFybmluZyIsInNraWxsIjoiamF2YSJ9XSwidGltZXN0YW1wIjoiMjAyMy0wNC0wM1QxMjo0NDoyOC4xNDkyNDgrMDE6MDAifQ==","messageId":"7391262173992046","message_id":"7391262173992046","publishTime":"2023-04-03T11:44:28.878Z","publish_time":"2023-04-03T11:44:28.878Z"},"subscription":"projects/skillsmapper-org/subscriptions/fact_changed_subscription"}`
-	req, err := http.NewRequest("POST", "/", bytes.NewBuffer([]byte(msg)))
+func TestCreateOrUpdateProfile(t *testing.T) {
+	ctx := context.Background()
+	projectID := os.Getenv("PROJECT_ID")
+
+	// Set up Firestore client.
+	firestoreClient, err := firestore.NewClient(ctx, projectID)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("Failed to create Firestore client: %v", err)
 	}
-	req.Header.Set("Content-Type", "application/json")
+	defer firestoreClient.Close()
 
-	// Create a ResponseRecorder to record the response
-	rr := httptest.NewRecorder()
+	event := &FactsChanged{
+		User: "testuser",
+		Facts: []Fact{
+			{Skill: "Go", Level: "using"},
+			{Skill: "Python", Level: "used"},
+		},
+	}
 
-	// Create a test HTTP server with the messageHandler
-	handler := http.HandlerFunc(processPubSub)
+	profile := createOrUpdateProfile(ctx, firestoreClient, event)
+	if profile == nil {
+		t.Fatal("Expected a profile, got nil")
+	}
 
-	// Serve the request and record the response
-	handler.ServeHTTP(rr, req)
+	if profile.User != "testuser" {
+		t.Errorf("Expected profile user to be 'testuser', got '%s'", profile.User)
+	}
 
-	// Check the status code
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	if len(profile.Using) != 1 || profile.Using[0] != "Go" {
+		t.Errorf("Expected profile using to have one element 'Go', got %v", profile.Using)
+	}
+
+	if len(profile.Used) != 1 || profile.Used[0] != "Python" {
+		t.Errorf("Expected profile used to have one element 'Python', got %v", profile.Used)
 	}
 }
+
+func TestHandleFactsChanged(t *testing.T) {
+	ctx := context.Background()
+	projectID := os.Getenv("PROJECT_ID")
+
+	// Set up Firestore client.
+	firestoreClient, err := firestore.NewClient(ctx, projectID)
+	if err != nil {
+		t.Fatalf("Failed to create Firestore client: %v", err)
+	}
+	defer firestoreClient.Close()
+
+	// Clean up test data.
+	defer firestoreClient.Collection("profiles").Doc("testuser").Delete(ctx)
+
+	body := `{
+		"user": "testuser",
+		"facts": [
+			{"skill": "Go", "level": "using"},
+			{"skill": "Python", "level": "used"}
+		]
+	}`
+
+	req := httptest.NewRequest("POST", "/factschanged", bytes.NewBufferString(body))
+	w := httptest.NewRecorder()
+
+	handleFactsChanged(w, req, firestoreClient)
+
+	if w.Code != http.StatusNoContent {
+		t.Errorf("Expected status code %d, got %d", http.StatusNoContent, w.Code)
+	}
+}
+
+/*
+func TestGetProfileHandler(t *testing.T) {
+	ctx := context.Background()
+	projectID := os.Getenv("PROJECT_ID")
+
+	// Set up Firestore client.
+	firestoreClient, err := firestore.NewClient(ctx, projectID)
+	if err != nil {
+		t.Fatalf("Failed to create Firestore client: %v", err)
+	}
+	defer firestoreClient.Close()
+
+	// Prepare a test profile.
+	profile := &Profile{
+		User:       "testuser",
+		Name:       "Profile",
+		Interested: []string{"Java"},
+		Learning:   []string{"C++"},
+		Using:      []string{"Go"},
+		Used:       []string{"Python"},
+	}
+	_, err = firestoreClient.Collection("profiles").Doc("testuser").Set(ctx, profile)
+	if err != nil {
+		t.Fatalf("Failed to set up test profile: %v", err)
+	}
+
+	// Clean up test data.
+	defer firestoreClient.Collection("profiles").Doc("testuser").Delete(ctx)
+
+	req := httptest.NewRequest("GET", "/profile?user=testuser", nil)
+	w := httptest.NewRecorder()
+
+	getProfileHandler(w, req, firestoreClient)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected status code %d, got %d", http.StatusOK, w.Code)
+	}
+
+	var retrievedProfile Profile
+	err = json.NewDecoder(w.Body).Decode(&retrievedProfile)
+	if err != nil {
+		t.Fatalf("Failed to decode response: %v", err)
+	}
+
+	if retrievedProfile.User != profile.User {
+		t.Errorf("Expected profile user to be '%s', got '%s'", profile.User, retrievedProfile.User)
+	}
+	if retrievedProfile.Name != profile.Name {
+		t.Errorf("Expected profile name to be '%s', got '%s'", profile.Name, retrievedProfile.Name)
+	}
+	if !equalStringSlices(retrievedProfile.Interested, profile.Interested) {
+		t.Errorf("Expected profile interested to be %v, got %v", profile.Interested, retrievedProfile.Interested)
+	}
+	if !equalStringSlices(retrievedProfile.Learning, profile.Learning) {
+		t.Errorf("Expected profile learning to be %v, got %v", profile.Learning, retrievedProfile.Learning)
+	}
+	if !equalStringSlices(retrievedProfile.Using, profile.Using) {
+		t.Errorf("Expected profile using to be %v, got %v", profile.Using, retrievedProfile.Using)
+	}
+	if !equalStringSlices(retrievedProfile.Used, profile.Used) {
+		t.Errorf("Expected profile used to be %v, got %v", profile.Used, retrievedProfile.Used)
+	}
+}
+
+func equalStringSlices(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+*/
