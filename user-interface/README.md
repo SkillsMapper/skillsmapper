@@ -41,9 +41,10 @@ gcloud run services describe user-interface --platform managed --region europe-w
 ## Get the endpoints
 
 ```shell
-export UI_SERVICE_URL=$(gcloud run services describe user-interface --format='value(status.url)')
-export SKILL_SERVICE_URL=$(gcloud run services describe skill-lookup --format='value(status.url)')
-export FACT_SERVICE_URL=$(gcloud run services describe fact-service --format='value(status.url)')
+export FACT_SERVICE_URL=$(gcloud run services describe ${FACT_SERVICE_NAME} --format 'value(status.url)')
+export SKILL_SERVICE_URL=$(gcloud run services describe ${SKILL_SERVICE_NAME} --format 'value(status.url)')
+export PROFILE_SERVICE_URL=$(gcloud run services describe ${PROFILE_SERVICE_NAME} --format 'value(status.url)')
+export UI_SERVICE_URL=$(gcloud run services describe ${UI_SERVICE_NAME} --format 'value(status.url)')
 ```
 
 Create an api.yaml file from the `api.yaml.template` file:
@@ -110,7 +111,6 @@ gcloud api-gateway gateways create ${API_NAME}-gateway \
   --api-config=${API_NAME}-config \
   --location=${REGION} \
   --project=${PROJECT_ID}
-  --service-account=${API_NAME}-gateway-sa@${PROJECT_ID}.iam.gserviceaccount.com
 ```
 
 Delete the gateway:
@@ -350,4 +350,55 @@ Create a forwarding rule to route incoming requests to the proxy
    --target-https-proxy=${PREFIX}-https-proxy \
    --global \
    --ports=443
+```
+
+### Backend for a Bucket
+
+https://cloud.google.com/load-balancing/docs/https/setup-global-ext-https-buckets
+
+* Create a bucket
+
+```shell
+gsutil mb -p ${PROJECT_ID} -c regional -l ${REGION} gs://${PREFIX}-ui
+```
+
+* Upload the static files to the bucket
+```shell
+gsutil cp -r ./src/* gs://${PREFIX}-ui
+```
+
+Grant permissions to the bucket
+
+```shell
+gsutil iam ch allUsers:objectViewer gs://${PREFIX}-ui
+```
+
+View the bucket:
+
+```shell
+open https://storage.googleapis.com/${PREFIX}-ui/index.html
+```
+
+Create a backend for bucket
+
+```shell
+gcloud compute backend-buckets create ${PREFIX}-ui \
+    --gcs-bucket-name=${PREFIX}-ui
+```
+
+Create a URL map to route incoming requests to the backend service:
+
+
+```shell
+gcloud compute url-maps create ${PREFIX}-with-ui 
+--default-backend-bucket=${PREFIX}-ui
+```
+
+Add map for the api:
+
+```shell
+gcloud compute url-maps add-path-matcher ${PREFIX}-with-ui \
+--default-backend-bucket=${PREFIX}-ui \
+--path-matcher-name api-path-matcher \
+--path-rules "/api/*=${PREFIX}-backend"
 ```

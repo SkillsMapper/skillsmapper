@@ -689,7 +689,7 @@
   <script>
     // Script section to load models into a JS Var
     var defs = {}
-            defs["facts_body"] = {
+            defs["api_facts_body"] = {
   "type" : "object",
   "properties" : {
     "skill" : {
@@ -728,20 +728,11 @@
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
                   <li class="nav-header" data-group="Default"><a href="#api-Default">API Methods - Default</a></li>
-                    <li data-group="Default" data-name="apiDocs" class="">
-                      <a href="#api-Default-apiDocs">apiDocs</a>
-                    </li>
-                    <li data-group="Default" data-name="configjs" class="">
-                      <a href="#api-Default-configjs">configjs</a>
-                    </li>
                     <li data-group="Default" data-name="createFact" class="">
                       <a href="#api-Default-createFact">createFact</a>
                     </li>
                     <li data-group="Default" data-name="deleteFact" class="">
                       <a href="#api-Default-deleteFact">deleteFact</a>
-                    </li>
-                    <li data-group="Default" data-name="firebasejs" class="">
-                      <a href="#api-Default-firebasejs">firebasejs</a>
                     </li>
                     <li data-group="Default" data-name="getFact" class="">
                       <a href="#api-Default-getFact">getFact</a>
@@ -749,11 +740,11 @@
                     <li data-group="Default" data-name="getFacts" class="">
                       <a href="#api-Default-getFacts">getFacts</a>
                     </li>
+                    <li data-group="Default" data-name="getProfile" class="">
+                      <a href="#api-Default-getProfile">getProfile</a>
+                    </li>
                     <li data-group="Default" data-name="skillsAutocomplete" class="">
                       <a href="#api-Default-skillsAutocomplete">skillsAutocomplete</a>
-                    </li>
-                    <li data-group="Default" data-name="ui" class="">
-                      <a href="#api-Default-ui">ui</a>
                     </li>
           </ul>
         </nav>
@@ -770,530 +761,12 @@
             <h2 id="welcome-to-apidoc">API and SDK Documentation</h2>
               <div class="app-desc">Version: 1.0.0</div>
             <hr>
-            <div>Skills Mapper</div>
+            <div>Skills Mapper API</div>
           </div>
         </div>
         <div id="sections">
                 <section id="api-Default">
                   <h1>Default</h1>
-                    <div id="api-Default-apiDocs">
-                      <article id="api-Default-apiDocs-0" data-group="User" data-name="apiDocs" data-version="0">
-                        <div class="pull-left">
-                          <h1>apiDocs</h1>
-                          <p>API Docs</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked"></p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api-docs</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-apiDocs-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-apiDocs-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-apiDocs-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-apiDocs-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-apiDocs-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-apiDocs-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-apiDocs-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-apiDocs-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-apiDocs-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-apiDocs-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-apiDocs-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-apiDocs-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: text/html"\
-"//api-docs"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Default-apiDocs-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.DefaultApi;
-
-import java.io.File;
-import java.util.*;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            'String' result = apiInstance.apiDocs();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#apiDocs");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Default-apiDocs-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            'String' result = apiInstance.apiDocs();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#apiDocs");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Default-apiDocs-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Default-apiDocs-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
-DefaultApi *apiInstance = [[DefaultApi alloc] init];
-
-// API Docs
-[apiInstance apiDocsWithCompletionHandler: 
-              ^('String' output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-apiDocs-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
-
-var api = new Skillsmapper.DefaultApi()
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.apiDocs(callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Default-apiDocs-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Default-apiDocs-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class apiDocsExample
-    {
-        public void main()
-        {
-
-            var apiInstance = new DefaultApi();
-
-            try
-            {
-                // API Docs
-                'String' result = apiInstance.apiDocs();
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling DefaultApi.apiDocs: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-apiDocs-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\ApiDefaultApi();
-
-try {
-    $result = $api_instance->apiDocs();
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->apiDocs: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-apiDocs-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::DefaultApi;
-
-my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-
-eval { 
-    my $result = $api_instance->apiDocs();
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling DefaultApi->apiDocs: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-apiDocs-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# create an instance of the API class
-api_instance = swagger_client.DefaultApi()
-
-try: 
-    # API Docs
-    api_response = api_instance.api_docs()
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling DefaultApi->apiDocs: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - A successful response </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-apiDocs-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-apiDocs-200-schema">
-                                  <div id='responses-apiDocs-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "A successful response",
-  "content" : {
-    "text/html" : {
-      "schema" : {
-        "type" : "string",
-        "x-content-type" : "text/html"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["text/html"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-apiDocs-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-apiDocs-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-apiDocs-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Default-configjs">
-                      <article id="api-Default-configjs-0" data-group="User" data-name="configjs" data-version="0">
-                        <div class="pull-left">
-                          <h1>configjs</h1>
-                          <p>User Interface</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked"></p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/js/config.js</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-configjs-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-configjs-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-configjs-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-configjs-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-configjs-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-configjs-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-configjs-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-configjs-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-configjs-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-configjs-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-configjs-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-configjs-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: text/javascript"\
-"//js/config.js"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Default-configjs-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.DefaultApi;
-
-import java.io.File;
-import java.util.*;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            'String' result = apiInstance.configjs();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#configjs");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Default-configjs-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            'String' result = apiInstance.configjs();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#configjs");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Default-configjs-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Default-configjs-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
-DefaultApi *apiInstance = [[DefaultApi alloc] init];
-
-// User Interface
-[apiInstance configjsWithCompletionHandler: 
-              ^('String' output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-configjs-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
-
-var api = new Skillsmapper.DefaultApi()
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.configjs(callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Default-configjs-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Default-configjs-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class configjsExample
-    {
-        public void main()
-        {
-
-            var apiInstance = new DefaultApi();
-
-            try
-            {
-                // User Interface
-                'String' result = apiInstance.configjs();
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling DefaultApi.configjs: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-configjs-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\ApiDefaultApi();
-
-try {
-    $result = $api_instance->configjs();
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->configjs: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-configjs-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::DefaultApi;
-
-my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-
-eval { 
-    my $result = $api_instance->configjs();
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling DefaultApi->configjs: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-configjs-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# create an instance of the API class
-api_instance = swagger_client.DefaultApi()
-
-try: 
-    # User Interface
-    api_response = api_instance.configjs()
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling DefaultApi->configjs: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - A successful response </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-configjs-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-configjs-200-schema">
-                                  <div id='responses-configjs-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "A successful response",
-  "content" : {
-    "text/javascript" : {
-      "schema" : {
-        "type" : "string",
-        "x-content-type" : "text/javascript"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["text/javascript"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-configjs-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-configjs-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-configjs-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
                     <div id="api-Default-createFact">
                       <article id="api-Default-createFact-0" data-group="User" data-name="createFact" data-version="0">
                         <div class="pull-left">
@@ -1306,7 +779,7 @@ except ApiException as e:
                         <p class="marked">Creates a new for the current user with the provided skill and level</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/facts</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/api/facts</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -1330,7 +803,7 @@ except ApiException as e:
 \
 -H "Accept: application/hal+json"\
 -H "Content-Type: application/json"\
-"//facts"</code></pre>
+"https://skillsmapper.org//api/facts"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-createFact-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1351,7 +824,7 @@ public class DefaultApiExample {
         firebase.setAccessToken("YOUR ACCESS TOKEN");
 
         DefaultApi apiInstance = new DefaultApi();
-        Facts_body body = ; // Facts_body | The skill and level of the fact to create
+        Api_facts_body body = ; // Api_facts_body | The skill and level of the fact to create
         String authorization = authorization_example; // String | Bearer token
         try {
             inline_response_201 result = apiInstance.createFact(body, authorization);
@@ -1371,7 +844,7 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        Facts_body body = ; // Facts_body | The skill and level of the fact to create
+        Api_facts_body body = ; // Api_facts_body | The skill and level of the fact to create
         String authorization = authorization_example; // String | Bearer token
         try {
             inline_response_201 result = apiInstance.createFact(body, authorization);
@@ -1391,7 +864,7 @@ public class DefaultApiExample {
                               <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
 // Configure OAuth2 access token for authorization: (authentication scheme: firebase)
 [apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
-Facts_body *body = ; // The skill and level of the fact to create
+Api_facts_body *body = ; // The skill and level of the fact to create
 String *authorization = authorization_example; // Bearer token
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -1419,7 +892,7 @@ var firebase = defaultClient.authentications['firebase'];
 firebase.accessToken = "YOUR ACCESS TOKEN"
 
 var api = new Skillsmapper.DefaultApi()
-var body = ; // {{Facts_body}} The skill and level of the fact to create
+var body = ; // {{Api_facts_body}} The skill and level of the fact to create
 var authorization = authorization_example; // {{String}} Bearer token
 
 var callback = function(error, data, response) {
@@ -1454,7 +927,7 @@ namespace Example
             Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
 
             var apiInstance = new DefaultApi();
-            var body = new Facts_body(); // Facts_body | The skill and level of the fact to create
+            var body = new Api_facts_body(); // Api_facts_body | The skill and level of the fact to create
             var authorization = authorization_example;  // String | Bearer token
 
             try
@@ -1481,7 +954,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$body = ; // Facts_body | The skill and level of the fact to create
+$body = ; // Api_facts_body | The skill and level of the fact to create
 $authorization = authorization_example; // String | Bearer token
 
 try {
@@ -1502,7 +975,7 @@ use WWW::SwaggerClient::DefaultApi;
 $WWW::SwaggerClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $body = WWW::SwaggerClient::Object::Facts_body->new(); # Facts_body | The skill and level of the fact to create
+my $body = WWW::SwaggerClient::Object::Api_facts_body->new(); # Api_facts_body | The skill and level of the fact to create
 my $authorization = authorization_example; # String | Bearer token
 
 eval { 
@@ -1526,7 +999,7 @@ swagger_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-body =  # Facts_body | The skill and level of the fact to create
+body =  # Api_facts_body | The skill and level of the fact to create
 authorization = authorization_example # String | Bearer token
 
 try: 
@@ -1588,7 +1061,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/facts_body"
+        "$ref" : "#/components/schemas/api_facts_body"
       }
     }
   },
@@ -1714,7 +1187,7 @@ except ApiException as e:
                         <p class="marked">Delete a fact for the authenticated user</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/facts/{id}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/api/facts/{id}</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -1736,7 +1209,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-deleteFact-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 \
-"//facts/{id}"</code></pre>
+"https://skillsmapper.org//api/facts/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-deleteFact-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -1974,265 +1447,6 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
-                    <div id="api-Default-firebasejs">
-                      <article id="api-Default-firebasejs-0" data-group="User" data-name="firebasejs" data-version="0">
-                        <div class="pull-left">
-                          <h1>firebasejs</h1>
-                          <p>User Interface</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked"></p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/js/firebase.js</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-firebasejs-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-firebasejs-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-firebasejs-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-firebasejs-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-firebasejs-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-firebasejs-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-firebasejs-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-firebasejs-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-firebasejs-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-firebasejs-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-firebasejs-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-firebasejs-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: text/javascript"\
-"//js/firebase.js"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Default-firebasejs-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.DefaultApi;
-
-import java.io.File;
-import java.util.*;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            'String' result = apiInstance.firebasejs();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#firebasejs");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Default-firebasejs-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            'String' result = apiInstance.firebasejs();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#firebasejs");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Default-firebasejs-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Default-firebasejs-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
-DefaultApi *apiInstance = [[DefaultApi alloc] init];
-
-// User Interface
-[apiInstance firebasejsWithCompletionHandler: 
-              ^('String' output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-firebasejs-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
-
-var api = new Skillsmapper.DefaultApi()
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.firebasejs(callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Default-firebasejs-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Default-firebasejs-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class firebasejsExample
-    {
-        public void main()
-        {
-
-            var apiInstance = new DefaultApi();
-
-            try
-            {
-                // User Interface
-                'String' result = apiInstance.firebasejs();
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling DefaultApi.firebasejs: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-firebasejs-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\ApiDefaultApi();
-
-try {
-    $result = $api_instance->firebasejs();
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->firebasejs: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-firebasejs-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::DefaultApi;
-
-my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-
-eval { 
-    my $result = $api_instance->firebasejs();
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling DefaultApi->firebasejs: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-firebasejs-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# create an instance of the API class
-api_instance = swagger_client.DefaultApi()
-
-try: 
-    # User Interface
-    api_response = api_instance.firebasejs()
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling DefaultApi->firebasejs: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - A successful response </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-firebasejs-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-firebasejs-200-schema">
-                                  <div id='responses-firebasejs-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "A successful response",
-  "content" : {
-    "text/javascript" : {
-      "schema" : {
-        "type" : "string",
-        "x-content-type" : "text/javascript"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["text/javascript"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-firebasejs-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-firebasejs-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-firebasejs-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
                     <div id="api-Default-getFact">
                       <article id="api-Default-getFact-0" data-group="User" data-name="getFact" data-version="0">
                         <div class="pull-left">
@@ -2245,7 +1459,7 @@ except ApiException as e:
                         <p class="marked">Get single fact for the authenticated user</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/facts/{id}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/facts/{id}</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -2267,7 +1481,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-getFact-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 \
-"//facts/{id}"</code></pre>
+"https://skillsmapper.org//api/facts/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-getFact-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2517,7 +1731,7 @@ except ApiException as e:
                         <p class="marked">Get all facts for the authenticated user</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/facts</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/facts</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -2539,7 +1753,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-getFacts-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 \
-"//facts"</code></pre>
+"https://skillsmapper.org//api/facts"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-getFacts-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2763,6 +1977,264 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
+                    <div id="api-Default-getProfile">
+                      <article id="api-Default-getProfile-0" data-group="User" data-name="getProfile" data-version="0">
+                        <div class="pull-left">
+                          <h1>getProfile</h1>
+                          <p>Get profile</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Get a profile for the authenticated user</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/profiles/me</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-getProfile-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-getProfile-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-getProfile-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-getProfile-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-getProfile-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-getProfile-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-getProfile-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-getProfile-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-getProfile-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-getProfile-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-getProfile-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-getProfile-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+\
+"https://skillsmapper.org//api/profiles/me"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-getProfile-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+        // Configure OAuth2 access token for authorization: firebase
+        OAuth firebase = (OAuth) defaultClient.getAuthentication("firebase");
+        firebase.setAccessToken("YOUR ACCESS TOKEN");
+
+        DefaultApi apiInstance = new DefaultApi();
+        try {
+            apiInstance.getProfile();
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#getProfile");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-getProfile-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        try {
+            apiInstance.getProfile();
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#getProfile");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-getProfile-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-getProfile-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+// Configure OAuth2 access token for authorization: (authentication scheme: firebase)
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Get profile
+[apiInstance getProfileWithCompletionHandler: 
+              ^(NSError* error) {
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-getProfile-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
+var defaultClient = Skillsmapper.ApiClient.instance;
+
+// Configure OAuth2 access token for authorization: firebase
+var firebase = defaultClient.authentications['firebase'];
+firebase.accessToken = "YOUR ACCESS TOKEN"
+
+var api = new Skillsmapper.DefaultApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.getProfile(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-getProfile-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-getProfile-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class getProfileExample
+    {
+        public void main()
+        {
+
+            // Configure OAuth2 access token for authorization: firebase
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
+
+            var apiInstance = new DefaultApi();
+
+            try
+            {
+                // Get profile
+                apiInstance.getProfile();
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.getProfile: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-getProfile-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure OAuth2 access token for authorization: firebase
+Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+
+try {
+    $api_instance->getProfile();
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->getProfile: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-getProfile-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+# Configure OAuth2 access token for authorization: firebase
+$WWW::SwaggerClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+
+eval { 
+    $api_instance->getProfile();
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->getProfile: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-getProfile-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# Configure OAuth2 access token for authorization: firebase
+swagger_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+
+try: 
+    # Get profile
+    api_instance.get_profile()
+except ApiException as e:
+    print("Exception when calling DefaultApi->getProfile: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - Profile found and returned successfully </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 401 - Missing or invalid Authorization header </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 404 - Profile not found </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 500 - Error retrieving profile </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Default-skillsAutocomplete">
                       <article id="api-Default-skillsAutocomplete-0" data-group="User" data-name="skillsAutocomplete" data-version="0">
                         <div class="pull-left">
@@ -2775,7 +2247,7 @@ except ApiException as e:
                         <p class="marked">Returns a list of skill suggestions based on the provided prefix</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/skills/autocomplete</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/api/skills/autocomplete</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -2797,7 +2269,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Default-skillsAutocomplete-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"//skills/autocomplete?prefix="</code></pre>
+"https://skillsmapper.org//api/skills/autocomplete?prefix="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-skillsAutocomplete-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3074,265 +2546,6 @@ except ApiException as e:
                             </ul>
 
                             <div class="tab-content" style='margin-bottom: 10px;'>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Default-ui">
-                      <article id="api-Default-ui-0" data-group="User" data-name="ui" data-version="0">
-                        <div class="pull-left">
-                          <h1>ui</h1>
-                          <p>User Interface</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked"></p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Default-ui-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Default-ui-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Default-ui-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Default-ui-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Default-ui-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Default-ui-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Default-ui-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Default-ui-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Default-ui-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Default-ui-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Default-ui-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Default-ui-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: text/html"\
-"//"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Default-ui-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.DefaultApi;
-
-import java.io.File;
-import java.util.*;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            'String' result = apiInstance.ui();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#ui");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Default-ui-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
-
-public class DefaultApiExample {
-
-    public static void main(String[] args) {
-        DefaultApi apiInstance = new DefaultApi();
-        try {
-            'String' result = apiInstance.ui();
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#ui");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Default-ui-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Default-ui-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
-DefaultApi *apiInstance = [[DefaultApi alloc] init];
-
-// User Interface
-[apiInstance uiWithCompletionHandler: 
-              ^('String' output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-ui-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var Skillsmapper = require('skillsmapper');
-
-var api = new Skillsmapper.DefaultApi()
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.ui(callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Default-ui-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Default-ui-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class uiExample
-    {
-        public void main()
-        {
-
-            var apiInstance = new DefaultApi();
-
-            try
-            {
-                // User Interface
-                'String' result = apiInstance.ui();
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling DefaultApi.ui: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-ui-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\ApiDefaultApi();
-
-try {
-    $result = $api_instance->ui();
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling DefaultApi->ui: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-ui-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::DefaultApi;
-
-my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-
-eval { 
-    my $result = $api_instance->ui();
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling DefaultApi->ui: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Default-ui-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# create an instance of the API class
-api_instance = swagger_client.DefaultApi()
-
-try: 
-    # User Interface
-    api_response = api_instance.ui()
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling DefaultApi->ui: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-
-
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - A successful response </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-ui-200-schema">Schema</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-ui-200-schema">
-                                  <div id='responses-ui-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "A successful response",
-  "content" : {
-    "text/html" : {
-      "schema" : {
-        "type" : "string",
-        "x-content-type" : "text/html"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["text/html"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-ui-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-ui-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-ui-200-schema-data' type='hidden' value=''></input>
-                                </div>
                             </div>
 
                         </article>

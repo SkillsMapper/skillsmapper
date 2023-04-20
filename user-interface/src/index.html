@@ -14,13 +14,10 @@
     <nav class="transparent nav-extended">
         <div class="container">
             <div class="nav-wrapper">
-                <a href="#" class="brand-logo">Skills Mapper</a>
+                <a href="#" class="brand-logo hide-on-med-and-down">Skills Mapper</a>
                 <a href="#" data-target="side-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
-                    <li id="user-name" class="nav-item">none</li>
-                    <li id="user-profile" class="nav-item">
-                        <img id="user-photo" class="circle" src="">
-                    </li>
+                    <li id="user-name"></li>
                     <li>
                         <a href="#" class="waves-effect waves-light btn" id="signInButtonNav">Sign In with Google</a>
                     </li>
@@ -29,7 +26,7 @@
             <div class="nav-content">
                 <ul class="tabs tabs-transparent">
                     <li class="tab"><a class="active" href="#skills">My Skills</a></li>
-                    <li class="tab disabled"><a href="#profile">My Profile</a></li>
+                    <li class="tab"><a href="#profile">My Profile</a></li>
                 </ul>
             </div>
         </div>
@@ -45,66 +42,71 @@
     </ul>
 </header>
 
-<section class="section">
-    <div class="container" id="loggedin">
-        <div class="row">
-            <div class="input-field col s12">
-                <input type="text" id="skill" class="autocomplete">
-                <label for="skill">Skill</label>
-                <ul class="suggestions"></ul>
+<div id="skills" class="col s12 tab-content hide-content">
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="input-field col s1">
+                    <label>I'm</label>
+                </div>
+                <div class="input-field col s4">
+                    <select id="level">
+                        <option value="interested" selected>interested in</option>
+                        <option value="learning">learning</option>
+                        <option value="using">using</option>
+                        <option value="used">no longer using</option>
+                    </select>
+                    <label for="level">Level</label>
+                </div>
+                <div class="input-field col s4">
+                    <input type="text" id="skill" class="autocomplete">
+                    <label for="skill">Skill</label>
+                    <div id="suggestions" class="collection"></div>
+                </div>
+                <div class="input-field col s1">
+                    <button class="waves-effect waves-light btn" id="addFact">Add Fact</button>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <select id="level">
-                    <option value="interested" selected>Interested in</option>
-                    <option value="learning">Learning</option>
-                    <option value="using">Using</option>
-                    <option value="used">Have used</option>
-                </select>
-                <label for="level">Level</label>
+        <div class="container">
+            <div class="row">
+                <div class="col s12">
+                    <ul class="collection" id="facts">
+                    </ul>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="chips-input"></div>
-        </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <button class="waves-effect waves-light btn" id="addFact">Add Fact</button>
-            </div>
-        </div>
-    </div>
+    </section>
+</div>
+<div id="profile" class="col s12 tab-content hide-content">
     <div class="container">
         <div class="row">
-            <div class="chips-input"></div>
-            <div class="col s12">
-                <ul class="collection facts">
+            <div class="col s12 m6">
+                <h4>My Profile</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m4">
+                <img id="profile-photo" class="circle responsive-img" src="">
+            </div>
+            <div class="col s12 m8">
+                <ul class="collection with-header">
+                    <li class="collection-header"><h5>Profile Details</h5></li>
                     <li class="collection-item">
-                        <span class="title">Skill 1</span>
-                        <a href="#!" class="secondary-content delete">
-                            <i class="material-icons">close</i>
-                        </a>
+                        <div>Name
+                            <span id="profile-name" class="secondary-content"></span>
+                        </div>
                     </li>
                     <li class="collection-item">
-                        <div>Skill 2
-                            <a href="#!" class="secondary-content delete">
-                                <i class="material-icons">close</i>
-                            </a>
+                        <div>Email
+                            <span id="profile-email" class="secondary-content"></span>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
-</section>
-
-<footer class="page-footer teal lighten-1">
-    <div class="footer-copyright teal darken-2">
-        <div class="container">
-            Skills Mapper &copy; 2023
-        </div>
-    </div>
-</footer>
+</div>
 
 <!-- Firebase App (the core Firebase SDK) is always required and must be listed first-->
 <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
@@ -115,5 +117,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/materialize.min.js"></script>
 <script src="js/script.js"></script>
+<script src="js/facts.js"></script>
+<script src="js/skills.js"></script>
+<script src="js/profiles.js"></script>
 </body>
 </html>

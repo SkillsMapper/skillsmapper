@@ -1,8 +1,9 @@
 swagger: "2.0"
 info:
   title: ${API_NAME}
-  description: Skills Mapper
+  description: Skills Mapper API
   version: 1.0.0
+host: ${DOMAIN}
 schemes:
   - "https"
 securityDefinitions:
@@ -14,59 +15,7 @@ securityDefinitions:
     x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
     x-google-audiences: ${PROJECT_ID}
 paths:
-  /:
-    get:
-      summary: User Interface
-      operationId: ui
-      x-google-backend:
-        address: ${UI_SERVICE_URL}
-      produces:
-        - "text/html"
-      responses:
-        '200':
-          description: A successful response
-          schema:
-            type: string
-  /api-docs:
-    get:
-      summary: API Docs
-      operationId: apiDocs
-      x-google-backend:
-        address: ${UI_SERVICE_URL}/api-docs
-      produces:
-        - "text/html"
-      responses:
-        '200':
-          description: A successful response
-          schema:
-            type: string
-  /js/firebase.js:
-    get:
-      summary: User Interface
-      operationId: firebasejs
-      x-google-backend:
-        address: ${UI_SERVICE_URL}/js/firebase.js
-      produces:
-        - "text/javascript"
-      responses:
-        '200':
-          description: A successful response
-          schema:
-            type: string
-  /js/config.js:
-    get:
-      summary: User Interface
-      operationId: configjs
-      x-google-backend:
-        address: ${UI_SERVICE_URL}/js/config.js
-      produces:
-        - "text/javascript"
-      responses:
-        '200':
-          description: A successful response
-          schema:
-            type: string
-  /skills/autocomplete:
+  /api/skills/autocomplete:
     get:
       summary: Autocomplete skills
       operationId: skillsAutocomplete
@@ -92,7 +41,7 @@ paths:
           description: Invalid request parameter(s)
         500:
           description: An unexpected error occurred
-  /facts:
+  /api/facts:
     get:
       summary: Get facts
       operationId: getFacts
@@ -162,7 +111,7 @@ paths:
           description: Forbidden access
         500:
           description: An unexpected error occurred
-  /facts/{id}:
+  /api/facts/{id}:
     get:
       summary: Get fact
       operationId: getFact
@@ -203,24 +152,24 @@ paths:
       responses:
         '204':
           description: No Content
-  /profiles:
+  /api/profiles/me:
     get:
       summary: Get profile
       operationId: getProfile
       description: Get a profile for the authenticated user
       x-google-backend:
-        address: ${PROFILE_SERVICE_URL}
+        address: ${PROFILE_SERVICE_URL}/profiles/me
         jwt_audience: ${PROJECT_ID}
       security:
         - firebase: [ ]
       produces:
-        - "application/hal+json"
-      parameters:
-        - in: path
-          name: id
-          type: integer
-          required: true
-          description: ID of the fact to get
+        - "application/json"
       responses:
         '200':
-          description: OK
+          description: 'Profile found and returned successfully'
+        '401':
+          description: 'Missing or invalid Authorization header'
+        '404':
+          description: 'Profile not found'
+        '500':
+          description: 'Error retrieving profile'
