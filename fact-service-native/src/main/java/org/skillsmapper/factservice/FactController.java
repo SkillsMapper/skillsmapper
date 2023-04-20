@@ -1,8 +1,5 @@
 package org.skillsmapper.factservice;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -10,10 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.skillsmapper.factservice.FactApplication.PubsubOutboundGateway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,20 +14,20 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/facts", produces = "application/hal+json")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FactController {
 
   private static final Logger logger = LoggerFactory.getLogger(FactController.class);
@@ -63,7 +56,6 @@ public class FactController {
   }
 
   // Aggregate root
-  // tag::get-aggregate-root[]
   @GetMapping
   @ResponseBody
   CollectionModel<EntityModel<Fact>> all(@RequestHeader Map<String, String> headers) {
@@ -76,7 +68,6 @@ public class FactController {
     return CollectionModel.of(facts,
         linkTo(methodOn(FactController.class).all(headers)).withSelfRel());
   }
-  // end::get-aggregate-root[]
 
   @PostMapping
   @ResponseBody
@@ -132,26 +123,27 @@ public class FactController {
    */
   private String authenticateJwt(Map<String, String> headers) {
     String idToken = null;
-    headers.forEach((key, value) -> logger.info("Header: {} = {}", key, value));
+
     String forwardedAuthHeader = headers.get("x-forwarded-authorization");
     if (forwardedAuthHeader != null) {
+      idToken = getTokenFromHeader(forwardedAuthHeader);
       logger.info("using 'x-forwarded-authorization' header for authentication");
-      idToken = forwardedAuthHeader.split(" ")[1];
     }
+
     if (idToken == null) {
-      String authHeader =
-          (headers.get("authorization") != null)
-              ? headers.get("authorization")
-              : headers.get("Authorization");
+      String authHeader = headers.get("authorization");
+      if (authHeader == null) {
+        authHeader = headers.get("Authorization");
+      }
       if (authHeader != null) {
+        idToken = getTokenFromHeader(authHeader);
         logger.info("using 'authorization' header for authentication");
-        idToken = authHeader.split(" ")[1];
       } else {
         logger.error("Error: no authorization header");
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
       }
     }
-    logger.info("idToken: {}", idToken);
+
     // If the provided ID token has the correct format, is not expired, and is
     // properly signed, the method returns the decoded ID token
     try {
@@ -161,5 +153,13 @@ public class FactController {
       logger.error("Error when authenticating: {}", e.getMessage());
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
+  }
+
+  private String getTokenFromHeader(String header) {
+    String[] parts = header.split(" ");
+    if (parts.length == 2) {
+      return parts[1];
+    }
+    return null;
   }
 }

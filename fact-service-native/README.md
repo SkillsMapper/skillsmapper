@@ -14,8 +14,7 @@ This is a summary of [Chapter P3](../chapters/chp3.asciidoc)
 Apply local .env:
 
 ```shell
-set -a; source ../.env; set +a 
-set -a; source .env; set +a
+set -a; source ../.env; source .env; set +a
 ```
 
 ### Run Locally
