@@ -5,8 +5,7 @@
 Apply local .env:
 
 ```shell
-set -a; source ../.env; set +a 
-set -a; source .env; set +a
+set -a; source ../.env; source .env; set +a
 ```
 
 ## Exposing the Backend

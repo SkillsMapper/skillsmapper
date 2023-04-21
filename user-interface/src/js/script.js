@@ -11,11 +11,6 @@ function hideTabs() {
 $('#signInButtonNav').click(toggle);
 $('#signInButtonSide').click(toggle);
 
-$('.facts').on('click', '.delete', function (e) {
-    $(this).parent().parent().remove();
-    M.Toast('Fact removed');
-    e.preventDefault();
-});
 
 $(document).ready(function() {
     // Initialize tabs
@@ -49,4 +44,9 @@ $(document).ready(function () {
 $(document).ready(function () {
     var elems = $('.sidenav');
     var instances = M.Sidenav.init(elems);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.tooltipped');
+    var instances = M.Tooltip.init(elems);
 });

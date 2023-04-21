@@ -2,6 +2,7 @@ firebase.initializeApp(config);
 
 // Watch for state change from sign in
 function initApp() {
+    hideTabs();
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             // User is signed in.
@@ -11,8 +12,7 @@ function initApp() {
             $('#user-photo').attr('src', `${photoURL}`).show();
             $('#signInButtonNav').text('Sign Out');
             $('#signInButtonSide').text('Sign Out');
-            fetchProfile().then(showTabs);
-            fetchFacts().then(r => console.log("Fetched facts."));
+            fetchProfile().then(fetchFacts().then(showTabs()));
         } else {
             // No user is signed in.
             hideTabs();

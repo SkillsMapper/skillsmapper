@@ -48,7 +48,7 @@ paths:
       description: Get all facts for the authenticated user
       x-google-backend:
         address: ${FACT_SERVICE_URL}/facts
-        jwt_audience: ${PROJECT_ID}
+        jwt_audience: ${FACT_SERVICE_URL}
       security:
         - firebase: [ ]
       produces:
@@ -118,7 +118,7 @@ paths:
       description: Get single fact for the authenticated user
       x-google-backend:
         address: ${FACT_SERVICE_URL}/facts
-        jwt_audience: ${PROJECT_ID}
+        jwt_audience: ${FACT_SERVICE_URL}
       security:
         - firebase: [ ]
       produces:
@@ -138,7 +138,7 @@ paths:
       description: Delete a fact for the authenticated user
       x-google-backend:
         address: ${FACT_SERVICE_URL}/facts
-        jwt_audience: ${PROJECT_ID}
+        jwt_audience: ${FACT_SERVICE_URL}
       security:
         - firebase: [ ]
       produces:
@@ -159,7 +159,7 @@ paths:
       description: Get a profile for the authenticated user
       x-google-backend:
         address: ${PROFILE_SERVICE_URL}/profiles/me
-        jwt_audience: ${PROJECT_ID}
+        jwt_audience: ${PROFILE_SERVICE_URL}
       security:
         - firebase: [ ]
       produces:

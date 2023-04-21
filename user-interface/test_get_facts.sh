@@ -13,8 +13,8 @@ if [ "${id_token}" == "null" ]; then
   exit 1
 fi
 
-endpoint="http://localhost:8080/facts"
-# endpoint="https://${DOMAIN}/api/facts"
+# endpoint="http://localhost:8080/facts"
+endpoint="https://${DOMAIN}/api/facts"
 # Perform a GET request to the /facts endpoint
 echo "Requesting facts from ${endpoint}"
 curl -s -X GET \

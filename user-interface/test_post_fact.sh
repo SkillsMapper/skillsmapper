@@ -13,8 +13,8 @@ if [ "${id_token}" == "null" ]; then
   exit 1
 fi
 
-endpoint="http://localhost:8080/facts"
-# endpoint="https://${DOMAIN}/api/facts"
+#endpoint="http://localhost:8080/facts"
+endpoint="https://${DOMAIN}/api/facts"
 echo "Posting fact to ${endpoint}"
 curl -X POST \
   -H "Authorization: Bearer ${id_token}" \

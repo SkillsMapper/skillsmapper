@@ -11,25 +11,26 @@ async function fetchFacts() {
     });
     const data = await response.json();
 
-    const factTable = $("#fact-table");
-    factTable.empty();
+    const facts = $("#facts");
+    facts.empty();
 
     if (data._embedded && data._embedded.factList) {
+        facts.show();
         data._embedded.factList.forEach(fact => {
             $("#facts").append(
                 `<li class="collection-item">
                    <span class="title">${fact.skill}</span>
-                    <a href="#!" class="secondary-content delete">
+                    <span class="secondary-content delete">
                       <i class="material-icons delete-btn" data-id="${fact.id}" style="cursor: pointer;">delete</i>
-                    </a>
+                    </span>
                  </li>`
             );
         });
     } else {
+        facts.hide();
         console.log("No _embedded or factList found in the response data.");
     }
 }
-
 
 // Submit a new fact
 async function submitFact(skill, level) {
@@ -47,15 +48,21 @@ async function submitFact(skill, level) {
 
 // Delete a fact
 async function deleteFact(id) {
+    const token = await firebase.auth().currentUser.getIdToken();
     const response = await fetch(FACTS_ENDPOINT + "/" + id, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + localStorage.getItem("jwt")
+            'Authorization': `Bearer ${token}`
         }
     });
     return response.status === 204;
 }
+
+$(document).on('click', '.delete-btn', function () {
+    const factId = $(this).data('id');
+    deleteFact(factId).then(r => fetchFacts());
+});
 
 $('#addFact').click(function () {
     const skill = $('#skill').val();
@@ -63,7 +70,7 @@ $('#addFact').click(function () {
     submitFact(skill, level).then(r => fetchFacts());
 });
 
-$("#fact-form").submit(async (event) => {
+$("#factForm").submit(async (event) => {
     event.preventDefault();
     const skill = $("#skill").val();
     const level = $("#level").val();
@@ -80,8 +87,3 @@ $("#fact-form").submit(async (event) => {
         Materialize.toast("Please fill out all fields!", 3000);
     }
 });
-
-// Initialize the app
-$(document).ready(() => {
-    }
-);
