@@ -2,6 +2,7 @@
 const PROFILES_ENDPOINT = "/api/profiles/me"
 
 async function fetchProfile() {
+    console.log("Fetching profile...");
     const currentUser = firebase.auth().currentUser;
     if (!currentUser) {
         console.log("User is not authenticated");

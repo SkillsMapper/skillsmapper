@@ -1,8 +1,10 @@
 //const FACTS_ENDPOINT = "http://localhost:8080/facts";
 const FACTS_ENDPOINT = "/api/facts";
 
-async function fetchFacts() {
+async function fetchFacts()
+{
     const token = await firebase.auth().currentUser.getIdToken();
+    console.log("Fetching facts...");
     const response = await fetch(FACTS_ENDPOINT, {
         headers: {
             "Content-Type": "application/json",
@@ -11,13 +13,13 @@ async function fetchFacts() {
     });
     const data = await response.json();
 
-    const facts = $("#facts");
-    facts.empty();
-
+    const factsCollection = $("#factsCollection");
+    factsCollection.empty();
+    factsCollection.hide();
     if (data._embedded && data._embedded.factList) {
-        facts.show();
+        factsCollection.show();
         data._embedded.factList.forEach(fact => {
-            $("#facts").append(
+            $("#factsCollection").append(
                 `<li class="collection-item">
                    <span class="title">${fact.skill}</span>
                     <span class="secondary-content delete">
@@ -27,12 +29,10 @@ async function fetchFacts() {
             );
         });
     } else {
-        facts.hide();
         console.log("No _embedded or factList found in the response data.");
     }
 }
 
-// Submit a new fact
 async function submitFact(skill, level) {
     const token = await firebase.auth().currentUser.getIdToken();
     const response = await fetch(FACTS_ENDPOINT, {
@@ -64,26 +64,34 @@ $(document).on('click', '.delete-btn', function () {
     deleteFact(factId).then(r => fetchFacts());
 });
 
-$('#addFact').click(function () {
-    const skill = $('#skill').val();
-    const level = $('#level').val();
-    submitFact(skill, level).then(r => fetchFacts());
-});
-
-$("#factForm").submit(async (event) => {
-    event.preventDefault();
-    const skill = $("#skill").val();
-    const level = $("#level").val();
+$('#addFact').click(async function () {
+    const skillField = $('#skill');
+    const levelField = $('#level');
+    const skill = skillField.val();
+    const level = levelField.val();
     if (skill && level) {
-        const newFact = await submitFact(skill, level);
-        if (newFact) {
-            Materialize.toast("Fact submitted successfully!", 3000);
-            $("#skill").val("");
-            $("#level").val("");
+        const result = await submitFact(skill, level);
+
+        if (result) {
+            M.toast({html: "Fact submitted successfully"}, 3000);
+            console.info("Fact submitted successfully", result)
+            levelField.prop('selectedIndex', 0);
+            skillField.val('');
+            await fetchFacts();
         } else {
-            Materialize.toast("Failed to submit fact!", 3000);
+            M.toast({html: "Failed to submit fact"}, 3000);
+            console.error('Failed to submit fact');
         }
     } else {
-        Materialize.toast("Please fill out all fields!", 3000);
+        M.toast({html: "Please fill out all fields"}, 3000);
+        console.info("Please fill out all fields!")
     }
+});
+$('#factsTab').click(function () {
+    console.log('Facts tab clicked');
+    fetchFacts().then(() => {
+        console.log('Facts fetched');
+    }).catch((error) => {
+        console.error('Error fetching facts:', error);
+    });
 });

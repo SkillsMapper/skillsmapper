@@ -1,16 +1,15 @@
 function showTabs() {
-    document.getElementById('skills').classList.remove('hide-content');
+    document.getElementById('facts').classList.remove('hide-content');
     document.getElementById('profile').classList.remove('hide-content');
 }
 
 function hideTabs() {
-    document.getElementById('skills').classList.add('hide-content');
+    document.getElementById('facts').classList.add('hide-content');
     document.getElementById('profile').classList.add('hide-content');
 }
 
 $('#signInButtonNav').click(toggle);
 $('#signInButtonSide').click(toggle);
-
 
 $(document).ready(function() {
     // Initialize tabs

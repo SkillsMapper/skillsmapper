@@ -3,7 +3,7 @@ firebase.initializeApp(config);
 // Watch for state change from sign in
 function initApp() {
     hideTabs();
-    firebase.auth().onAuthStateChanged(function (user) {
+    firebase.auth().onAuthStateChanged(async function (user) {
         if (user) {
             // User is signed in.
             const displayName = user.displayName;
@@ -12,7 +12,9 @@ function initApp() {
             $('#user-photo').attr('src', `${photoURL}`).show();
             $('#signInButtonNav').text('Sign Out');
             $('#signInButtonSide').text('Sign Out');
-            fetchProfile().then(fetchFacts().then(showTabs()));
+            await fetchProfile();
+            await fetchFacts()
+            showTabs();
         } else {
             // No user is signed in.
             hideTabs();
