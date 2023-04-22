@@ -10,12 +10,6 @@
         <includeSpanId>true</includeSpanId>
         <includeThreadName>false</includeThreadName>
         <includeTraceId>true</includeTraceId>
-        <!-- Uncomment below for local development only -->
-
-        <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
-          <prettyPrint>true</prettyPrint>
-        </jsonFormatter>
-
       </layout>
     </encoder>
   </appender>

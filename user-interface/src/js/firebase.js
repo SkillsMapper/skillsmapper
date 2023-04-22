@@ -2,81 +2,60 @@ firebase.initializeApp(config);
 
 // Watch for state change from sign in
 function initApp() {
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      // User is signed in.
-      document.getElementById('signInButton').innerText = 'Sign Out';
-      document.getElementById('form').style.display = '';
-    } else {
-      // No user is signed in.
-      document.getElementById('signInButton').innerText = 'Sign In with Google';
-      document.getElementById('form').style.display = 'none';
-    }
-  });
-}
-window.onload = function() {
-  initApp();
+    hideTabs();
+    firebase.auth().onAuthStateChanged(async function (user) {
+        if (user) {
+            // User is signed in.
+            const displayName = user.displayName;
+            const photoURL = user.photoURL;
+            $('#user-name').text(`${displayName}`).show();
+            $('#user-photo').attr('src', `${photoURL}`).show();
+            $('#signInButtonNav').text('Sign Out');
+            $('#signInButtonSide').text('Sign Out');
+            await fetchProfile();
+            await fetchFacts()
+            showTabs();
+        } else {
+            // No user is signed in.
+            hideTabs();
+            $('#signInButtonNav').text('Sign In with Google');
+            $('#signInButtonSide').text('Sign In with Google');
+            $('#user-name').text('').show();
+            $('#user-photo').attr('src', '').hide();
+        }
+    });
 }
 
-// [START cloudrun_end_user_firebase_sign_in]
-function signIn() {
-  var provider = new firebase.auth.GoogleAuthProvider();
-  provider.addScope('https://www.googleapis.com/auth/userinfo.email');
-  firebase.auth().signInWithPopup(provider).then(function(result) {
-    // Returns the signed in user along with the provider's credential
-    console.log(`${result.user.displayName} logged in.`);
-    window.alert(`Welcome ${result.user.displayName}!`);
-  }).catch((err) => {
-    console.log(`Error during sign in: ${err.message}`)
-    window.alert(`Sign in failed. Retry or check your browser logs.`);
-  });
+
+
+window.onload = function () {
+    initApp();
 }
-// [END cloudrun_end_user_firebase_sign_in]
+
+function signIn() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/userinfo.email');
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+        console.log(`${result.user.displayName} logged in.`);
+    }).catch((err) => {
+        console.log(`Error during sign in: ${err.message}`)
+    });
+}
 
 function signOut() {
-  firebase.auth().signOut().then(function(result) {
-  }).catch((err) => {
-    console.log(`Error during sign out: ${err.message}`);
-    window.alert(`Sign out failed. Retry or check your browser logs.`);
-  })
+    firebase.auth().signOut().then(function (result) {
+        console.log(`User logged out.`);
+    }).catch((err) => {
+        console.log(`Error during sign out: ${err.message}`);
+    });
 }
 
 // Toggle Sign in/out button
 function toggle() {
-  if (!firebase.auth().currentUser) {
-    signIn();
-  } else {
-    signOut();
-  }
+    if (!firebase.auth().currentUser) {
+        signIn();
+    } else {
+        signOut();
+    }
 }
 
-async function addFact(skill, level) {
-  if (firebase.auth().currentUser) {
-    // Retrieve JWT to identify the user to the Identity Platform service.
-    // Returns the current token if it has not expired. Otherwise, this will
-    // refresh the token and return a new one.
-    try {
-      const token = await firebase.auth().currentUser.getIdToken();
-      const response = await fetch('/facts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: `{ "skill": "${skill}", "level": "${level}" }` // send application data (vote)
-      });
-      if (response.ok) {
-        const text = await response.text();
-        window.alert(text);
-        window.location.reload();
-      } else {
-        window.alert('Something went wrong... Please try again!');
-      }
-    } catch (err) {
-      console.log(`Error when voting: ${err}`);
-      window.alert('Something went wrong... Please try again!');
-    }
-  } else {
-    window.alert('User not signed in.');
-  }
-}

@@ -1,0 +1,50 @@
+.nav-item {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+#user-name {
+    font-weight: 500;
+    margin-right: 10px;
+}
+
+#user-photo {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border: 2px solid white;
+}
+
+.hide-content {
+    display: none;
+}
+
+#suggestions {
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none; /* Hide by default, show when needed */
+}
+
+#suggestions .collection-item {
+    cursor: pointer;
+}
+
+#suggestions .collection-item:hover {
+    background-color: #eee;
+}
+
+.delete-btn:hover {
+    color: red;
+    opacity: 0.8;
+}
+
+.chip {
+    white-space: nowrap;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 16px;
+}

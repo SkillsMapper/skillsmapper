@@ -34,10 +34,6 @@ var (
 	storageClient *storage.Client
 )
 
-type App struct {
-	*http.Server
-}
-
 func init() {
 	bucketName = util.MustGetenv("BUCKET_NAME")
 	objectName = util.MustGetenv("OBJECT_NAME")
@@ -88,7 +84,6 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 	r := mux.NewRouter()
-
 	isReady := &atomic.Value{}
 	isReady.Store(false)
 	r.HandleFunc("/liveness", liveness)
@@ -119,7 +114,7 @@ func main() {
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(json)
 	})
-	server.Handler = r
+	server.Handler = enableCORS(r)
 
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
@@ -221,4 +216,13 @@ func readiness(isReady *atomic.Value) http.HandlerFunc {
 
 func liveness(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
+}
+
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
+		next.ServeHTTP(w, r)
+	})
 }

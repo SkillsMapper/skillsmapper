@@ -14,8 +14,7 @@ This is a summary of [Chapter P3](../chapters/chp3.asciidoc)
 Apply local .env:
 
 ```shell
-set -a; source ../.env; set +a 
-set -a; source .env; set +a
+set -a; source ../.env; source .env; set +a
 ```
 
 ### Run Locally
@@ -177,6 +176,15 @@ gcloud run services update $FACT_SERVICE_NAME \
     --update-secrets=DATABASE_PASSWORD=${FACT_SERVICE_DB_PASSWORD_SECRET_NAME}:latest
 ```
 
+Redeploy:
+
+```shell
+gcloud run deploy $FACT_SERVICE_NAME --source . --env-vars-file=.env.yaml \
+--service-account ${FACT_SERVICE_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+--add-cloudsql-instances ${PROJECT_ID}:${REGION}:${INSTANCE_NAME} \
+--update-secrets=DATABASE_PASSWORD=${FACT_SERVICE_DB_PASSWORD_SECRET_NAME}:latest
+```
+
 ## Test with Curl
 
 https://cloud.google.com/identity-platform/docs/sign-in-user-email
@@ -270,14 +278,9 @@ gclo
 
 
 
+### Open API 
 
-
-
-
-
-
-
-
+http://localhost:8080/v3/api-docs/
 
 
 

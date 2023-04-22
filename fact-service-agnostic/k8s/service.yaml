@@ -3,8 +3,6 @@ kind: Service
 metadata:
   name: fact-service
   namespace: facts
-  annotations:
-    cloud.google.com/neg: '{"ingress": true}'
 spec:
   type: ClusterIP
   selector:

@@ -2,15 +2,18 @@
 
 ## TODO:
 
-* --HATEOS: https://www.baeldung.com/spring-hateoas-tutorial--
-* --Swagger--
-    * https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
-    * https://github.com/spring-guides/tut-rest/blob/main/rest/src/main/java/payroll/EmployeeController.java
+- [X] HATEOS: https://www.baeldung.com/spring-hateoas-tutorial--
+- [X] Swagger: 
+	- [X] https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api
+	- [X] https://github.com/spring-guides/tut-rest/blob/main/rest/src/main/java/payroll/EmployeeController.java
+
+https://spring.io/guides/gs/messaging-gcp-pubsub/
 
 ## To add to chapter
 
-* OpenAPI instructions
-* Reiterate important concepts e.g. sigterm
+- [ ] OpenAPI instructions 
+- [ ] Reiterate important concepts e.g. sigterm
+- [ ] Explain the importance of RFC3339 timestamps
 
 ## Database connection options
 
@@ -189,3 +192,13 @@ public void deleteFact_Forbidden() throws Exception {
         .andExpect(status().isForbidden());
 }
 }
+
+### Redeplopy
+
+```shell
+gcloud run deploy $FACT_SERVICE_NAME --source . \
+--service-account ${FACT_SERVICE_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+--add-cloudsql-instances ${PROJECT_ID}:${REGION}:${INSTANCE_NAME} \
+--env-vars-file=.env.yaml \
+--update-secrets=DATABASE_PASSWORD=${FACT_SERVICE_DB_PASSWORD_SECRET_NAME}:latest
+```

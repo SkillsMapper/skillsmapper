@@ -1,5 +1,9 @@
 package model
 
+import "time"
+
 type FactsChanged struct {
-	TxnID string `json:"txnid" db:"txnid"`
+	Timestamp time.Time `json:"timestamp"`
+	User      string    `json:"user"`
+	Facts     []Fact    `json:"facts"`
 }
