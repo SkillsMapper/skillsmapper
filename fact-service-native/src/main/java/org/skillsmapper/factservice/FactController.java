@@ -26,8 +26,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping(value = "/facts", produces = "application/hal+json")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping(value = "/api/facts", produces = "application/hal+json")
 public class FactController {
 
   private static final Logger logger = LoggerFactory.getLogger(FactController.class);
@@ -55,7 +54,6 @@ public class FactController {
     this.messagingGateway = messagingGateway;
   }
 
-  // Aggregate root
   @GetMapping
   @ResponseBody
   CollectionModel<EntityModel<Fact>> all(@RequestHeader Map<String, String> headers) {
