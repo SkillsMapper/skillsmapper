@@ -33,6 +33,15 @@
     cursor: pointer;
 }
 
+#suggestions .collection-item:hover {
+    background-color: #eee;
+}
+
+.delete-btn:hover {
+    color: red;
+    opacity: 0.8;
+}
+
 .chip {
     white-space: nowrap;
     padding-left: 12px;

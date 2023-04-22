@@ -47,7 +47,8 @@ paths:
       operationId: getFacts
       description: Get all facts for the authenticated user
       x-google-backend:
-        address: ${FACT_SERVICE_URL}/facts
+        address: ${FACT_SERVICE_URL}
+        path_translation: APPEND_PATH_TO_ADDRESS
         jwt_audience: ${FACT_SERVICE_URL}
       security:
         - firebase: [ ]
@@ -67,7 +68,8 @@ paths:
       description: Creates a new for the current user with the provided skill and level
       operationId: createFact
       x-google-backend:
-        address: ${FACT_SERVICE_URL}/facts
+        address: ${FACT_SERVICE_URL}
+        path_translation: APPEND_PATH_TO_ADDRESS
         jwt_audience: ${FACT_SERVICE_URL}
       security:
         - firebase: [ ]
@@ -117,7 +119,8 @@ paths:
       operationId: getFact
       description: Get single fact for the authenticated user
       x-google-backend:
-        address: ${FACT_SERVICE_URL}/facts
+        address: ${FACT_SERVICE_URL}
+        path_translation: APPEND_PATH_TO_ADDRESS
         jwt_audience: ${FACT_SERVICE_URL}
       security:
         - firebase: [ ]
@@ -137,7 +140,8 @@ paths:
       operationId: deleteFact
       description: Delete a fact for the authenticated user
       x-google-backend:
-        address: ${FACT_SERVICE_URL}/facts
+        address: ${FACT_SERVICE_URL}
+        path_translation: APPEND_PATH_TO_ADDRESS
         jwt_audience: ${FACT_SERVICE_URL}
       security:
         - firebase: [ ]
@@ -158,7 +162,8 @@ paths:
       operationId: getProfile
       description: Get a profile for the authenticated user
       x-google-backend:
-        address: ${PROFILE_SERVICE_URL}/profiles/me
+        address: ${PROFILE_SERVICE_URL}
+        path_translation: APPEND_PATH_TO_ADDRESS
         jwt_audience: ${PROFILE_SERVICE_URL}
       security:
         - firebase: [ ]

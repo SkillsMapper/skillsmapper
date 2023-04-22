@@ -1,8 +1,7 @@
 //const FACTS_ENDPOINT = "http://localhost:8080/facts";
 const FACTS_ENDPOINT = "/api/facts";
 
-async function fetchFacts()
-{
+async function fetchFacts() {
     const token = await firebase.auth().currentUser.getIdToken();
     console.log("Fetching facts...");
     const response = await fetch(FACTS_ENDPOINT, {
@@ -23,10 +22,11 @@ async function fetchFacts()
                 `<li class="collection-item">
                    <span class="title">${fact.skill}</span>
                     <span class="secondary-content delete">
-                      <i class="material-icons delete-btn" data-id="${fact.id}" style="cursor: pointer;">delete</i>
+                      <button class="delete-btn" data-id="${fact.id}" style="background: none; border: none; padding: 0; cursor: pointer;">
+                        <i class="material-icons" style="cursor: pointer;">delete</i>
+                      </button>
                     </span>
-                 </li>`
-            );
+                 </li>`);
         });
     } else {
         console.log("No _embedded or factList found in the response data.");

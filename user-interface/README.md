@@ -43,7 +43,6 @@ gcloud run services describe user-interface --platform managed --region europe-w
 export FACT_SERVICE_URL=$(gcloud run services describe ${FACT_SERVICE_NAME} --format 'value(status.url)')
 export SKILL_SERVICE_URL=$(gcloud run services describe ${SKILL_SERVICE_NAME} --format 'value(status.url)')
 export PROFILE_SERVICE_URL=$(gcloud run services describe ${PROFILE_SERVICE_NAME} --format 'value(status.url)')
-export UI_SERVICE_URL=$(gcloud run services describe ${UI_SERVICE_NAME} --format 'value(status.url)')
 ```
 
 Create an api.yaml file from the `api.yaml.template` file:
@@ -150,17 +149,17 @@ curl -X GET "https://${GATEWAY_URL}"
 
 Direct:
 ```shell
-curl -X GET "${SKILL_LOOKUP_URL}/autocomplete?prefix=java"
+curl -X GET "${SKILL_SERVICE_URL}/autocomplete?prefix=java"
 ````
 
 Via gateway
 ```shell
-curl -X GET "https://${GATEWAY_URL}/skills/autocomplete?prefix=java"
+curl -X GET "https://${GATEWAY_URL}/api/skills/autocomplete?prefix=java"
 ```
 
 Via domain
 ```shell
-curl -X GET "https://${DOMAIN}/skills/autocomplete?prefix=java"
+curl -X GET "https://${DOMAIN}/api/skills/autocomplete?prefix=java"
 ```
 
 ### Facts
@@ -180,7 +179,7 @@ export ID_TOKEN=$(curl "https://www.googleapis.com/identitytoolkit/v3/relyingpar
 Decode a token by pasting the value of `echo $ID_TOKEN` into the following site:
 
 ```shell
-https://jwt.io/
+open https://jwt.io/
 ```
 
 This will decode the token and show the claims. The `aud` claim should be the project ID and the `iss` claim should be `https://securetoken.google.com/${PROJECT_ID}`.
@@ -195,24 +194,30 @@ export ID_TOKEN=$(curl "https://www.googleapis.com/identitytoolkit/v3/relyingpar
 
 ### GET
 
+Test the GET endpoint of the gateway:
+
 ```shell
-curl -X GET "https://${GATEWAY_URL}/facts" \
+curl -X GET "https://${GATEWAY_URL}/api/facts" \
   -H "Authorization: Bearer ${ID_TOKEN}"
 ```
 
+Test the GET endpoint of the load balancer:
+
 ```shell
-curl -X GET "https://${DOMAIN}/facts" \
+curl -X GET "https://${DOMAIN}/api/facts" \
   -H "Authorization: Bearer ${ID_TOKEN}"
 ```
 
 ### POST
 
+Test the POST endpoint of the gateway:
+
 ```shell
 curl -X POST \
   -H "Authorization: Bearer ${ID_TOKEN}" \
   -H 'Content-Type: application/json' \
   -d '{ "skill": "java", "level": "learning" }`' \
-  https://${GATEWAY_URL}/facts
+  https://${GATEWAY_URL}/api/facts
 ```
 
 ```shell
@@ -220,23 +225,23 @@ curl -X POST \
   -H "Authorization: Bearer ${ID_TOKEN}" \
   -H 'Content-Type: application/json' \
   -d '{ "skill": "java", "level": "learning" }`' \
-  https://${DOMAIN}/facts
+  https://${DOMAIN}/api/facts
 ```
 ### DELETE
 
-Gateway:
+Test the DELETE endpoint of the gateway:
 
 ```shell
 curl -X DELETE \
   -H "Authorization: Bearer ${ID_TOKEN}" \
-  ${GATEWAY_URL}/facts/1
+  https://${DOMAIN}/api/facts/1
 ```
-Domain:
+Test the DELETE endpoint of the load balancer:
 
 ```shell
 curl -X DELETE \
   -H "Authorization: Bearer ${ID_TOKEN}" \
-  ${DOMAIN}/facts/1
+  https://${DOMAIN}/api/facts/1
 ```
 
 ### Troubleshooting

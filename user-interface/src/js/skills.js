@@ -7,7 +7,7 @@ $(document).ready(function() {
     suggestions.hide();
 });
 
-const DEBOUNCE_DELAY = 300; // Adjust this value based on the desired delay (in milliseconds)
+const DEBOUNCE_DELAY = 500; // Adjust this value based on the desired delay (in milliseconds)
 let debounceTimeout;
 
 $('#skill').on('input', function (event) {
