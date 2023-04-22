@@ -9,9 +9,6 @@
         <module name="fact-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="fact-service" target="11" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
