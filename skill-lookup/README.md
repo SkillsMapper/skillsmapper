@@ -7,10 +7,7 @@ First follow the instructions in the [Setup](../setup/README.md) to get a projec
 If returning to this project after installation reinitalise environment variables using:
 
 ```shell
-set -a # automatically export all variables
-source ../.env
-source .env
-set +a
+set -a; source ../.env; source .env; set +a
 ```
 
 ## Installation
