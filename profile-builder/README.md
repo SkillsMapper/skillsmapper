@@ -3,10 +3,7 @@
 ## Pre-requisites
 
 ```shell
-set -a # automatically export all variables
-source ../.env
-source .env
-set +a
+set -a; source ../.env; source .env; set +a
 ```
 
 ## Create a topic
@@ -67,10 +64,29 @@ Create a dead letter topic to send failed events to:
 gcloud pubsub topics create $FACT_CHANGED_TOPIC-deadletter
 ```
 
-Create a push subscription receive events from:
+Create a service account for the pubsub subscription:
 
 ```shell
-gcloud pubsub subscriptions create $FACT_CHANGED_SUBSCRIPTION --topic $FACT_CHANGED_TOPIC --push-endpoint $PROFILE_SERVICE_URL/factschanged --max-delivery-attempts=5 --dead-letter-topic=$FACT_CHANGED_TOPIC-deadletter
+gcloud iam service-accounts create ${FACT_CHANGED_SUBSCRIPTION}-sa
+```
+
+Give the service account permission to invoke the Profile Service:
+
+```shell
+gcloud run services add-iam-policy-binding $PROFILE_SERVICE_NAME \
+--member=serviceAccount:${FACT_CHANGED_SUBSCRIPTION}-sa@${PROJECT_ID}.iam.gserviceaccount.com \
+--role=roles/run.invoker
+```
+
+Create a push subscription receive events from that uses the service account:
+
+```shell
+gcloud pubsub subscriptions create ${FACT_CHANGED_SUBSCRIPTION} \
+  --topic=${FACT_CHANGED_TOPIC} \
+  --push-endpoint=${PROFILE_SERVICE_URL}/factschanged \
+  --max-delivery-attempts=5 \
+  --dead-letter-topic=$FACT_CHANGED_TOPIC-deadletter \
+  --push-auth-service-account=${FACT_CHANGED_SUBSCRIPTION}-sa@${PROJECT_ID}.iam.gserviceaccount.com
 ```
 
 * Don't want to keep trying, go to dead letter queue with exponential backoff

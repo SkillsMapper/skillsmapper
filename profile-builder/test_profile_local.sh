@@ -14,7 +14,7 @@ if [ "${id_token}" == "null" ]; then
 fi
 
 # Replace with your Profile Builder Service URL
-PROFILE_SERVICE_URL=https://localhost:8080
+PROFILE_SERVICE_URL=http://localhost:8080
 echo "Profile Service URL: ${PROFILE_SERVICE_URL}"
 
 # Make the request to get the profile

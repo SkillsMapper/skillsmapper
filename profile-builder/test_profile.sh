@@ -18,4 +18,4 @@ PROFILE_SERVICE_URL=$(gcloud run services describe ${PROFILE_SERVICE_NAME} --for
 echo "Profile Service URL: ${PROFILE_SERVICE_URL}"
 
 # Make the request to get the profile
-curl -s -X GET -H "Authorization: Bearer ${id_token}" "${PROFILE_SERVICE_URL}/profiles/me"
+curl -s -X GET -H "Authorization: Bearer ${id_token}" "${PROFILE_SERVICE_URL}/api/profiles/me"

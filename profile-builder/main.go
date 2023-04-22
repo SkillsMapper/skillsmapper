@@ -68,9 +68,9 @@ func main() {
 	http.HandleFunc("/factschanged", func(w http.ResponseWriter, r *http.Request) {
 		handleFactsChanged(w, r, firestoreClient)
 	})
-	http.HandleFunc("/profiles/me", func(w http.ResponseWriter, req *http.Request) {
+	http.HandleFunc("/api/profiles/me", corsMiddleware(func(w http.ResponseWriter, req *http.Request) {
 		handleGetMyProfile(ctx, firestoreClient, authClient, w, req)
-	})
+	}))
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -212,19 +212,19 @@ func handleGetMyProfile(ctx context.Context, firestoreClient *firestore.Client, 
 	}
 
 	user := token.UID
-
+	w.Header().Set("Content-Type", "application/json")
 	profileRef := firestoreClient.Collection("profiles").Doc(user)
 	doc, err := profileRef.Get(ctx)
+	var profile Profile
 	if err != nil && status.Code(err) == codes.NotFound {
-		http.Error(w, "Profile not found", http.StatusNotFound)
+		http.Error(w, "Profile dos not exist", http.StatusNotFound)
 	} else if err != nil {
 		http.Error(w, "Error retrieving profile", http.StatusInternalServerError)
 		log.Printf("Error getting profile: %v", err)
 		return
+	} else {
+		doc.DataTo(&profile)
 	}
-
-	var profile Profile
-	doc.DataTo(&profile)
 
 	// Retrieve the user's display name and photo URL from the token
 	profile.User = user
@@ -234,8 +234,6 @@ func handleGetMyProfile(ctx context.Context, firestoreClient *firestore.Client, 
 	if picture, ok := token.Claims["picture"].(string); ok {
 		profile.PhotoURL = picture
 	}
-
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(profile)
 }
 
@@ -251,4 +249,22 @@ func readiness(isReady *atomic.Value) http.HandlerFunc {
 
 func liveness(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
+}
+
+func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Set the CORS headers
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization, X-Forwarded-Authorization")
+
+		// If it's a preflight request (OPTIONS method), return OK
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		// Otherwise, continue with the next handler
+		next(w, r)
+	}
 }
