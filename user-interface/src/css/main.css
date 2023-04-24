@@ -48,3 +48,29 @@
     padding-right: 12px;
     border-radius: 16px;
 }
+
+.chip-interested {
+    background-color: #80cbc4; /* teal lighten-4 */
+    color: #000;
+}
+
+.chip-learning {
+    background-color: #4db6ac; /* teal lighten-2 */
+    color: #000;
+}
+
+.chip-using {
+    background-color: #00796b; /* teal darken-2 */
+    color: #fff;
+}
+
+.chip-used {
+    background-color: #004d40; /* teal darken-4 */
+    color: #fff;
+}
+
+.chip-fixed-width {
+    width: 100px;
+    display: inline-flex;
+    justify-content: center;
+}
