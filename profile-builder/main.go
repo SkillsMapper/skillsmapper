@@ -153,6 +153,11 @@ func createOrUpdateProfile(ctx context.Context, firestoreClient *firestore.Clien
 	var profile Profile
 	doc.DataTo(&profile)
 
+	profile.Interested = []string{}
+	profile.Learning = []string{}
+	profile.Using = []string{}
+	profile.Used = []string{}
+
 	// Update the profile with the new facts
 	for _, fact := range event.Facts {
 		switch fact.Level {

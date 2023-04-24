@@ -6,12 +6,24 @@
 set -a; source ../.env; source .env; set +a
 ```
 
+Enable the Pub/Sub API:
+
+```shell
+gcloud services enable pubsub.googleapis.com
+```
+
 ## Create a topic
+
+Create a name for the topic to send events to:
+
+```shell
+export FACT_CHANGED_TOPIC=[FACT_CHANGED_TOPIC]
+```
 
 Create a topic to send events to:
 
 ```shell
-gcloud pubsub topics create $FACT_CHANGED_TOPIC
+gcloud pubsub topics create $FACT_CHANGED_TOPIC}
 ```
 
 ## Send Event
@@ -111,11 +123,7 @@ gcloud services enable firestore.googleapis.com
 Create a firestore database:
 
 ```shell
-gcloud alpha firestore databases create --location=$REGION --database=$DATABASE_NAME --type=datastore-mode
-```
-
-```shell
-gcloud alpha firestore databases update --type=firestore-native
+gcloud alpha firestore databases create --location=$REGION --database=$DATABASE_NAME --type=firestore-native
 ```
 
 NOTE: you can only have one firestore/datastore database per project
