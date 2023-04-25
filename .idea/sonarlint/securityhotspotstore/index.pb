@@ -1,16 +1,10 @@
 
-9
-	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 Q
 !user-interface/config.js.template,b/1/b13de613b9676a57d2ecc99efa3d8a4da4f941c9
 H
 user-interface/README.md,3/a/3a8d61d569cc4abbe1b79de5790bd5c1e009d441
 ?
 setup/README.md,6/8/68182921ed799f14ad7a5df21c6aa47ab5388024
-F
-chapters/chp1.asciidoc,a/0/a094fc747fe94975d83c3a38477b2bdde621deff
-F
-chapters/chp2.asciidoc,5/6/56f34b6ebfcb95c45975b04f74be6ded1ea286b3
 C
 user-interface/.env,0/7/073a491fa34bee39f633c1d9ffc76941b4976fe2
 D
@@ -62,14 +56,16 @@ U
 w
 G.idea/sonarlint/issuestore/2/b/2b9668f00d868bea573b30c8b62955b2f68bf69a,7/f/7fc0c5bf7a0e24a10f31c8154e28c33ab386d195
 F
-chapters/chp5.asciidoc,c/6/c65ecbc61493fb7b6dbb050527f50e86a49db49e
-F
 chapters/chs1.asciidoc,a/2/a212a1a11a250a544622b84843654fe9c1d205e7
-F
-chapters/chp4.asciidoc,a/3/a3fb91f9d99a7e1e103d258e8fa925ba2039a960
 H
 fact-service-native/.env,0/b/0be536c1326b1445da03c8faac61307b48bf74d8
-‚
-Rfact-service-native/src/main/java/org/skillsmapper/factservice/FactController.java,3/a/3a7244c7ac90d1744bcf1c27e5b4faf9b8328954
-F
-chapters/chp6.asciidoc,e/a/eada8d6de98098dadc7147d7cca8ec84c49c6818
+H
+chapters/technologies.md,3/b/3be5eaf1223fa5c9ea479f4dc512eea296427457
+M
+fact-service-native/README.md,2/b/2b9668f00d868bea573b30c8b62955b2f68bf69a
+L
+fact-service-native/NOTES.md,1/f/1fa8ded17032071317f1ea9c77cd89b04d4cf343
+Y
+)fact-service-native/chapter/chp3.asciidoc,0/3/035823d4c89b424ab9d3646ff9c6e4405f8950f9
+V
+&fact-service-agnostic/fact-service.iml,3/5/3502c73cbb0bc01ab75565c82241b9bf21ad1b21

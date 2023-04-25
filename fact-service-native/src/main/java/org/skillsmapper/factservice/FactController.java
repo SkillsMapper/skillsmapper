@@ -32,14 +32,11 @@ public class FactController {
   private static final Logger logger = LoggerFactory.getLogger(FactController.class);
   private final FactRepository factRepository;
   private final PubsubOutboundGateway messagingGateway;
+  private final ObjectMapper objectMapper;
 
   public void factsChanged(Fact fact) {
     List<Fact> facts = factRepository.findByUser(fact.getUser());
     FactsChanged factsChanged = new FactsChanged(fact.getUser(), facts, OffsetDateTime.now());
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(new JavaTimeModule());
-    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    objectMapper.disable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE);
     try {
       String jsonString = objectMapper.writeValueAsString(factsChanged);
       logger.info("Sending message to Pub/Sub: {}", jsonString);
@@ -52,6 +49,11 @@ public class FactController {
   FactController(FactRepository factRepository, PubsubOutboundGateway messagingGateway) {
     this.factRepository = factRepository;
     this.messagingGateway = messagingGateway;
+
+    objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    objectMapper.disable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE);
   }
 
   @GetMapping

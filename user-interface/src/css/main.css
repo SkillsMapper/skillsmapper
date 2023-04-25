@@ -74,3 +74,7 @@
     display: inline-flex;
     justify-content: center;
 }
+
+.brand-logo-small {
+    font-size: 1.6rem; /* Adjust this value according to your preference */
+}

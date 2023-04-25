@@ -33,15 +33,15 @@ async function fetchFacts() {
                 $("#factsCollection").append(
                     `<li class="collection-item">
                         <span class="chip chip-fixed-width ${
-                                            fact.level === 'interested' ? 'chip-interested' :
-                                                fact.level === 'learning' ? 'chip-learning' :
-                                                    fact.level === 'using' ? 'chip-using' :
-                                                        fact.level === 'used' ? 'chip-used' : ''
-                                        }">${fact.level}</span>
+                        fact.level === 'interested' ? 'chip-interested' :
+                            fact.level === 'learning' ? 'chip-learning' :
+                                fact.level === 'using' ? 'chip-using' :
+                                    fact.level === 'used' ? 'chip-used' : ''
+                    }">${fact.level}</span>
                         <span class="title">${fact.skill}</span>
                         <span class="secondary-content delete">
                             <button class="delete-btn" data-id="${fact.id}" style="background: none; border: none; padding: 0; cursor: pointer;">
-                                <i class="material-icons" style="cursor: pointer;">delete</i>
+                                <i class="material-icons teal-icon">delete</i>
                             </button>
                         </span>
                     </li>`);

@@ -9,9 +9,9 @@
 1. [Tag Updater](./tag-updater/README.md) (Ready for testing)
 2. [Skill Lookup](./skill-lookup/README.md) (Ready for testing)
 3. [Fact Service - Native](./fact-service-native/README.md) (Ready for testing)
-4. [Fact Service - Agnostic](./fact-service-agnostic/README.md) (In Progress)
-5. [Profile Builder](./profile-builder/README.md) (In Progress)
-6. [User Interface](./user-interface/README.md) (In Progress)
+4. [Fact Service - Agnostic](./fact-service-agnostic/README.md) (Ready for testing)
+5. [Profile Builder](./profile-builder/README.md) (Ready for testing)
+6. [User Interface](./user-interface/README.md) (Ready for testing)
 
 ## Facilities
 
