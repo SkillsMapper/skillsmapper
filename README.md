@@ -4,7 +4,7 @@ This repository contains the code for the book [Programming Cloud Native Applica
 
 For technical reviewer instructions see: [REVIEWERS.md](./REVIEWERS.md). 
 
-## Pre-requisites
+## Pre-requisites (Start here)
 
 ### [Setup](./setup/README.md) 
 
