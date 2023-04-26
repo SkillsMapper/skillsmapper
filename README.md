@@ -1,17 +1,25 @@
 # SkillsMapper
 
+This repository contains the code for the book [Programming Cloud Native Applications with Google Cloud](https://www.oreilly.com/library/view/programming-cloud-native/9781098145071/) for technical review.
+
+For technical reviewer instructions see: [REVIEWERS.md](./REVIEWERS.md). 
+
 ## Pre-requisites
 
-1. [Setup](./setup/README.md) (Ready for testing)
+### [Setup](./setup/README.md) 
+
+These are the basics of setting up a project on Google Cloud to use for deployment of the projects. It assumes the reader already has a Google Cloud account. It also introduces the projects and some key Google Cloud concepts that are used throughout the project chapters.
+
+Use with [Chapter S1 - Setup](./chapters/chs1.asciidoc)
 
 ## Projects
 
-1. [Tag Updater](./tag-updater/README.md) (Ready for testing)
-2. [Skill Lookup](./skill-lookup/README.md) (Ready for testing)
-3. [Fact Service - Native](./fact-service-native/README.md) (Ready for testing)
-4. [Fact Service - Agnostic](./fact-service-agnostic/README.md) (Ready for testing)
-5. [Profile Builder](./profile-builder/README.md) (Ready for testing)
-6. [User Interface](./user-interface/README.md) (Ready for testing)
+### Project 1 [Tag Updater](./tag-updater/README.md) (Ready for testing)
+### Project 2 [Skill Lookup](./skill-lookup/README.md) (Ready for testing)
+### Project 3 [Fact Service - Native](./fact-service-native/README.md) (Ready for testing)
+### Project 4 [Fact Service - Agnostic](./fact-service-agnostic/README.md) (Ready for testing)
+### Project 5 [Profile Builder](./profile-builder/README.md) (Ready for testing)
+### Project 6 [User Interface](./user-interface/README.md) (Ready for testing)
 
 ## Facilities
 

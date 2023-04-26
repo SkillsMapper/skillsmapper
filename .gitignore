@@ -3,3 +3,4 @@
 /fact-service-native/.env.yaml
 /user-interface/src/js/config.js
 /profile-builder/.env
+/.env-test

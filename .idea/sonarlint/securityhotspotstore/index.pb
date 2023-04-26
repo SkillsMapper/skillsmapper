@@ -3,8 +3,6 @@ Q
 !user-interface/config.js.template,b/1/b13de613b9676a57d2ecc99efa3d8a4da4f941c9
 H
 user-interface/README.md,3/a/3a8d61d569cc4abbe1b79de5790bd5c1e009d441
-?
-setup/README.md,6/8/68182921ed799f14ad7a5df21c6aa47ab5388024
 C
 user-interface/.env,0/7/073a491fa34bee39f633c1d9ffc76941b4976fe2
 D
@@ -23,8 +21,6 @@ F
 profile-builder/go.mod,0/1/0102d78cd697c003344c41802910bbb63d6dcc08
 G
 profile-builder/main.go,b/9/b92c2379c97da11ebc44690bfec10502cf44ee59
-4
-.env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 B
 .obsidian/app.json,d/4/d4f3e40bdc17f9bce2dca15c57d1116af871f06f
 w
@@ -55,14 +51,10 @@ U
 %.obsidian/core-plugins-migration.json,9/2/9225526d6a717df1f51e48620cc22e1594aa5548
 w
 G.idea/sonarlint/issuestore/2/b/2b9668f00d868bea573b30c8b62955b2f68bf69a,7/f/7fc0c5bf7a0e24a10f31c8154e28c33ab386d195
-F
-chapters/chs1.asciidoc,a/2/a212a1a11a250a544622b84843654fe9c1d205e7
 H
 fact-service-native/.env,0/b/0be536c1326b1445da03c8faac61307b48bf74d8
 H
 chapters/technologies.md,3/b/3be5eaf1223fa5c9ea479f4dc512eea296427457
-M
-fact-service-native/README.md,2/b/2b9668f00d868bea573b30c8b62955b2f68bf69a
 L
 fact-service-native/NOTES.md,1/f/1fa8ded17032071317f1ea9c77cd89b04d4cf343
 Y
