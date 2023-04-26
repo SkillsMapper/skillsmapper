@@ -14,7 +14,9 @@ Use with [Chapter S1 - Setup](./chapters/chs1.asciidoc)
 
 ## Projects
 
-### Project 1 [Tag Updater](./tag-updater/README.md) (Ready for testing)
+Please follow the projects in order as they build on each other.
+
+### Project 1 [Tag Updater](./tag-updater) (Ready for testing)
 ### Project 2 [Skill Lookup](./skill-lookup/README.md) (Ready for testing)
 ### Project 3 [Fact Service - Native](./fact-service-native/README.md) (Ready for testing)
 ### Project 4 [Fact Service - Agnostic](./fact-service-agnostic/README.md) (Ready for testing)
@@ -30,3 +32,4 @@ Use with [Chapter S1 - Setup](./chapters/chs1.asciidoc)
 ## Standards
 
 * Java: [Google Java Style](./intellij-java-google-style.xml)
+* Go: [Effective Go](https://golang.org/doc/effective_go.html)

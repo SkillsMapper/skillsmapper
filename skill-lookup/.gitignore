@@ -102,3 +102,4 @@ go.work
 
 /.env
 /.env.yaml
+/.env-test.yaml

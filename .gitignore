@@ -4,3 +4,4 @@
 /user-interface/src/js/config.js
 /profile-builder/.env
 /.env-test
+/tag-updater/.env-test.yaml
