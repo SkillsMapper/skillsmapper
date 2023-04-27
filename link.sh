@@ -6,7 +6,8 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch05.asciidoc chapters/ch05.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch06.asciidoc chapters/ch06.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch07.asciidoc chapters/ch07.asciidoc
-ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch08.asciidoc chapters/ch08.asciidoc
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch08a.asciidoc chapters/ch08a.asciidoc
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch08b.asciidoc chapters/ch08b.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch09.asciidoc chapters/ch09.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch10.asciidoc chapters/ch10.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch11.asciidoc chapters/ch11.asciidoc
