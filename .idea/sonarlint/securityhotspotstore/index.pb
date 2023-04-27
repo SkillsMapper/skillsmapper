@@ -60,19 +60,9 @@ Y
 V
 &fact-service-agnostic/fact-service.iml,3/5/3502c73cbb0bc01ab75565c82241b9bf21ad1b21
 F
-chapters/chp3.asciidoc,f/c/fc5c778b03bea642b77d4eaab8fcd620d424ce77
-R
-"skill-lookup/chapter/chp2.asciidoc,8/6/861b549192e1fcfb03a1aca44fd9ed2ba1028503
-F
-chapters/chp4.asciidoc,a/3/a3fb91f9d99a7e1e103d258e8fa925ba2039a960
-F
-chapters/cp14.asciidoc,8/b/8b5da004ec8aa70290587c699c8534ff9c909393
-F
 chapters/chp5.asciidoc,c/6/c65ecbc61493fb7b6dbb050527f50e86a49db49e
 M
 chapters/project-structure.md,5/f/5fe49dce947e4306d025aaac464c5e1b5aef08a2
-H
-.obsidian/workspace.json,3/2/32be0c671001fbc70ffdb0b9311947c2c56cc934
 M
 user-interface/src/index.html,8/b/8b00bb60d208d884f70fded8c7072f27d241a2bb
 ‚
@@ -87,7 +77,3 @@ F
 chapters/chp6.asciidoc,e/a/eada8d6de98098dadc7147d7cca8ec84c49c6818
 4
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
-?
-setup/README.md,6/8/68182921ed799f14ad7a5df21c6aa47ab5388024
-7
-link.sh,0/a/0ac99b77b10d2abe3df0b25c5aa6dae8754c8ff8

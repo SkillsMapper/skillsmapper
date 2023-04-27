@@ -1,6 +1,6 @@
 # Fact Service - Native
 
-This is a summary of [Chapter P3](../chapters/chp3.asciidoc)
+This is a summary of [Chapter P3](../chapters/ch08a.asciidoc)
 
 ## Services Used
 

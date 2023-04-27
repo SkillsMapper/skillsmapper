@@ -1,6 +1,6 @@
 # Fact Service - Agnostic
 
-This is a summary of [Chapter P4](../chapters/chp4.asciidoc)
+This is a summary of [Chapter P4](../chapters/ch-08b.asciidoc)
 
 ## Run Locally
 

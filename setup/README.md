@@ -1,6 +1,6 @@
 # Setup
 
-This is a summary of [Chapter S1](../chapters/chs1.asciidoc). 
+This is a summary of [Chapter S1](../chapters/ch05.asciidoc). 
 
 It may be out of date. Please you the chapter rather than this README if you have access.
 

@@ -6,22 +6,20 @@ For technical reviewer instructions see: [REVIEWERS.md](./REVIEWERS.md).
 
 ## Pre-requisites (Start here)
 
-### [Setup](./setup/README.md) 
+### Chapter 5 - [Setup](./chapters/ch05.asciidoc)
 
 These are the basics of setting up a project on Google Cloud to use for deployment of the projects. It assumes the reader already has a Google Cloud account. It also introduces the projects and some key Google Cloud concepts that are used throughout the project chapters.
-
-Use with [Chapter S1 - Setup](./chapters/chs1.asciidoc)
 
 ## Projects
 
 Please follow the projects in order as they build on each other.
 
-### Project 1 [Tag Updater](./tag-updater) (Ready for testing)
-### Project 2 [Skill Lookup](./skill-lookup/README.md) (Ready for testing)
-### Project 3 [Fact Service - Native](./fact-service-native/README.md) (Ready for testing)
-### Project 4 [Fact Service - Agnostic](./fact-service-agnostic/README.md) (Ready for testing)
-### Project 5 [Profile Builder](./profile-builder/README.md) (Ready for testing)
-### Project 6 [User Interface](./user-interface/README.md) (Ready for testing)
+### Chapter 6 - Project 1 [Tag Updater](./tag-updater) (Ready for testing)
+### Chapter 7 - Project 2 [Skill Lookup](./skill-lookup) (Ready for testing)
+### Chapter 8a - Project 3 [Fact Service - Native](./fact-service-native) (Ready for testing)
+### Chapter 8b - Project 4 [Fact Service - Agnostic](./fact-service-agnostic) (Ready for testing)
+### Chapter 9 - Project 5 [Profile Builder](./profile-builder) (Ready for testing)
+### Chapter 10 - Project 6 [User Interface](./user-interface) (Ready for testing)
 
 ## Facilities
 

@@ -1,6 +1,6 @@
 # Tag Updater
 
-This is a summary of [Chapter P1](../chapters/chp1.asciidoc)
+This is a summary of [Chapter P1](../chapters/ch06.asciidoc)
 
 ## Pre-requisites
 
