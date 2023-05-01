@@ -15,6 +15,7 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch13.asciidoc chapters/ch13.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch14.asciidoc chapters/ch14.asciidoc
 
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch04.asciidoc setup/chapter/ch04.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch05.asciidoc laboratory/chapter/ch05.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch06.asciidoc tag-updater/chapter/ch06.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch07.asciidoc skill-lookup/chapter/ch07.asciidoc

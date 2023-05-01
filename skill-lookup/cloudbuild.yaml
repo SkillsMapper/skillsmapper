@@ -8,3 +8,4 @@ steps:
       - gcr.io/buildpacks/builder
     entrypoint: pack
     name: gcr.io/k8s-skaffold/pack
+    dir: skill-lookup
