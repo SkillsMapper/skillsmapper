@@ -1,13 +1,12 @@
-module skillsmapper.org/skill-lookup
+module skillsmapper.org/skill-service
 
-go 1.19
+go 1.20
 
 require (
 	cloud.google.com/go/compute/metadata v0.2.3
 	cloud.google.com/go/logging v1.6.1
 	cloud.google.com/go/storage v1.28.1
 	github.com/gorilla/mux v1.8.0
-	github.com/rs/cors v1.9.0
 	github.com/stretchr/testify v1.8.1
 	golang.org/x/text v0.5.0
 	google.golang.org/api v0.109.0

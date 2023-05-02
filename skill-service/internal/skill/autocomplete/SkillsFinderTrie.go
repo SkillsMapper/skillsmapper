@@ -43,7 +43,7 @@ type score struct {
 	fuzzy       bool
 }
 
-// New creates a new empty trie. By default fuzzy search is on and string normalisation is on.
+// New creates a new empty trie. By default, fuzzy search is on and string normalisation is on.
 // The default levenshtein scheme is on, where search strings of len 1-2 characters allow no
 // distance, search strings of length 3-4 allow a levenshtein distance of 1, and search strings
 // of length 5 or more runes allow a levenshtein distance of two.
@@ -305,9 +305,9 @@ func (n *node) collectAllDescendentWords(collection map[string]score, distance u
 // maxDistance determines the maximum levenshein distance based on the levenshtein scheme
 // and search string length.
 func (t *Trie) maxDistance(search string) (maxDistance uint8) {
-	runes := []rune(search)
+	r := []rune(search)
 	for _, limit := range t.levenshteinIntervals {
-		if len(runes) >= int(limit) {
+		if len(r) >= int(limit) {
 			maxDistance = t.levenshteinScheme[limit]
 			return
 		}

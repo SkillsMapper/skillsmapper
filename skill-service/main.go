@@ -13,12 +13,13 @@ import (
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"skillsmapper.org/skill-lookup/internal/skill/autocomplete"
-	"skillsmapper.org/skill-lookup/internal/util"
+	"skillsmapper.org/skill-service/internal"
+	"skillsmapper.org/skill-service/internal/skill/autocomplete"
 	"sync/atomic"
 	"time"
 )
@@ -35,9 +36,9 @@ var (
 )
 
 func init() {
-	bucketName = util.MustGetenv("BUCKET_NAME")
-	objectName = util.MustGetenv("OBJECT_NAME")
-	serviceName := util.MustGetenv("SERVICE_NAME")
+	bucketName = internal.MustGetenv("BUCKET_NAME")
+	objectName = internal.MustGetenv("OBJECT_NAME")
+	serviceName := internal.MustGetenv("SERVICE_NAME")
 
 	ctx := context.Background()
 
@@ -86,35 +87,11 @@ func main() {
 	r := mux.NewRouter()
 	isReady := &atomic.Value{}
 	isReady.Store(false)
-	r.HandleFunc("/liveness", liveness)
-	r.HandleFunc("/readiness", readiness(isReady))
-	r.HandleFunc("/autocomplete", func(w http.ResponseWriter, r *http.Request) {
-		start := time.Now()
-		// Get the prefix from the query string
-		prefix := r.URL.Query().Get("prefix")
-		if prefix == "" {
-			http.Error(w, "prefix is required", http.StatusBadRequest)
-			return
-		}
 
-		results := trie.Search(prefix, 10)
-
-		// Return the results as a JSON response
-		response := autocompleteResponse{Results: results}
-		json, err := json.Marshal(response)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		duration := time.Since(start)
-		logger.Log(logging.Entry{
-			Severity: logging.Debug,
-			Payload:  fmt.Sprintf(fmt.Sprintf("autocomplete for %s took %v", prefix, duration))})
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(json)
-	})
-	server.Handler = enableCORS(r)
+	r.HandleFunc("/liveness", livenessHandler)
+	r.HandleFunc("/readiness", readinessHandler(isReady))
+	r.HandleFunc("/autocomplete", autocompleteHandler(trie))
+	//server.Handler = enableCORS(r)
 
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
@@ -147,10 +124,52 @@ func main() {
 	// for more details.
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-	server.Shutdown(ctx)
+	if err := server.Shutdown(ctx); err != nil {
+		log.Printf("HTTP server Shutdown error: %v", err)
+	}
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
 		Payload:  "shutdown complete"})
+}
+
+func autocompleteHandler(trie *autocomplete.Trie) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		// Get the prefix from the query string
+		prefix := r.URL.Query().Get("prefix")
+		if prefix == "" {
+			http.Error(w, "prefix is required", http.StatusBadRequest)
+			return
+		}
+
+		results := trie.Search(prefix, 10)
+
+		// Return the results as a JSON response
+		response := autocompleteResponse{Results: results}
+		responseJson, err := json.Marshal(response)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		duration := time.Since(start)
+		logger.Log(logging.Entry{
+			Severity: logging.Debug,
+			Payload:  fmt.Sprintf("autocomplete for %s took %v", prefix, duration)})
+		w.Header().Set("Content-Type", "application/json")
+		if _, err := w.Write(responseJson); err != nil {
+			logger.Log(logging.Entry{
+				Severity: logging.Error,
+				Payload:  fmt.Sprintf("error writing JSON response: %v", err)})
+		}
+	}
+}
+
+func closeReader(reader io.Closer) {
+	err := reader.Close()
+	if err != nil {
+		log.Printf("error closing reader: %v", err)
+	}
 }
 
 func populate(trie autocomplete.Trie, bucketName string, objectName string) {
@@ -175,7 +194,7 @@ func populate(trie autocomplete.Trie, bucketName string, objectName string) {
 			Severity: logging.Error,
 			Payload:  fmt.Sprintf("failed to read tags object %s: %v", objectName, err)})
 	}
-	defer reader.Close()
+	defer closeReader(reader)
 
 	scanner := bufio.NewScanner(reader)
 	scanner.Text() // skip first line
@@ -204,7 +223,7 @@ func populate(trie autocomplete.Trie, bucketName string, objectName string) {
 		Payload:  fmt.Sprintf("loaded %d tags", count)})
 }
 
-func readiness(isReady *atomic.Value) http.HandlerFunc {
+func readinessHandler(isReady *atomic.Value) http.HandlerFunc {
 	return func(w http.ResponseWriter, _ *http.Request) {
 		if isReady == nil || !isReady.Load().(bool) {
 			http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
@@ -214,10 +233,11 @@ func readiness(isReady *atomic.Value) http.HandlerFunc {
 	}
 }
 
-func liveness(w http.ResponseWriter, _ *http.Request) {
+func livenessHandler(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+/*
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -225,4 +245,4 @@ func enableCORS(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
 		next.ServeHTTP(w, r)
 	})
-}
+}*/
