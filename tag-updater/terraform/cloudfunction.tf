@@ -4,7 +4,7 @@ resource "google_cloudfunctions2_function" "tags_updater_function" {
   description = "Tag Updater"
 
   build_config {
-    runtime     = "go119"
+    runtime     = "go120"
     entry_point = var.function_name
     source {
       storage_source {

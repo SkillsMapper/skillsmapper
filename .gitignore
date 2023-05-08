@@ -1,7 +1,7 @@
 /.env
-!/skill-lookup/.env
+!/skill-service/.env
 /fact-service-native/.env.yaml
 /user-interface/src/js/config.js
-/profile-builder/.env
+/profile-service/.env
 /.env-test
 /tag-updater/.env-test.yaml

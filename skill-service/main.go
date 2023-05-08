@@ -91,7 +91,7 @@ func main() {
 	r.HandleFunc("/liveness", livenessHandler)
 	r.HandleFunc("/readiness", readinessHandler(isReady))
 	r.HandleFunc("/autocomplete", autocompleteHandler(trie))
-	//server.Handler = enableCORS(r)
+	server.Handler = r
 
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
@@ -120,8 +120,7 @@ func main() {
 		Payload:  "shutdown initiated"})
 
 	// Cloud Run gives apps 10 seconds to shutdown. See
-	// https://cloud.google.com/blog/topics/developers-practitioners/graceful-shutdowns-cloud-run-deep-dive
-	// for more details.
+	// https://cloud.google.com/blog/topics/developers-practitioners/graceful-shutdowns-cloud-run-deep-dive for more details.
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
@@ -236,13 +235,3 @@ func readinessHandler(isReady *atomic.Value) http.HandlerFunc {
 func livenessHandler(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
-
-/*
-func enableCORS(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET")
-		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Authorization")
-		next.ServeHTTP(w, r)
-	})
-}*/

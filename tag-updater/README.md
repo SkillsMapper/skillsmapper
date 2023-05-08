@@ -6,6 +6,10 @@ This is a summary of [Chapter P1](../chapters/ch06.asciidoc)
 
 Create a new project and enable billing as described in the [Setup](../setup/README.md) instructions.
 
+```shell
+set -a; source ../.env; source .env; set +a
+```
+
 ## Enable APIs
 
 Enable the APIs for the services used in this project:

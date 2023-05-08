@@ -159,3 +159,4 @@ terraform.rc
 /.database.local.env
 /.env
 /secrets.txt
+/.env.yaml

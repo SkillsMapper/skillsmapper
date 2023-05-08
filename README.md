@@ -15,10 +15,10 @@ These are the basics of setting up a project on Google Cloud to use for deployme
 Please follow the projects in order as they build on each other.
 
 ### Chapter 6 - Project 1 [Tag Updater](./tag-updater) (Ready for testing)
-### Chapter 7 - Project 2 [Skill Lookup](./skill-lookup) (Ready for testing)
+### Chapter 7 - Project 2 [Skill Lookup](./skill-service) (Ready for testing)
 ### Chapter 8a - Project 3 [Fact Service - Native](./fact-service-native) (Ready for testing)
 ### Chapter 8b - Project 4 [Fact Service - Agnostic](./fact-service-agnostic) (Ready for testing)
-### Chapter 9 - Project 5 [Profile Builder](./profile-builder) (Ready for testing)
+### Chapter 9 - Project 5 [Profile Builder](./profile-service) (Ready for testing)
 ### Chapter 10 - Project 6 [User Interface](./user-interface) (Ready for testing)
 
 ## Facilities

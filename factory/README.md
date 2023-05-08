@@ -203,5 +203,10 @@ tfsec
 Build the images:
 
 ```shell
-gcloud builds submit --pack image=gcr.io/sm-terraform-test/skill-service:latest .
+gcloud builds submit --pack image=gcr.io/sm-terraform-test/skill-service:latest ../skill_service
+gcloud builds submit --pack image=gcr.io/sm-terraform-test/fact-service:latest ../fact-service
+```
+
+```shell
+gcloud
 ```

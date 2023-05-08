@@ -1,7 +1,7 @@
 resource "google_service_account" "skill_service" {
   project      = var.project_id
   account_id   = var.skill_service_service_account_name
-  display_name = "Skill Service Service Account"
+  display_name = "Service account for ${var.skill_service_name}"
 }
 
 resource "google_storage_bucket_iam_binding" "skill_service_object_viewer" {

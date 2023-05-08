@@ -11,15 +11,22 @@
             "id": "d6fe8a89a107f09a",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "empty",
+              "state": {}
+            }
+          },
+          {
+            "id": "467dfd03d59b32d1",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
               "state": {
-                "file": "profile-builder/README.md",
-                "mode": "source",
-                "source": true
+                "currentVersion": "1.2.7"
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -64,6 +71,14 @@
               "type": "starred",
               "state": {}
             }
+          },
+          {
+            "id": "f5df0273046e22c7",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
           }
         ]
       }
@@ -85,7 +100,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "profile-builder/README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +116,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "profile-builder/README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -124,9 +137,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "profile-builder/README.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -146,20 +157,27 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "d6fe8a89a107f09a",
+  "active": "467dfd03d59b32d1",
   "lastOpenFiles": [
-    "setup/chapter/ch04.asciidoc",
-    "skill-lookup/cloudbuild.yaml.template",
-    "skill-lookup/cloudbuild.yaml",
-    "factory/link.sh",
-    "factory/builds",
-    "factory/terraform/provider.tf",
-    "factory/terraform",
+    "factory/terraform/modules/fact_service/vpc.tf",
+    "factory/terraform/modules/fact_service/iam.tf",
+    "factory/terraform/modules/fact_service/cloud_run.tf",
+    "factory/terraform/modules/fact_service/secret.tf",
+    "factory/terraform/modules/fact_service/password.tf",
+    "factory/terraform/modules/fact_service/cloudsql.tf",
+    "factory/terraform/modules/fact_service/variables.tf",
+    "factory/terraform/modules/fact_service/services.tf",
+    "fact-service/src/main/java/org/skillsmapper/factservice/FactRepository.java",
+    "fact-service/src/main/java/org/skillsmapper/factservice/FactsChanged.java",
+    "fact-service/src/main/java/org/skillsmapper/factservice/FactCreateRequest.java",
+    "fact-service/README.md",
+    "fact-service/NOTES.md",
+    "profile-builder/README.md",
+    "profile-service/README.md",
+    "profile-service/NOTES.md",
+    "skill-service/README.md",
+    "skill-service/NOTES.md",
     "factory/README.md",
-    "factory/chapter/ch10.asciidoc",
-    "factory/chapter",
-    "setup/chapter",
-    "chapters/ch08b.asciidoc",
     "user-interface/chapter/images/chapter-6-neg.png",
     "user-interface/chapter/images/chapter-6-bg.png",
     "user-interface/chapter/images/chapter-6-url-map.png",
