@@ -2,7 +2,7 @@
 #  repo_source:
 #    project_id: $PROJECT_ID
 #    repo_name: github_skillsmapper_skillsmapper
-#    dir: skill-service
+#    dir: skill_service
 #    branch_name: main
 steps:
   #  - id: eclint
@@ -37,17 +37,24 @@ steps:
   - id: go_security
     name: "securego/gosec"
     args: [ "./..." ]
-    env: [ "GOPATH=." ]
+    #env: [ "GOPATH=." ]
   - id: pack
     name: gcr.io/k8s-skaffold/pack
     entrypoint: pack
     args:
       - build
-      - gcr.io/$PROJECT_ID/skill-service
+      - ${REGION}-docker.pkg.dev/${PROJECT_ID}/${IMAGE_NAME}:${DOLLAR}BUILD_ID
       - --network
       - cloudbuild
       - --builder
       - gcr.io/buildpacks/builder
-images:
-  - 'gcr.io/$PROJECT_ID/skill-service:$COMMIT_SHA'
-
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    args:
+      [
+        "deploy", "releases", "create", "release-${DOLLAR}_RELEASE_TIMESTAMP",
+        "--delivery-pipeline", "cloud-run-pipeline",
+        "--region", "${REGION}",
+        "--images", "service=${REGION}-docker.pkg.dev/${PROJECT_ID}/${IMAGE_NAME}:${DOLLAR}BUILD_ID",
+      ]
+    entrypoint: gcloud

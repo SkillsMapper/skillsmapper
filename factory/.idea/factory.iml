@@ -7,5 +7,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="skill-lookup" />
     <orderEntry type="module" module-name="setup" />
+    <orderEntry type="module" module-name="laboratory" />
+    <orderEntry type="module" module-name="tag-updater" />
   </component>
 </module>
