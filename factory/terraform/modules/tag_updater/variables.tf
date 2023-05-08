@@ -4,17 +4,14 @@ variable "project_id" {
 
 variable "region" {
   type    = string
-  default = "us-central1"
 }
 
 variable "bucket_name" {
   type    = string
-  default = "tags"
 }
 
 variable "tags_file_name" {
   type    = string
-  default = "tags.json"
 }
 
 variable "function_name" {
