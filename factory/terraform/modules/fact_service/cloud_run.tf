@@ -7,7 +7,7 @@ resource "google_cloud_run_service" "fact_service" {
       service_account_name = "${var.fact_service_service_account_name}@${var.project_id}.iam.gserviceaccount.com"
 
       containers {
-        image = "gcr.io/${var.project_id}/${var.fact_service_name}:latest"
+        image = "gcr.io/${var.project_id}/${var.image_name}:latest"
 
         resources {
           limits = {
@@ -28,18 +28,17 @@ resource "google_cloud_run_service" "fact_service" {
           name = "DATABASE_PASSWORD"
           value_from {
             secret_key_ref {
-              name = "${var.project_id}/secrets/${var.secret_name}/versions/latest"
-              key  = "secret_data"
+              name = google_secret_manager_secret.secret.secret_id
+              key  = "1"
             }
           }
         }
       }
     }
-  }
-
-  metadata {
-    annotations = {
-      "run.googleapis.com/cloudsql-instances" = "${var.project_id}:${var.region}:${google_sql_database_instance.instance.name}"
+    metadata {
+      annotations = {
+        "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.instance.connection_name
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 variable "project_id" {
-  type= string
+  type = string
 }
 
 variable "region" {
@@ -7,41 +7,46 @@ variable "region" {
 }
 
 variable "instance_name" {
-  type = string
+  type    = string
   default = "facts-instance"
 }
 
 variable "database_tier" {
-  type = string
+  type    = string
   default = "db-f1-micro"
 }
 
 variable "disk_size" {
-  type = number
+  type    = number
   default = 10
 }
 
 variable "database_name" {
-  type = string
+  type    = string
   default = "facts"
 }
 
 variable "fact_service_user" {
-  type = string
+  type    = string
   default = "fact_service_user"
 }
 
 variable "secret_name" {
-  type = string
-  default = "fact-service-db-password"
+  type    = string
+  default = "fact_service_db_password"
 }
 
 variable "fact_service_service_account_name" {
-  type = string
+  type    = string
   default = "fact-service-sa"
 }
 
 variable "fact_service_name" {
-  type = string
+  type    = string
+  default = "fact-service"
+}
+
+variable "image_name" {
+  type    = string
   default = "fact-service"
 }

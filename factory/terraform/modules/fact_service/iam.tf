@@ -11,7 +11,8 @@ resource "google_project_iam_member" "fact_service_sql_client" {
 }
 
 resource "google_secret_manager_secret_iam_member" "fact_service_secret_accessor" {
-  secret_id = var.secret_name
-  role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${google_service_account.fact_service_account.email}"
+  secret_id  = google_secret_manager_secret.secret.id
+  role       = "roles/secretmanager.secretAccessor"
+  member     = "serviceAccount:${google_service_account.fact_service_account.email}"
+  depends_on = [google_secret_manager_secret.secret]
 }

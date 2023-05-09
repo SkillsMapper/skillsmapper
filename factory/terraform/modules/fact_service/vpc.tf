@@ -1,7 +1,8 @@
+/*
 resource "google_compute_network" "vpc_network" {
   name                    = "vpc-network"
   auto_create_subnetworks = false
-  depends_on = [google_project_service.compute_engine]
+  depends_on              = [google_project_service.compute_engine]
 }
 
 resource "google_compute_subnetwork" "private_subnet" {
@@ -16,3 +17,4 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_subnetwork.private_subnet.name]
 }
+*/

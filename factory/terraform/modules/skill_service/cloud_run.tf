@@ -6,7 +6,7 @@ resource "google_cloud_run_service" "skill_service" {
     spec {
       service_account_name = google_service_account.skill_service.email
       containers {
-        image = "gcr.io/${var.project_id}/${var.skill_service_name}:latest"
+        image = "gcr.io/${var.project_id}/${var.image_name}:latest"
 
         env {
           name  = "PROJECT_ID"
