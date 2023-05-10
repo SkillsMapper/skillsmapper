@@ -3,15 +3,15 @@ variable "project_id" {
 }
 
 variable "region" {
-  type    = string
+  type = string
 }
 
 variable "bucket_name" {
-  type    = string
+  type = string
 }
 
 variable "tags_file_name" {
-  type    = string
+  type = string
 }
 
 variable "function_name" {

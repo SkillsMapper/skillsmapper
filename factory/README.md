@@ -200,13 +200,31 @@ tflint ./...
 tfsec
 ```
 
-Build the images:
+## Prerequisites
+
+### Create the project
+
+### Configure Identity Platform
+
+* Enable Identity Platform in the marketplace
+* Enable Identity Toolkit API
+
+### Build Images
 
 ```shell
 gcloud builds submit --pack image=gcr.io/sm-terraform-test/skill-service:latest ../skill_service
 gcloud builds submit --pack image=gcr.io/sm-terraform-test/fact-service:latest ../fact-service
+gcloud builds submit --pack image=gcr.io/sm-terraform-test/profile-service:latest ../profile-service
 ```
 
+### Run Terraform
+
 ```shell
-gcloud
+terraform apply
+```
+
+### Run Infracost
+
+```shell
+infracost breakdown --path .
 ```

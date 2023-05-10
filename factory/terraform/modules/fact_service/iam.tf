@@ -16,3 +16,10 @@ resource "google_secret_manager_secret_iam_member" "fact_service_secret_accessor
   member     = "serviceAccount:${google_service_account.fact_service_account.email}"
   depends_on = [google_secret_manager_secret.secret]
 }
+
+resource "google_pubsub_topic_iam_member" "publisher" {
+  project = var.project_id
+  topic   = var.fact_changed_topic
+  role    = "roles/pubsub.publisher"
+  member  = "serviceAccount:${google_service_account.fact_service_account.email}"
+}

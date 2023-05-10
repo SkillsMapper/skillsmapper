@@ -50,3 +50,7 @@ variable "image_name" {
   type    = string
   default = "fact-service"
 }
+
+variable "fact_changed_topic" {
+  type = string
+}

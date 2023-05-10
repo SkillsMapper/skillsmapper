@@ -9,7 +9,8 @@ resource "google_cloud_scheduler_job" "job" {
   }
 
   http_target {
-    uri = google_cloudfunctions2_function.tags_updater_function.service_config[0].uri
+    uri         = google_cloudfunctions2_function.tags_updater_function.service_config[0].uri
+    http_method = "POST"
     oidc_token {
       service_account_email = google_service_account.gcf_invoker_sa.email
     }

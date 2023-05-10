@@ -5,9 +5,11 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="skill-lookup" />
+    <orderEntry type="module" module-name="skill-service" />
     <orderEntry type="module" module-name="setup" />
     <orderEntry type="module" module-name="laboratory" />
     <orderEntry type="module" module-name="tag-updater" />
+    <orderEntry type="module" module-name="fact-service" />
+    <orderEntry type="module" module-name="profile-service" />
   </component>
 </module>

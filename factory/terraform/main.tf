@@ -19,15 +19,22 @@ module "skill_service" {
 }
 
 module "fact_service" {
-  source     = "./modules/fact_service"
-  project_id = var.project_id
-  region     = var.region
+  source             = "./modules/fact_service"
+  project_id         = var.project_id
+  region             = var.region
+  fact_changed_topic = var.fact_changed_topic
 }
 
 module "profile_service" {
-  source = "./modules/profile_service"
+  source             = "./modules/profile_service"
+  project_id         = var.project_id
+  region             = var.region
+  fact_changed_topic = var.fact_changed_topic
 }
 
 module "user_interface" {
-  source = "./modules/user_interface"
+  source     = "./modules/user_interface"
+  prefix     = var.prefix
+  project_id = var.project_id
+  region     = var.region
 }
