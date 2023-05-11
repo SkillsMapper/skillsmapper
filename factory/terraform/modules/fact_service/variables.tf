@@ -42,8 +42,7 @@ variable "fact_service_service_account_name" {
 }
 
 variable "fact_service_name" {
-  type    = string
-  default = "fact-service"
+  type = string
 }
 
 variable "image_name" {

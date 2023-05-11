@@ -1,6 +1,5 @@
 variable "skill_service_name" {
-  default = "skill-service"
-  type    = string
+  type = string
 }
 
 variable "image_name" {

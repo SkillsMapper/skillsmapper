@@ -16,8 +16,7 @@ variable "fact_changed_topic" {
 }
 
 variable "profile_service_name" {
-  default = "profile-service"
-  type    = string
+  type = string
 }
 
 variable "image_name" {

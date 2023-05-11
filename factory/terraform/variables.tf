@@ -33,3 +33,24 @@ variable "prefix" {
   description = "A prefix to apply to all resource names."
 }
 
+variable "skill_service_name" {
+  type        = string
+  default     = "skill-service"
+  description = "The name of the skill service."
+}
+
+variable "fact_service_name" {
+  type        = string
+  default     = "fact-service"
+  description = "The name of the fact service."
+}
+
+variable "profile_service_name" {
+  type        = string
+  default     = "profile-service"
+  description = "The name of the profile service."
+}
+
+variable "domain" {
+  type = string
+}
