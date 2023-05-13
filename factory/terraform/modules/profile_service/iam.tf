@@ -4,7 +4,7 @@ resource "google_service_account" "fact_changed_subscription_sa" {
   display_name = "Service account for ${var.fact_changed_subscription}"
 }
 
-resource "google_cloud_run_service_iam_member" "invoker" {
+resource "google_cloud_run_service_iam_member" "fact_changed_invoker" {
   project  = var.project_id
   location = var.region
   service  = google_cloud_run_service.profile_service.name

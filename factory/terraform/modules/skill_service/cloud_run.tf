@@ -41,20 +41,3 @@ resource "google_cloud_run_service" "skill_service" {
     google_project_service.container_registry,
   ]
 }
-
-resource "google_cloud_run_service_iam_policy" "skill_service_unauthenticated" {
-  location    = google_cloud_run_service.skill_service.location
-  project     = google_cloud_run_service.skill_service.project
-  service     = google_cloud_run_service.skill_service.name
-  policy_data = data.google_iam_policy.skill_service_unauthenticated.policy_data
-}
-
-data "google_iam_policy" "skill_service_unauthenticated" {
-  binding {
-    role = "roles/run.invoker"
-
-    members = [
-      "allUsers",
-    ]
-  }
-}

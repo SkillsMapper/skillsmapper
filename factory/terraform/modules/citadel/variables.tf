@@ -37,3 +37,7 @@ variable "prefix" {
   type        = string
   description = "Prefix for load balancer related names"
 }
+
+variable "fact_changed_subscription" {
+  type = string
+}

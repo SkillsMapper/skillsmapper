@@ -33,21 +33,3 @@ resource "google_cloud_run_service" "profile_service" {
   autogenerate_revision_name = true
 
 }
-
-resource "google_cloud_run_service_iam_policy" "noauth" {
-  location = google_cloud_run_service.profile_service.location
-  project  = google_cloud_run_service.profile_service.project
-  service  = google_cloud_run_service.profile_service.name
-
-  policy_data = data.google_iam_policy.no_auth.policy_data
-}
-
-data "google_iam_policy" "no_auth" {
-  binding {
-    role = "roles/run.invoker"
-
-    members = [
-      "allUsers",
-    ]
-  }
-}

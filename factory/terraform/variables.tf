@@ -9,7 +9,7 @@ variable "region" {
   description = "The region in which to create the resources."
 }
 
-variable "bucket_name" {
+variable "tag_bucket_name" {
   type        = string
   default     = "tags"
   description = "The name to give to the Google Cloud Storage bucket."
@@ -17,7 +17,7 @@ variable "bucket_name" {
 
 variable "tags_file_name" {
   type        = string
-  default     = "tags.json"
+  default     = "tags.csv"
   description = "The name of the file to store tags in."
 }
 
@@ -53,4 +53,9 @@ variable "profile_service_name" {
 
 variable "domain" {
   type = string
+}
+
+variable "fact_changed_subscription" {
+  type    = string
+  default = "fact-changed-subscription"
 }

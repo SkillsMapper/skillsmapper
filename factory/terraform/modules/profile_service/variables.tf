@@ -25,6 +25,5 @@ variable "image_name" {
 }
 
 variable "fact_changed_subscription" {
-  type    = string
-  default = "fact-changed-subscription"
+  type = string
 }

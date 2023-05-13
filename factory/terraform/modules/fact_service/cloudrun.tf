@@ -79,20 +79,3 @@ locals {
     },
   ]
 }
-
-resource "google_cloud_run_service_iam_policy" "fact_service_unauthenticated" {
-  location    = google_cloud_run_service.fact_service.location
-  project     = google_cloud_run_service.fact_service.project
-  service     = google_cloud_run_service.fact_service.name
-  policy_data = data.google_iam_policy.fact_service_unauthenticated.policy_data
-}
-
-data "google_iam_policy" "fact_service_unauthenticated" {
-  binding {
-    role = "roles/run.invoker"
-
-    members = [
-      "allUsers",
-    ]
-  }
-}

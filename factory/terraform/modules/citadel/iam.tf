@@ -38,5 +38,6 @@ resource "google_cloud_run_service_iam_binding" "profile_service_invoker" {
 
   members = [
     "serviceAccount:${var.api_name}-gateway-sa@${var.project_id}.iam.gserviceaccount.com",
+    "serviceAccount:${var.fact_changed_subscription}-sa@${var.project_id}.iam.gserviceaccount.com"
   ]
 }
