@@ -5,9 +5,14 @@ resource "google_compute_global_address" "global_address" {
 
 resource "google_compute_url_map" "url_map" {
   name            = "${var.prefix}-url-map"
-  default_service = google_compute_backend_bucket.ui_backend_bucket.id
-  /*
-  path_matcher {
+  default_service = google_compute_backend_bucket.ui_backend_bucket.name
+
+  host_rule {
+    hosts        = [var.domain]
+    path_matcher = "${var.prefix}-api-path-matcher"
+  }
+
+    path_matcher {
     name            = "${var.prefix}-api-path-matcher"
     default_service = google_compute_backend_bucket.ui_backend_bucket.id
 
@@ -16,7 +21,6 @@ resource "google_compute_url_map" "url_map" {
       service = google_compute_backend_service.api_backend.id
     }
   }
-  */
 }
 
 resource "google_compute_global_forwarding_rule" "forwarding_rule" {

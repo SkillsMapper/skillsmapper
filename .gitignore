@@ -5,3 +5,6 @@
 /profile-service/.env
 /.env-test
 /tag-updater/.env-test.yaml
+/fact-service/.env.terraform
+/factory/.env
+/factory/terraform/tags.csv

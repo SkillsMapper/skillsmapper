@@ -212,9 +212,9 @@ tfsec
 ### Build Images
 
 ```shell
-gcloud builds submit --pack image=gcr.io/sm-terraform-test/skill-service:latest ../skill_service
-gcloud builds submit --pack image=gcr.io/sm-terraform-test/fact-service:latest ../fact-service
-gcloud builds submit --pack image=gcr.io/sm-terraform-test/profile-service:latest ../profile-service
+gcloud builds submit --pack image=gcr.io/${PROJECT_ID}/skill-service:latest ../skill-service
+gcloud builds submit --pack image=gcr.io/${PROJECT_ID}/fact-service:latest ../fact-service
+gcloud builds submit --pack image=gcr.io/${PROJECT_ID}/profile-service:latest ../profile-service
 ```
 
 ### Run Terraform
@@ -227,4 +227,24 @@ terraform apply
 
 ```shell
 infracost breakdown --path .
+```
+
+## Clearing up
+
+Get the current project:
+
+```shell
+PROJECT_ID=$(gcloud config get-value project)
+```
+
+Delete the project:
+
+```shell
+gcloud projects delete ${PROJECT_ID}
+```
+
+Delete any remaining child resources:
+
+```shell
+gcloud endpoints services delete skillsmapper-api-api-gw-3pr8jbeyvvobi.apigateway.sm-terraform-test.cloud.goog --project=sm-terraform-test
 ```

@@ -1,4 +1,4 @@
-# Fact Service - Native
+# Fact Service
 
 This is a summary of [Chapter P3](../chapters/ch08a.asciidoc)
 
