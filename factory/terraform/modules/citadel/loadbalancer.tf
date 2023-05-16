@@ -12,7 +12,7 @@ resource "google_compute_url_map" "url_map" {
     path_matcher = "${var.prefix}-api-path-matcher"
   }
 
-    path_matcher {
+  path_matcher {
     name            = "${var.prefix}-api-path-matcher"
     default_service = google_compute_backend_bucket.ui_backend_bucket.id
 

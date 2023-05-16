@@ -1,7 +1,7 @@
 resource "google_api_gateway_api" "api_gw" {
-  provider   = google-beta
-  project    = var.project_id
-  api_id     = "${var.api_name}-api-gw"
+  provider = google-beta
+  project  = var.project_id
+  api_id   = "${var.api_name}-api-gw"
   depends_on = [
     google_project_service.apigateway,
     google_project_service.servicecontrol
@@ -22,7 +22,7 @@ resource "google_api_gateway_api_config" "api_gw_config" {
 
   openapi_documents {
     document {
-      path     = "spec.yaml"
+      path = "spec.yaml"
       contents = base64encode(templatefile("../../user-interface/api.yaml.template",
         {
           API_NAME            = var.api_name

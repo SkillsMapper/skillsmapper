@@ -222,6 +222,16 @@ gcloud builds submit --pack image=gcr.io/${PROJECT_ID}/profile-service:latest ..
 ```shell
 terraform apply
 ```
+When rerunning manually delete gateway and gateway config first:
+
+```shell
+gcloud api-gateway gateways delete ${API_NAME}-gateway \
+--location=${REGION} \
+--project=${PROJECT_ID}
+
+```shell
+gcloud api-gateway api-configs delete ${API_NAME}-api-gw-config --api ${API_NAME}-api-gw
+```
 
 ### Run Infracost
 

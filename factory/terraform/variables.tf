@@ -52,10 +52,16 @@ variable "profile_service_name" {
 }
 
 variable "domain" {
-  type = string
+  description = "The domain where the project will be hosted."
+  type        = string
 }
 
 variable "fact_changed_subscription" {
   type    = string
   default = "fact-changed-subscription"
+}
+
+variable "api_key" {
+  description = "The API key for Identity Platform"
+  type        = string
 }

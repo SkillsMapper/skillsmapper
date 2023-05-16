@@ -3,7 +3,7 @@ terraform {
 }
 
 module "tag_updater" {
-  source         = "./modules/tag_updater"
+  source = "./modules/tag_updater"
   providers = {
     google = google
   }
@@ -14,7 +14,7 @@ module "tag_updater" {
 }
 
 module "skill_service" {
-  source             = "./modules/skill_service"
+  source = "./modules/skill_service"
   providers = {
     google = google
   }
@@ -28,7 +28,7 @@ module "skill_service" {
 
 
 module "fact_service" {
-  source             = "./modules/fact_service"
+  source = "./modules/fact_service"
   providers = {
     google = google
   }
@@ -40,7 +40,7 @@ module "fact_service" {
 }
 
 module "profile_service" {
-  source                    = "./modules/profile_service"
+  source = "./modules/profile_service"
   providers = {
     google = google
   }
@@ -53,18 +53,19 @@ module "profile_service" {
 }
 
 module "user_interface" {
-  source     = "./modules/user_interface"
+  source = "./modules/user_interface"
   providers = {
     google = google
   }
   prefix     = var.prefix
   project_id = var.project_id
   region     = var.region
+  api_key    = var.api_key
   depends_on = [module.profile_service, module.fact_service, module.skill_service]
 }
 
 module "citadel" {
-  source    = "./modules/citadel"
+  source = "./modules/citadel"
   providers = {
     google-beta = google-beta
   }

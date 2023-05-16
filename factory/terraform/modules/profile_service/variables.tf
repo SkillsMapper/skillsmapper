@@ -7,7 +7,7 @@ variable "region" {
 }
 
 variable "database_name" {
-  default = "profiles"
+  default = "(default)"
   type    = string
 }
 
