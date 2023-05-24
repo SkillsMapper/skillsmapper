@@ -14,19 +14,8 @@
               "type": "empty",
               "state": {}
             }
-          },
-          {
-            "id": "467dfd03d59b32d1",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.2.7"
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -157,19 +146,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "467dfd03d59b32d1",
+  "active": "d6fe8a89a107f09a",
   "lastOpenFiles": [
-    "factory/terraform/modules/fact_service/project.tf",
-    "factory/terraform/modules/fact_service/identityplatform.tf",
-    "factory/terraform/modules/profile_service/identityplatform.tf",
-    "factory/terraform/modules/profile_service/pubsub.tf",
-    "factory/terraform/modules/profile_service/iam.tf",
-    "factory/terraform/modules/profile_service/cloud_run.tf",
-    "factory/terraform/modules/fact_service/pubsub.tf",
-    "factory/terraform/modules/profile_service/firestore.tf",
-    "factory/terraform/modules/profile_service/variables.tf",
-    "factory/terraform/modules/profile_service/version.tf",
-    "factory/terraform/modules/profile_service/services.tf",
+    "factory/a",
+    "factory/chapter/ch11.asciidoc~",
+    "factory/chapter/images",
+    "fact-service/chapter/images/p3-postit.png",
+    "fact-service/chapter/images",
+    "fact-service/link.sh",
+    "chapters/images/factory.png",
+    "factory/terraform/management/output.tf",
+    "factory/terraform/management/modules/output.tf",
+    "factory/terraform/environment/iam.tf",
+    "factory/terraform/iam.tf",
+    "factory/terraform/management/modules/observatory/iam.tf",
+    "factory/terraform/management/modules/factory/cloudbuild.tf",
+    "factory/terraform/management/README.md",
+    "observatory/README.md",
     "user-interface/node_modules/lodash/README.md",
     "user-interface/node_modules/lodash/release.md",
     "user-interface/node_modules/karma/SECURITY.md",
@@ -196,14 +189,10 @@
     "user-interface/node_modules/ws/README.md",
     "user-interface/node_modules/minimist/README.md",
     "user-interface/node_modules/@colors/colors/README.md",
-    "user-interface/node_modules/minimist/CHANGELOG.md",
-    "user-interface/node_modules/source-map/CHANGELOG.md",
     "user-interface/chapter/images/chapter-6-neg.png",
     "user-interface/chapter/images/chapter-6-bg.png",
     "user-interface/chapter/images/chapter-6-url-map.png",
     "user-interface/chapter/images/chapter-6-start.png",
-    "user-interface/chapter/images/chapter-6-solution.png",
-    "user-interface/chapter/images/chapter-6-fw.png",
-    "user-interface/chapter/images/chapter-6-proxy.png"
+    "user-interface/chapter/images/chapter-6-solution.png"
   ]
 }

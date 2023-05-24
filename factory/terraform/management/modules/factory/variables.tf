@@ -17,3 +17,7 @@ variable "region" {
 variable "app_installation_id" {
   type = string
 }
+
+variable "github_repo" {
+  type = string
+}

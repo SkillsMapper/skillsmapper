@@ -3,6 +3,14 @@ variable "project_id" {
   description = "The ID of the Google Cloud project to use."
 }
 
+variable "billing_account" {
+  description = "The billing account ID to use with the project"
+}
+
+variable "project_name" {
+  default = "skillsmapper"
+}
+
 variable "region" {
   default     = "us-central1"
   type        = string
@@ -64,4 +72,8 @@ variable "fact_changed_subscription" {
 variable "api_key" {
   description = "The API key for Identity Platform"
   type        = string
+}
+
+variable "monitoring_sa_email" {
+  type = string
 }

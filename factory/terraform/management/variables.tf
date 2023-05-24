@@ -11,6 +11,10 @@ variable "project_name" {
   default = "skillsmapper-management"
 }
 
+variable "github_repo" {
+  type = string
+}
+
 variable "region" {
   default     = "us-central1"
   type        = string

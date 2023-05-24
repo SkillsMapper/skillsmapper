@@ -26,7 +26,7 @@ variable "function_source_file_name" {
 
 variable "function_source_file_source" {
   type    = string
-  default = "../../tag-updater/source/source.zip"
+  default = "../../../tag-updater/source/source.zip"
 }
 
 variable "job_name" {

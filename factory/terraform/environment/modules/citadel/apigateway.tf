@@ -23,7 +23,7 @@ resource "google_api_gateway_api_config" "api_gw_config" {
   openapi_documents {
     document {
       path = "spec.yaml"
-      contents = base64encode(templatefile("../../user-interface/api.yaml.template",
+      contents = base64encode(templatefile("../../../user-interface/api.yaml.template",
         {
           API_NAME            = var.api_name
           DOMAIN              = var.domain

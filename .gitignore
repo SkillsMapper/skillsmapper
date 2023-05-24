@@ -7,4 +7,6 @@
 /tag-updater/.env-test.yaml
 /fact-service/.env.terraform
 /factory/.env
-/factory/terraform/tags.csv
+/factory/terraform/environment/tags.csv
+/observatory/.env
+/factory/terraform/management/github-token.txt

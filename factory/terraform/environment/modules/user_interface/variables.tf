@@ -8,21 +8,16 @@ variable "region" {
   type        = string
 }
 
-variable "prefix" {
-  description = "The prefix for the GCS bucket"
-  type        = string
-}
-
 variable "ui_project" {
   description = "The project for the UI"
   type        = string
-  default     = "../../user-interface"
+  default     = "../../../user-interface"
 }
 
 variable "ui_source" {
   description = "The source code for the UI"
   type        = string
-  default     = "../../user-interface/src/*"
+  default     = "../../../user-interface/src/*"
 }
 
 variable "api_key" {

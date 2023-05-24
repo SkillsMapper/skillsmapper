@@ -21,6 +21,7 @@ resource "google_compute_url_map" "url_map" {
       service = google_compute_backend_service.api_backend.id
     }
   }
+  depends_on = [google_compute_backend_service.api_backend, google_compute_backend_bucket.ui_backend_bucket]
 }
 
 resource "google_compute_global_forwarding_rule" "forwarding_rule" {

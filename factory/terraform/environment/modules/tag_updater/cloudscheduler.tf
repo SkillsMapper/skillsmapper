@@ -20,3 +20,5 @@ resource "google_cloud_scheduler_job" "job" {
     google_project_service.cloudscheduler
   ]
 }
+
+
