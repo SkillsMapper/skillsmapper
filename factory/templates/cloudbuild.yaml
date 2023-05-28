@@ -3,9 +3,12 @@ steps:
       - pack
       - build
       - gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA
+      - --tag
+      - gcr.io/$PROJECT_ID/${_SERVICE_NAME}:latest
       - --builder
       - gcr.io/buildpacks/builder
     dir: ${_SERVICE_NAME}
     name: gcr.io/k8s-skaffold/pack
 images:
-  - 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:latest'
+  - gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA
+  - gcr.io/$PROJECT_ID/${_SERVICE_NAME}:latest
