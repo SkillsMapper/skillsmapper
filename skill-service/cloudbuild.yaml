@@ -1,0 +1,13 @@
+build:
+  images:
+    - gcr.io/$PROJECT_ID/skill-service:$COMMIT_SHA
+  options: {}
+  steps:
+    - args:
+        - pack
+        - build
+        - gcr.io/$PROJECT_ID/skill-service:$COMMIT_SHA
+        - --builder
+        - gcr.io/buildpacks/builder
+      dir: skill-service
+      name: gcr.io/k8s-skaffold/pack
