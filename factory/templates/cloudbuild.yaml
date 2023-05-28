@@ -2,8 +2,8 @@ steps:
   - args:
       - pack
       - build
-      - gcr.io/$PROJECT_ID/_SERVICE_NAME:$COMMIT_SHA
+      - gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA
       - --builder
       - gcr.io/buildpacks/builder
-    dir: _SERVICE_NAME
+    dir: ${_SERVICE_NAME}
     name: gcr.io/k8s-skaffold/pack
