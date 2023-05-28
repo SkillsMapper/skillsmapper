@@ -7,3 +7,5 @@ steps:
       - gcr.io/buildpacks/builder
     dir: ${_SERVICE_NAME}
     name: gcr.io/k8s-skaffold/pack
+images:
+  - 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:latest'
