@@ -17,12 +17,8 @@ resource "google_secret_manager_secret_version" "github-token-secret-version" {
 data "google_iam_policy" "p4sa-secretAccessor" {
   provider = google-beta
   binding {
-    role = "roles/secretmanager.secretAccessor"
-    members = [
-      "serviceAccount:${var.project_number}@cloudbuild.gserviceaccount.com",
-      "serviceAccount:service-${var.project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com",
-      "serviceAccount:${google_service_account.factory_sa.email}"
-    ]
+    role    = "roles/secretmanager.secretAccessor"
+    members = ["serviceAccount:service-${var.project_number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"]
   }
 }
 
@@ -33,14 +29,15 @@ resource "google_secret_manager_secret_iam_policy" "policy" {
   policy_data = data.google_iam_policy.p4sa-secretAccessor.policy_data
 }
 
-resource "google_cloudbuildv2_connection" "skillsmapper-github-conn" {
+resource "google_cloudbuildv2_connection" "skillsmapper-github-connection" {
   depends_on = [google_project_service.cloudbuild]
   provider   = google-beta
   location   = var.region
-  name       = "skillsmapper-github-conn"
+  name       = "SkillsMapper"
 
   github_config {
     app_installation_id = var.app_installation_id
+    #username            = var.github_username
     authorizer_credential {
       oauth_token_secret_version = google_secret_manager_secret_version.github-token-secret-version.id
     }
@@ -49,26 +46,52 @@ resource "google_cloudbuildv2_connection" "skillsmapper-github-conn" {
 
 resource "google_cloudbuildv2_repository" "skillsmapper-repo" {
   provider          = google-beta
-  #location          = var.region
-  name              = "skillsmapper-repo"
-  parent_connection = google_cloudbuildv2_connection.skillsmapper-github-conn.name
+  location          = var.region
+  name              = "skillsmapper"
+  parent_connection = google_cloudbuildv2_connection.skillsmapper-github-connection.name
   remote_uri        = var.github_repo
 }
 
-//https://discuss.hashicorp.com/t/repository-mapping-does-not-exist-when-creating-google-cloudbuild-trigger-for-github-repo/35621/10
 
-/*
-resource "google_cloudbuild_trigger" "repo-trigger" {
+resource "google_cloudbuildv2_repository" "cloud-build-test-repo" {
+  provider          = google-beta
+  location          = var.region
+  name              = "cloud-build-test"
+  parent_connection = google_cloudbuildv2_connection.skillsmapper-github-connection.name
+  remote_uri        = var.github_test_repo
+}
+
+resource "google_cloudbuild_trigger" "cloud-build-test-trigger" {
   provider = google-beta
   location = var.region
 
   repository_event_config {
-    repository = google_cloudbuildv2_repository.skillsmapper-repo.id
+    repository = google_cloudbuildv2_repository.cloud-build-test-repo.id
     push {
-      branch = "feature-.*"
+      branch = "^main$"
     }
   }
 
   filename = "cloudbuild.yaml"
 }
-*/
+
+resource "google_cloudbuild_trigger" "service_trigger" {
+  for_each = toset(var.service_names)
+
+  provider = google-beta
+  location = var.region
+  name     = "${each.key}-trigger"
+
+  repository_event_config {
+    repository = google_cloudbuildv2_repository.skillsmapper-repo.id
+    push {
+      branch = "^main$"
+    }
+  }
+  substitutions = {
+    _SERVICE_NAME = each.key
+  }
+
+  filename = "factory/templates/cloudbuild.yaml"
+}
+

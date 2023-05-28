@@ -21,3 +21,12 @@ variable "app_installation_id" {
 variable "github_repo" {
   type = string
 }
+
+variable "github_test_repo" {
+  type = string
+}
+
+variable "service_names" {
+  description = "List of service names"
+  type        = list(string)
+}

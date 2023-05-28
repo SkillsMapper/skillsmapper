@@ -1,3 +1,4 @@
+
 resource "google_service_account" "factory_sa" {
   account_id   = "factory-sa"
   project      = var.project_id
@@ -27,14 +28,9 @@ data "google_iam_policy" "factory_sa_policy" {
     ]
   }
 }
-
+/*
 resource "google_project_iam_policy" "project_iam_policy" {
   project     = var.project_id
   policy_data = data.google_iam_policy.factory_sa_policy.policy_data
 }
-
-resource "google_project_iam_member" "cloudbuild_viewer" {
-  project = var.project_id
-  role    = "roles/cloudbuild.connectionViewer"
-  member  = "serviceAccount:${google_service_account.factory_sa.email}"
-}
+*/
