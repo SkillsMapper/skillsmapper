@@ -7,6 +7,10 @@ variable "github_repo" {
   type = string
 }
 
+variable "container_repo" {
+  type = string
+}
+
 variable "region" {
   type        = string
   description = "The region in which to create the resources."

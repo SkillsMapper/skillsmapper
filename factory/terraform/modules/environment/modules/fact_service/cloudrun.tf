@@ -7,7 +7,7 @@ resource "google_cloud_run_service" "fact_service" {
       service_account_name = "${var.fact_service_service_account_name}@${var.project_id}.iam.gserviceaccount.com"
 
       containers {
-        image = "${var.region}-docker.pkg.dev/${var.management_project_id}/${var.fact_service_name}:${var.fact_service_version}"
+        image = "${var.region}-docker.pkg.dev/${var.management_project_id}/${var.container_repo}/${var.fact_service_name}:${var.fact_service_version}"
         resources {
           limits = {
             cpu    = "1000m"

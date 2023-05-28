@@ -5,7 +5,7 @@ resource "google_cloud_run_service" "profile_service" {
   template {
     spec {
       containers {
-        image = "${var.region}-docker.pkg.dev/${var.management_project_id}/${var.profile_service_name}:${var.profile_service_version}"
+        image = "${var.region}-docker.pkg.dev/${var.management_project_id}/${var.container_repo}/${var.profile_service_name}:${var.profile_service_version}"
         env {
           name  = "PROJECT_ID"
           value = var.project_id

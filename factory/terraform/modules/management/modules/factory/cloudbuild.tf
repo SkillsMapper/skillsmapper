@@ -69,6 +69,7 @@ resource "google_cloudbuild_trigger" "service_trigger" {
   substitutions = {
     _SERVICE_NAME = each.key
     _LOCATION     = var.region
+    _REPO         = var.container_repo
   }
 
   filename = "factory/templates/cloudbuild.yaml"

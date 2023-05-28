@@ -84,3 +84,7 @@ variable "profile_service_version" {
 variable "fact_service_version" {
   type = string
 }
+
+variable "container_repo" {
+  type = string
+}

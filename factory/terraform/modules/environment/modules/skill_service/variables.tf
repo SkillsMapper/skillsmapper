@@ -35,3 +35,7 @@ variable "management_project_id" {
 variable "skill_service_version" {
   type = string
 }
+
+variable "container_repo" {
+  type = string
+}

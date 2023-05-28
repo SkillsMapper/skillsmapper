@@ -36,6 +36,7 @@ module "skill_service" {
   tags_file_name        = var.tags_file_name
   skill_service_name    = var.skill_service_name
   skill_service_version = var.skill_service_version
+  container_repo        = var.container_repo
   depends_on            = [module.tag_updater]
 }
 
@@ -50,6 +51,7 @@ module "fact_service" {
   fact_changed_topic    = var.fact_changed_topic
   fact_service_name     = var.fact_service_name
   fact_service_version  = var.fact_service_version
+  container_repo        = var.container_repo
   depends_on            = [module.skill_service]
 }
 
@@ -65,8 +67,8 @@ module "profile_service" {
   profile_service_name      = var.profile_service_name
   profile_service_version   = var.profile_service_version
   fact_changed_subscription = var.fact_changed_subscription
+  container_repo            = var.container_repo
   depends_on                = [module.fact_service]
-
 }
 
 module "user_interface" {

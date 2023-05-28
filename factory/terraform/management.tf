@@ -6,6 +6,7 @@ module "management" {
   project_id          = google_project.management_project.project_id
   region              = var.region
   service_names       = var.service_names
+  container_repo      = var.container_repo
 }
 
 resource "google_project" "management_project" {

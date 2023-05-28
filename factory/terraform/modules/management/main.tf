@@ -9,6 +9,7 @@ module "factory" {
   app_installation_id = var.app_installation_id
   github_repo         = var.github_repo
   service_names       = var.service_names
+  container_repo      = var.container_repo
 }
 
 module "observatory" {

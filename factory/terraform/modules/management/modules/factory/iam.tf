@@ -3,10 +3,9 @@ data "google_project" "dev_project" {
 }
 
 resource "google_artifact_registry_repository_iam_member" "member" {
-  for_each   = toset(var.service_names)
   project    = var.project_id
   location   = var.region
-  repository = google_artifact_registry_repository.repository[each.key].repository_id
+  repository = google_artifact_registry_repository.repository.repository_id
   role       = "roles/artifactregistry.reader"
   member     = "serviceAccount:service-${data.google_project.dev_project.number}@serverless-robot-prod.iam.gserviceaccount.com"
 }

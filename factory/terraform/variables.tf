@@ -19,6 +19,10 @@ variable "github_repo" {
   type = string
 }
 
+variable "container_repo" {
+  default = "skillsmapper"
+}
+
 variable "region" {
   default     = "us-central1"
   type        = string
@@ -79,6 +83,7 @@ variable "fact_service_dev_version" {
   type    = string
   default = "latest"
 }
+
 variable "profile_service_dev_version" {
   type    = string
   default = "latest"

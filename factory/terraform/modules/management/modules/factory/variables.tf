@@ -21,6 +21,10 @@ variable "github_repo" {
   type = string
 }
 
+variable "container_repo" {
+  type = string
+}
+
 variable "service_names" {
   description = "List of service names"
   type        = list(string)

@@ -17,6 +17,7 @@ module "environment" {
   skill_service_version   = var.skill_service_dev_version
   fact_service_version    = var.fact_service_dev_version
   profile_service_version = var.profile_service_dev_version
+  container_repo          = var.container_repo
 }
 
 provider "google" {

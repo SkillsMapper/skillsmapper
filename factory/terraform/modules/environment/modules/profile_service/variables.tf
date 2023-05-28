@@ -30,3 +30,7 @@ variable "fact_changed_subscription" {
 variable "management_project_id" {
   type = string
 }
+
+variable "container_repo" {
+  type = string
+}

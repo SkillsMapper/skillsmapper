@@ -56,3 +56,7 @@ variable "fact_changed_topic" {
 variable "management_project_id" {
   type = string
 }
+
+variable "container_repo" {
+  type = string
+}
