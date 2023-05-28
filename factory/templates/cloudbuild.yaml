@@ -2,13 +2,13 @@ steps:
   - args:
       - pack
       - build
-      - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA
+      - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE_NAME}:$COMMIT_SHA
       - --tag
-      - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:latest
+      - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE_NAME}:latest
       - --builder
       - gcr.io/buildpacks/builder
     dir: ${_SERVICE_NAME}
     name: gcr.io/k8s-skaffold/pack
 images:
-  - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:$COMMIT_SHA
-  - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_SERVICE_NAME}:latest
+  - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE_NAME}:$COMMIT_SHA
+  - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE_NAME}:latest
