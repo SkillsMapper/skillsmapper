@@ -261,3 +261,62 @@ Delete any remaining child resources:
 ```shell
 gcloud endpoints services delete skillsmapper-api-api-gw-3pr8jbeyvvobi.apigateway.sm-terraform-test.cloud.goog --project=sm-terraform-test
 ```
+
+https://www.googlecloudcommunity.com/gc/Developer-Tools/GCP-CloudBuild-gt-Failed-to-trigger-build-Couldn-t-read-commit/m-p/509861
+
+Get a Trigger
+```
+gcloud alpha builds triggers export $(TRIGGERNAME) --region=$REGION --destination=trigger.yaml
+```
+
+Get Connections
+```
+ gcloud alpha builds connections list --region=europe-west2
+```
+
+Removing the app completely resulted in:
+
+```shell
+ERROR: (gcloud.alpha.builds.triggers.create.github) FAILED_PRECONDITION: connection of repository projects/skillsmapper-management/locations/us-central1/connections/skillsmapper-github-connection/repositories/SkillsMapper cannot be fetched: generic::permission_denied: Permission 'cloudbuild.connections.get' denied on 'projects/262018307079/locations/us-central1/connections/skillsmapper-github-connection'
+```
+
+
+Added to factory-sa
+
+Cloud Build Editor fixes:
+
+```shell
+Failed to trigger build: Permission 'cloudbuild.builds.create' denied on resource 'projects/0000003d01821407' (or it may not exist)
+```
+
+Default cloud build service account:
+https://cloud.google.com/build/docs/cloud-build-service-account
+
+
+### Cloud Build Service Account 
+- 262018307079@cloudbuild.gserviceaccount.com
+- Secret Manager Secret Accessor
+- Default for Cloud Build
+
+In working project permissions: 104184829272@cloudbuild.gserviceaccount.com
+* Cloud Build Service Account
+* Cloud Run Admin
+* Service Account User
+
+### Cloud Build Service Agent
+
+service-262018307079@gcp-sa-cloudbuild.iam.gserviceaccount.com
+- Secret Manager Admin
+
+In addition to the Cloud Build service account, Cloud Build has another Google-managed service account called the Cloud Build Service Agent that allows other Google Cloud services to access your resources.
+
+
+# Skillsmapper dev
+Failed to trigger build: generic::failed_precondition: due to quota restrictions, cannot run builds in this region
+
+## Import Projects
+
+```shell
+terraform import google_project.management_project skillsmapper-management
+terraform import google_project.dev_project skillsmapper-dev
+```
