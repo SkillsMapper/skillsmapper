@@ -1,5 +1,5 @@
 module "factory" {
-  source    = "./modules/factory"
+  source = "./modules/factory"
   providers = {
     google = google
   }
@@ -13,7 +13,7 @@ module "factory" {
 }
 
 module "observatory" {
-  source    = "./modules/observatory"
+  source = "./modules/observatory"
   providers = {
     google = google
   }

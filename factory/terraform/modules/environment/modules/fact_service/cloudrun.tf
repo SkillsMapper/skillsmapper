@@ -1,6 +1,7 @@
 resource "google_cloud_run_service" "fact_service" {
-  name     = var.fact_service_name
-  location = var.region
+  depends_on = [google_secret_manager_secret_iam_member.fact_service_secret_accessor]
+  name       = var.fact_service_name
+  location   = var.region
 
   template {
     spec {

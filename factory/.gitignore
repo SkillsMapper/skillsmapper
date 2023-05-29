@@ -192,3 +192,4 @@ override.tf.json
 .terraformrc
 terraform.rc
 .env
+/terraform/tags.csv

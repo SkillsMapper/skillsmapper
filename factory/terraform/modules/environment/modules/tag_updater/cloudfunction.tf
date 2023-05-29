@@ -29,8 +29,6 @@ resource "google_cloudfunctions2_function" "tags_updater_function" {
   depends_on = [
     google_project_service.cloudfunctions,
     google_project_service.cloudbuild,
-    google_project_service.artifactregistry,
-    google_project_service.run,
   ]
 }
 

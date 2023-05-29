@@ -1,6 +1,7 @@
 resource "google_cloud_run_service" "skill_service" {
-  name     = var.skill_service_name
-  location = var.region
+  depends_on = [google_project_service.run]
+  name       = var.skill_service_name
+  location   = var.region
 
   template {
     spec {
@@ -14,7 +15,7 @@ resource "google_cloud_run_service" "skill_service" {
 
         env {
           name  = "BUCKET_NAME"
-          value = "${var.project_id}-${var.bucket_name}"
+          value = var.bucket_name
         }
 
         env {
@@ -34,9 +35,4 @@ resource "google_cloud_run_service" "skill_service" {
     percent         = 100
     latest_revision = true
   }
-
-  depends_on = [
-    google_project_service.cloud_run,
-    google_project_service.container_registry,
-  ]
 }

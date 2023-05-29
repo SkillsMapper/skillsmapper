@@ -1,12 +1,16 @@
+resource "random_id" "bucket_suffix" {
+  byte_length = 8
+}
+
 resource "google_storage_bucket" "tags_bucket" {
-  name                        = "${var.project_id}-${var.bucket_name}"
+  name                        = var.bucket_name
   location                    = var.region
   force_destroy               = true
   uniform_bucket_level_access = true
 }
 
 resource "google_storage_bucket" "gcf_source_bucket" {
-  name                        = "${var.project_id}-gcf-source"
+  name                        = "gcf-source-${random_id.bucket_suffix.hex}"
   location                    = var.region
   force_destroy               = true
   uniform_bucket_level_access = true

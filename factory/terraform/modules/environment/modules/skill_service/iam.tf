@@ -5,7 +5,7 @@ resource "google_service_account" "skill_service" {
 }
 
 resource "google_storage_bucket_iam_binding" "skill_service_object_viewer" {
-  bucket = "${var.project_id}-${var.bucket_name}"
+  bucket = var.bucket_name
   role   = "roles/storage.objectViewer"
 
   members = [

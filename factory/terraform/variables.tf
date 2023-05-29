@@ -21,17 +21,13 @@ variable "github_repo" {
 
 variable "container_repo" {
   default = "skillsmapper"
+  type    = string
 }
 
 variable "region" {
-  default     = "us-central1"
+  default     = "us-west2"
   type        = string
   description = "The region in which to create the resources."
-}
-
-variable "monitored_project_id" {
-  type        = string
-  description = "The ID of the project to monitor."
 }
 
 variable "app_installation_id" {
@@ -44,14 +40,9 @@ variable "service_names" {
   default     = ["skill-service", "fact-service", "profile-service"]
 }
 
-variable "environments" {
-  description = "List of environments"
-  type        = list(string)
-  default     = ["dev"]
-}
-
 variable "prefix" {
   default = "skillsmapper"
+  type    = string
 }
 
 variable "domain" {
@@ -66,6 +57,7 @@ variable "api_key" {
 
 variable "billing_account" {
   description = "The billing account ID to use with the project"
+  type        = string
 }
 
 variable "skill_service_name" {

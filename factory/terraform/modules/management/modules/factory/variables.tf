@@ -4,7 +4,7 @@ variable "project_id" {
 }
 
 variable "dev_project_id" {
-  type        = string
+  type = string
 }
 
 variable "region" {

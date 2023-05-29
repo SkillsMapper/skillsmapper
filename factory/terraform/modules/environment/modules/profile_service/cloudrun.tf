@@ -30,5 +30,4 @@ resource "google_cloud_run_service" "profile_service" {
   }
 
   autogenerate_revision_name = true
-
 }

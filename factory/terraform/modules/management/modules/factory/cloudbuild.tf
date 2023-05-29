@@ -17,9 +17,9 @@ resource "google_secret_manager_secret_version" "github-token-secret-version" {
 data "google_iam_policy" "p4sa-secretAccessor" {
   provider = google-beta
   binding {
-    role    = "roles/secretmanager.secretAccessor"
+    role = "roles/secretmanager.secretAccessor"
     members = [
-      "serviceAccount:service-${data.google_project.dev_project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
+      "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
     ]
   }
 }

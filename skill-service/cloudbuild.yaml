@@ -1,7 +1,7 @@
 build:
   images:
     - gcr.io/$PROJECT_ID/skill-service:$COMMIT_SHA
-  options: {}
+  options: { }
   steps:
     - args:
         - pack

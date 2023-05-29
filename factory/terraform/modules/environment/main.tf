@@ -14,25 +14,25 @@ terraform {
 }
 
 module "tag_updater" {
-  source    = "./modules/tag_updater"
+  source = "./modules/tag_updater"
   providers = {
     google = google
   }
   project_id     = var.project_id
   region         = var.region
-  bucket_name    = var.tag_bucket_name
+  bucket_name    = "${var.tag_bucket_name}-${random_id.bucket_suffix.hex}"
   tags_file_name = var.tags_file_name
 }
 
 module "skill_service" {
-  source    = "./modules/skill_service"
+  source = "./modules/skill_service"
   providers = {
     google = google
   }
   project_id            = var.project_id
   management_project_id = var.management_project_id
   region                = var.region
-  bucket_name           = var.tag_bucket_name
+  bucket_name           = "${var.tag_bucket_name}-${random_id.bucket_suffix.hex}"
   tags_file_name        = var.tags_file_name
   skill_service_name    = var.skill_service_name
   skill_service_version = var.skill_service_version
@@ -41,7 +41,7 @@ module "skill_service" {
 }
 
 module "fact_service" {
-  source    = "./modules/fact_service"
+  source = "./modules/fact_service"
   providers = {
     google = google
   }
@@ -56,7 +56,7 @@ module "fact_service" {
 }
 
 module "profile_service" {
-  source    = "./modules/profile_service"
+  source = "./modules/profile_service"
   providers = {
     google = google
   }
@@ -72,7 +72,7 @@ module "profile_service" {
 }
 
 module "user_interface" {
-  source    = "./modules/user_interface"
+  source = "./modules/user_interface"
   providers = {
     google = google
   }
@@ -83,7 +83,7 @@ module "user_interface" {
 }
 
 module "citadel" {
-  source    = "./modules/citadel"
+  source = "./modules/citadel"
   providers = {
     google-beta = google-beta
   }
@@ -97,4 +97,8 @@ module "citadel" {
   prefix                    = var.prefix
   fact_changed_subscription = var.fact_changed_subscription
   depends_on                = [module.user_interface]
+}
+
+resource "random_id" "bucket_suffix" {
+  byte_length = 8
 }

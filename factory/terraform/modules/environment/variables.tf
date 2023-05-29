@@ -4,7 +4,7 @@ variable "project_id" {
 }
 
 variable "project_name" {
-  default = "skillsmapper"
+  type        = string
 }
 
 variable "region" {
@@ -63,10 +63,6 @@ variable "fact_changed_subscription" {
 variable "api_key" {
   description = "The API key for Identity Platform"
   type        = string
-}
-
-variable "monitoring_sa_email" {
-  type = string
 }
 
 variable "management_project_id" {

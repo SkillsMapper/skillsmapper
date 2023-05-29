@@ -5,7 +5,7 @@ resource "google_compute_global_address" "global_address" {
 
 resource "google_compute_url_map" "url_map" {
   name            = "${var.prefix}-url-map"
-  default_service = google_compute_backend_bucket.ui_backend_bucket.name
+  default_service = google_compute_backend_bucket.ui_backend_bucket.id
 
   host_rule {
     hosts        = [var.domain]

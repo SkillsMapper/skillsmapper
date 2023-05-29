@@ -1,4 +1,3 @@
-
 resource "google_monitoring_dashboard" "default" {
   project = var.project_id
   dashboard_json = jsonencode({

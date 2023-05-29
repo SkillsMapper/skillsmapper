@@ -2,11 +2,6 @@ variable "skill_service_name" {
   type = string
 }
 
-variable "image_name" {
-  default = "skill-service"
-  type    = string
-}
-
 variable "skill_service_service_account_name" {
   default = "skill-service-sa"
   type    = string
