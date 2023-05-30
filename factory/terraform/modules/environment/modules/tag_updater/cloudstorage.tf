@@ -1,4 +1,4 @@
-resource "random_id" "bucket_suffix" {
+resource "random_id" "random_suffix" {
   byte_length = 8
 }
 
@@ -10,7 +10,7 @@ resource "google_storage_bucket" "tags_bucket" {
 }
 
 resource "google_storage_bucket" "gcf_source_bucket" {
-  name                        = "gcf-source-${random_id.bucket_suffix.hex}"
+  name                        = "gcf-source-${random_id.random_suffix.hex}"
   location                    = var.region
   force_destroy               = true
   uniform_bucket_level_access = true
