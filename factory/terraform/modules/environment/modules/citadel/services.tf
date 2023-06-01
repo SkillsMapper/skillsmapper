@@ -11,3 +11,8 @@ resource "google_project_service" "servicecontrol" {
 
   disable_on_destroy = false
 }
+
+resource "google_project_service" "identitytoolkit" {
+  project = var.project_id
+  service = "identitytoolkit.googleapis.com"
+}

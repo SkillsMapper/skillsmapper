@@ -41,3 +41,5 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/p6-postit.png chapters/images/p6-postit.png
 
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/factory.png chapters/images/factory.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/continuous-integration.png chapters/images/continuous-integration.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/continuous-deployment.png chapters/images/continuous-deployment.png

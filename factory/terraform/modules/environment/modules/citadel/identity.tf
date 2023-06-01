@@ -1,10 +1,3 @@
-/*
-resource "google_project_service" "identitytoolkit" {
-  project = var.project_id
-  service = "identitytoolkit.googleapis.com"
-}
-
-
 resource "google_identity_platform_config" "default" {
   project                    = var.project_id
   autodelete_anonymous_users = true
@@ -18,7 +11,5 @@ resource "google_identity_platform_project_default_config" "default" {
       enabled           = true
       password_required = false
     }
-
   }
 }
-*/

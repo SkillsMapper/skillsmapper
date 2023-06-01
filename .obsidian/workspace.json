@@ -148,6 +148,11 @@
   },
   "active": "d6fe8a89a107f09a",
   "lastOpenFiles": [
+    "chapters/images/continuous-deployment.png",
+    "factory/chapter/images/continuous-deployment.png",
+    "factory/chapter/images/factory.png",
+    "factory/chapter/images/continuous-integration.png",
+    "chapters/images/continuous-integration.png",
     "observatory/skill-service-dashboard.yaml.template",
     "observatory/dashboard.yaml",
     "factory/a",
@@ -160,7 +165,6 @@
     "factory/terraform/management/output.tf",
     "factory/terraform/management/modules/output.tf",
     "factory/terraform/environment/iam.tf",
-    "factory/terraform/iam.tf",
     "factory/terraform/management/README.md",
     "observatory/README.md",
     "user-interface/node_modules/lodash/README.md",
@@ -189,10 +193,6 @@
     "user-interface/node_modules/ws/README.md",
     "user-interface/node_modules/minimist/README.md",
     "user-interface/node_modules/@colors/colors/README.md",
-    "user-interface/chapter/images/chapter-6-neg.png",
-    "user-interface/chapter/images/chapter-6-bg.png",
-    "user-interface/chapter/images/chapter-6-url-map.png",
-    "user-interface/chapter/images/chapter-6-start.png",
-    "user-interface/chapter/images/chapter-6-solution.png"
+    "user-interface/chapter/images/chapter-6-neg.png"
   ]
 }

@@ -3,6 +3,11 @@ resource "google_project_service" "cloudfunctions" {
   service = "cloudfunctions.googleapis.com"
 }
 
+resource "google_project_service" "bigquery" {
+  project = var.project_id
+  service = "bigquery.googleapis.com"
+}
+
 resource "google_project_service" "cloudbuild" {
   project = var.project_id
   service = "cloudbuild.googleapis.com"

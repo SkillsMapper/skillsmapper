@@ -25,8 +25,19 @@ gcloud api-gateway gateways delete ${API_NAME}-gateway \
 gcloud api-gateway api-configs delete ${API_NAME}-api-gw-config --api ${API_NAME}-api-gw
 ```
 
-Then apply terraform:
+Then apply the terraform configuration:
 
 ```shell
 terraform apply
+```
+
+Enable Service Usage API:
+
+```shell
+gcloud services enable serviceusage.googleapis.com
+gcloud services enable cloudresourcemanager.googleapis.com
+```
+
+```shell
+gcloud auth application-default set-quota-project ${DEV_PROJECT_ID}
 ```
