@@ -6,13 +6,13 @@ steps:
 
   - id: 'Download Dependencies'
     name: "gcr.io/cloud-builders/go:1.20"
-    dir: '{$_SERVICE_NAME}'
+    dir: '${_SERVICE_NAME}'
     entrypoint: go
     args: [ 'mod', 'download' ]
 
   - id: 'go_get'
     name: "gcr.io/cloud-builders/go:1.20"
-    dir: '{$_SERVICE_NAME}'
+    dir: '${_SERVICE_NAME}'
     entrypoint: go
     args: [ 'get', './...' ]
 
@@ -23,13 +23,13 @@ steps:
 
   - id: 'Run Unit Tests'
     name: "gcr.io/cloud-builders/go:1.20"
-    dir: '{$_SERVICE_NAME}'
+    dir: '${_SERVICE_NAME}'
     entrypoint: go
     args: [ 'test', '-v', './...' ]
 
   - id: 'Build Container Image'
     name: 'gcr.io/k8s-skaffold/pack'
-    dir: '{$_SERVICE_NAME}'
+    dir: '${_SERVICE_NAME}'
     entrypoint: pack
     args:
       - 'build'
@@ -40,14 +40,14 @@ steps:
 
   - id: 'Push Container Image'
     name: 'gcr.io/cloud-builders/docker:latest'
-    dir: '{$_SERVICE_NAME}'
+    dir: '${_SERVICE_NAME}'
     args:
       - push
       - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA'
 
   - id: 'Push Container Image as Latest'
     name: 'gcr.io/cloud-builders/docker:latest'
-    dir: '{$_SERVICE_NAME}'
+    dir: '${_SERVICE_NAME}'
     args:
       - push
       - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:latest'
