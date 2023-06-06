@@ -35,8 +35,6 @@ steps:
       - 'build'
       - '--builder=gcr.io/buildpacks/builder:v1'
       - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA'
-      - '--tag'
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:latest'
 
   - id: 'Push Container Image'
     name: 'gcr.io/cloud-builders/docker:latest'
@@ -44,10 +42,3 @@ steps:
     args:
       - push
       - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA'
-
-  - id: 'Push Container Image as Latest'
-    name: 'gcr.io/cloud-builders/docker:latest'
-    dir: '${_SERVICE_NAME}'
-    args:
-      - push
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:latest'
