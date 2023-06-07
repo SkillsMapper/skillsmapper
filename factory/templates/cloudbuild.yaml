@@ -1,14 +1,39 @@
 steps:
-  - args:
-      - pack
-      - build
-      - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE_NAME}:$COMMIT_SHA
-      - --tag
-      - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE_NAME}:latest
-      - --builder
-      - gcr.io/buildpacks/builder
-    dir: ${_SERVICE_NAME}
-    name: gcr.io/k8s-skaffold/pack
-images:
-  - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE_NAME}:$COMMIT_SHA
-  - ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE_NAME}:latest
+  - id: 'Download Dependencies'
+    name: "gcr.io/cloud-builders/go:1.20"
+    dir: '${_SERVICE_NAME}'
+    entrypoint: go
+    args: [ 'mod', 'download' ]
+
+  - id: 'go_get'
+    name: "gcr.io/cloud-builders/go:1.20"
+    dir: '${_SERVICE_NAME}'
+    entrypoint: go
+    args: [ 'get', './...' ]
+
+  #  - id: 'lint'
+  #    name: 'golangci/golangci-lint:v1.53.1'
+  #    entrypoint: 'golangci-lint'
+  #    args: [ 'run', './...' ]
+
+  - id: 'Run Unit Tests'
+    name: "gcr.io/cloud-builders/go:1.20"
+    dir: '${_SERVICE_NAME}'
+    entrypoint: go
+    args: [ 'test', '-v', './...' ]
+
+  - id: 'Build Container Image'
+    name: 'gcr.io/k8s-skaffold/pack'
+    dir: '${_SERVICE_NAME}'
+    entrypoint: pack
+    args:
+      - 'build'
+      - '--builder=gcr.io/buildpacks/builder:v1'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA'
+
+  - id: 'Push Container Image'
+    name: 'gcr.io/cloud-builders/docker:latest'
+    dir: '${_SERVICE_NAME}'
+    args:
+      - push
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA'
