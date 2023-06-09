@@ -1,0 +1,82 @@
+steps:
+  - id: 'Output env'
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'echo'
+    args: [ PROJECT_ID=$PROJECT_ID, LOCATION=$LOCATION, _REPOSITORY=$_REPOSITORY, SERVICE_NAME=$_SERVICE_NAME, IMAGE_NAME=$_IMAGE_NAME, COMMIT_SHA=$COMMIT_SHA, REGION=$_REGION, DESTINATION_PROJECT_ID=$_DESTINATION_PROJECT_ID ]
+
+  - id: 'Download Dependencies'
+    name: "gcr.io/cloud-builders/go:1.20"
+    dir: '${_SERVICE_NAME}'
+    entrypoint: go
+    args: [ 'mod', 'download' ]
+
+  - id: 'go_get'
+    name: "gcr.io/cloud-builders/go:1.20"
+    dir: '${_SERVICE_NAME}'
+    entrypoint: go
+    args: [ 'get', './...' ]
+
+  #  - id: 'lint'
+  #    name: 'golangci/golangci-lint:v1.53.1'
+  #    entrypoint: 'golangci-lint'
+  #    args: [ 'run', './...' ]
+
+  - id: 'Run Unit Tests'
+    name: "gcr.io/cloud-builders/go:1.20"
+    dir: '${_SERVICE_NAME}'
+    entrypoint: go
+    args: [ 'test', '-v', './...' ]
+
+  - id: 'Build Container Image'
+    name: 'gcr.io/k8s-skaffold/pack'
+    dir: '${_SERVICE_NAME}'
+    entrypoint: pack
+    args:
+      - 'build'
+      - '--builder=gcr.io/buildpacks/builder:v1'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA'
+
+  - id: 'Push Container Image'
+    name: 'gcr.io/cloud-builders/docker:latest'
+    dir: '${_SERVICE_NAME}'
+    args:
+      - push
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA'
+
+  - id: 'Deploy to Cloud Run'
+    name: 'gcr.io/cloud-builders/gcloud:latest'
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      - |
+        gcloud run deploy ${_SERVICE_NAME} \
+          --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA \
+          --project ${_DESTINATION_PROJECT_ID} \
+          --region ${_REGION} \
+          --update-env-vars PROJECT_ID=${_DESTINATION_PROJECT_ID},BUCKET_NAME=${_DESTINATION_PROJECT_ID}-tags,OBJECT_NAME=tags.csv,SERVICE_NAME=${_SERVICE_NAME}
+
+#  - id: 'Retrieve Service URL'
+#    name: 'gcr.io/cloud-builders/gcloud:latest'
+#    entrypoint: /bin/bash
+#    args:
+#      - '-c'
+#      - |
+#        set -e
+#        source /workspace/common.sh
+#        echo $(get_url ${BUILD_ID}) > _service_url
+#        echo $(get_idtoken) > _id_token
+#    env:
+#      - '_SERVICE_NAME=${_SERVICE_NAME}'
+#      - '_DEPLOY_REGION=${_DEPLOY_REGION}'
+#      - 'BUILD_ID=${BUILD_ID}'
+#      - 'PROJECT_ID=${PROJECT_ID}'
+#
+#  - id: 'Run System Tests'
+#    name: golang
+#    entrypoint: /bin/bash
+#    args:
+#      - '-c'
+#      - |
+#        export BASE_URL=$(cat _service_url)
+#        export ID_TOKEN=$(cat _id_token)
+#        go test -tags=system -v ./...
