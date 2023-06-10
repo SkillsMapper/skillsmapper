@@ -43,9 +43,3 @@ data "google_iam_policy" "factory_sa_policy" {
     ]
   }
 }
-/*
-resource "google_project_iam_policy" "project_iam_policy" {
-  project     = var.project_id
-  policy_data = data.google_iam_policy.factory_sa_policy.policy_data
-}
-*/

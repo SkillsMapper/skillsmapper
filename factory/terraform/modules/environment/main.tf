@@ -20,7 +20,7 @@ module "tag_updater" {
   }
   project_id     = var.project_id
   region         = var.region
-  bucket_name    = "${var.tag_bucket_name}-${random_id.bucket_suffix.hex}"
+  bucket_name    = "${var.project_id}-${var.tag_bucket_name}"
   tags_file_name = var.tags_file_name
 }
 
@@ -32,7 +32,7 @@ module "skill_service" {
   project_id            = var.project_id
   management_project_id = var.management_project_id
   region                = var.region
-  bucket_name           = "${var.tag_bucket_name}-${random_id.bucket_suffix.hex}"
+  bucket_name           = "${var.project_id}-${var.tag_bucket_name}"
   tags_file_name        = var.tags_file_name
   skill_service_name    = var.skill_service_name
   skill_service_version = var.skill_service_version
@@ -97,8 +97,4 @@ module "citadel" {
   prefix                    = var.prefix
   fact_changed_subscription = var.fact_changed_subscription
   depends_on                = [module.user_interface]
-}
-
-resource "random_id" "bucket_suffix" {
-  byte_length = 8
 }

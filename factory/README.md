@@ -9,7 +9,7 @@ set -a; source ../.env; source .env; set +a
 ## Replicate the Projects in Code Repository
 
 You don't need to move your code into Google Cloud Source Repository, but you do need to replicate the projects in the
-repository so it is available to the likes of Google Cloud Build. Unfortunately, at the time of writing there is no way
+repository, so it is available to the likes of Google Cloud Build. Unfortunately, at the time of writing, there is no way
 to do this via the command line, so you will need to do this manually:
 
 * In the Google Cloud console, open Cloud Source Repositories.
@@ -23,9 +23,9 @@ to do this via the command line, so you will need to do this manually:
 * When authorization finishes, you're returned to the Connect external repository page. A list of repositories opens.
 * From the list of repositories, select the repository you want to mirror.
 
-To list respositories in Google Cloud Source Repository:
+To list repositories in Google Cloud Source Repository:
 
-```shell    
+```shelset -a; source ../.env; source .env; set +al    
 gcloud source repos list
 ```
 
@@ -54,7 +54,7 @@ gcloud builds list
 Export a build:
 
 ```shell
-gcloud builds describe 669b066c-9154-42c2-bf51-68d3baeee7e2 --format yaml > ../skill_service/cloudbuild.yaml
+gcloud builds describe 669b066c-9154-42c2-bf51-68d3baeee7e2 --format yaml > ../skill_service/cloudbuild-go.yaml
 ```
 
 ### Use pack to build locally
@@ -108,7 +108,7 @@ export RELEASE_TIMESTAMP=$(date '+%Y%m%d-%H%M%S')
 
 ```shell
 gcloud builds submit \
-  --config cloudbuild.yaml \
+  --config cloudbuild-cicd.yaml \
   --substitutions=_RELEASE_TIMESTAMP=${RELEASE_TIMESTAMP} .
 ```
 
@@ -121,7 +121,7 @@ gcloud beta builds triggers create cloud-source-repositories \
   --name=${SKILL_SERVICE_NAME} \
   --repo=$REPO_NAME \
   --branch-pattern=main \
-  --build-config=${SKILL_SERVICE_NAME}/cloudbuild.yaml
+  --build-config=${SKILL_SERVICE_NAME}/cloudbuild-cicd.yaml
 ```
 ### Comparison
 
@@ -182,7 +182,7 @@ https://cloud.google.com/deploy/docs/deploy-app-run
 [Google Code Lab](https://codelabs.developers.google.com/cloud-run-app-deployment-with-cloud-deploy#2)
 
 ```shell
-env subst < ./factory/ > cloudbuild.yaml
+env subst < ./factory/ > cloudbuild-go.yaml
 ```
 
 ```shell

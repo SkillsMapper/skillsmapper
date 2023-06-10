@@ -25,7 +25,17 @@ variable "container_repo" {
   type = string
 }
 
+variable "repository_name" {
+  default = "skillsmapper"
+  type    = string
+}
+
 variable "service_names" {
   description = "List of service names"
   type        = list(string)
+}
+
+variable "cloudbuild_connection_name" {
+  default = "skillsmapper-github-connection"
+  type    = string
 }

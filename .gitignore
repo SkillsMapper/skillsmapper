@@ -11,3 +11,4 @@
 /observatory/.env
 /factory/terraform/secrets/github-token.txt
 /observatory/skill-service-dashboard.yaml
+/skill-service/.env.cloudbuild

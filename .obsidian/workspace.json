@@ -148,6 +148,8 @@
   },
   "active": "d6fe8a89a107f09a",
   "lastOpenFiles": [
+    "skill-service/skill-service",
+    "factory/NOTES.md",
     "chapters/images/continuous-deployment.png",
     "factory/chapter/images/continuous-deployment.png",
     "factory/chapter/images/factory.png",
@@ -191,8 +193,6 @@
     "user-interface/node_modules/qs/README.md",
     "user-interface/node_modules/qs/CHANGELOG.md",
     "user-interface/node_modules/ws/README.md",
-    "user-interface/node_modules/minimist/README.md",
-    "user-interface/node_modules/@colors/colors/README.md",
-    "user-interface/chapter/images/chapter-6-neg.png"
+    "user-interface/node_modules/minimist/README.md"
   ]
 }

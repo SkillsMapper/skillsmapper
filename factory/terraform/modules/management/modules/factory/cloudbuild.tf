@@ -35,7 +35,7 @@ resource "google_cloudbuildv2_connection" "skillsmapper-github-connection" {
   depends_on = [google_project_service.cloudbuild]
   provider   = google-beta
   location   = var.region
-  name       = "SkillsMapper"
+  name       = var.cloudbuild_connection_name
 
   github_config {
     app_installation_id = var.app_installation_id
@@ -48,7 +48,7 @@ resource "google_cloudbuildv2_connection" "skillsmapper-github-connection" {
 resource "google_cloudbuildv2_repository" "skillsmapper-repo" {
   provider          = google-beta
   location          = var.region
-  name              = "skillsmapper"
+  name              = var.repository_name
   parent_connection = google_cloudbuildv2_connection.skillsmapper-github-connection.name
   remote_uri        = var.github_repo
 }
@@ -72,6 +72,6 @@ resource "google_cloudbuild_trigger" "service_trigger" {
     _REPO         = var.container_repo
   }
 
-  filename = "factory/templates/cloudbuild.yaml"
+  filename = "${each.key}/cloudbuild-cicd.yaml"
 }
 

@@ -4,10 +4,10 @@
 
 First follow the instructions in the [Setup](../setup/README.md) to get a project up and running.
 
-If returning to this project after installation reinitalise environment variables using:
+If returning to this project after installation, reinitalise environment variables using:
 
 ```shell
-set -a; source ../.env; source .env; set +a
+set -a; source ../.env; source .env; source .env.cloudbuild; set +a
 ```
 
 ## Installation
@@ -71,4 +71,10 @@ Test with curl:
 
 ```shell
 curl -X GET "${SKILL_LOOKUP_SERVICE_URL}/autocomplete?prefix=java"
+```
+
+## Manual Build
+
+```shell
+ gcloud builds submit --config cloudbuild-cicd.yaml . --substitutions _REPOSITORY=SkillMapper,_SERVICE_NAME=skill-service,COMMIT_SHA=$(git rev-parse HEAD)
 ```

@@ -25,7 +25,7 @@ gcloud api-gateway gateways delete ${API_NAME}-gateway \
 gcloud api-gateway api-configs delete ${API_NAME}-api-gw-config --api ${API_NAME}-api-gw
 ```
 
-Then apply the terraform configuration:
+Then apply the Terraform configuration:
 
 ```shell
 terraform apply
