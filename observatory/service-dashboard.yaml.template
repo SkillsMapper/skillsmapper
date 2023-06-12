@@ -1,10 +1,10 @@
-displayName: Skill Service
+displayName: $SERVICE_NAME ($MONITORED_PROJECT_ID)
 mosaicLayout:
   columns: 12
   tiles:
     - height: 4
       widget:
-        title: Container instance count
+        title: Container Instance Count
         xyChart:
           chartOptions:
             mode: COLOR
@@ -23,7 +23,7 @@ mosaicLayout:
                       - metric.label.state
                     perSeriesAligner: ALIGN_MAX
                   filter: metric.type="run.googleapis.com/container/instance_count" resource.type="cloud_run_revision"
-                    resource.labels.service_name="$SKILL_SERVICE_NAME" resource.labels.project_id="$PROJECT_ID"
+                    resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID"
                     resource.labels.location="$REGION"
                   secondaryAggregation:
                     alignmentPeriod: 60s
@@ -33,7 +33,7 @@ mosaicLayout:
       width: 6
     - height: 4
       widget:
-        title: Request latencies
+        title: Request Latencies
         xyChart:
           chartOptions:
             mode: COLOR
@@ -49,7 +49,7 @@ mosaicLayout:
                       - resource.label.service_name
                     perSeriesAligner: ALIGN_DELTA
                   filter: metric.type="run.googleapis.com/request_latencies" resource.type="cloud_run_revision"
-                    resource.labels.service_name="$SKILL_SERVICE_NAME" resource.labels.project_id="$PROJECT_ID"
+                    resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID"
                     resource.labels.location="$REGION"
                   secondaryAggregation: { }
                 unitOverride: ms
@@ -64,7 +64,7 @@ mosaicLayout:
                       - resource.label.service_name
                     perSeriesAligner: ALIGN_DELTA
                   filter: metric.type="run.googleapis.com/request_latencies" resource.type="cloud_run_revision"
-                    resource.labels.service_name="$SKILL_SERVICE_NAME" resource.labels.project_id="$PROJECT_ID"
+                    resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID"
                     resource.labels.location="$REGION"
                   secondaryAggregation: { }
                 unitOverride: ms
@@ -79,7 +79,7 @@ mosaicLayout:
                       - resource.label.service_name
                     perSeriesAligner: ALIGN_DELTA
                   filter: metric.type="run.googleapis.com/request_latencies" resource.type="cloud_run_revision"
-                    resource.labels.service_name="$SKILL_SERVICE_NAME" resource.labels.project_id="$PROJECT_ID"
+                    resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID"
                     resource.labels.location="$REGION"
                   secondaryAggregation: { }
                 unitOverride: ms
@@ -106,7 +106,7 @@ mosaicLayout:
                       - metric.label.response_code_class
                     perSeriesAligner: ALIGN_RATE
                   filter: metric.type="run.googleapis.com/request_count" resource.type="cloud_run_revision"
-                    resource.labels.service_name="$SKILL_SERVICE_NAME" resource.labels.project_id="$PROJECT_ID"
+                    resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID"
                     resource.labels.location="$REGION"
                   secondaryAggregation: { }
                 unitOverride: count/s
@@ -119,10 +119,10 @@ mosaicLayout:
         logsPanel:
           filter: |-
             resource.type = "cloud_run_revision"
-            resource.labels.service_name="$SKILL_SERVICE_NAME" 
+            resource.labels.service_name="$SERVICE_NAME" 
             resource.labels.location="$REGION"
           resourceNames:
-            - projects/$PROJECT_ID
+            - projects/$MONITORED_PROJECT_ID
         title: Cloud Run Logs
       width: 6
       xPos: 6

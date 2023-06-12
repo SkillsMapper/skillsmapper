@@ -1,0 +1,21 @@
+{
+  "bucketName": "projects/skillsmapper-development/locations/global/buckets/_Default",
+  "bucketOptions": {
+    "exponentialBuckets": {
+      "growthFactor": 2.0,
+      "numFiniteBuckets": 64,
+      "scale": 0.01
+    }
+  },
+  "filter": "resource.labels.service_name=skill-service AND jsonPayload.message=~\"loaded.*tags\"",
+  "metricDescriptor": {
+    "metricKind": "DELTA",
+    "name": "projects/skillsmapper-development/metricDescriptors/logging.googleapis.com/user/num_tags_loaded",
+    "type": "logging.googleapis.com/user/num_tags_loaded",
+    "unit": "1",
+    "valueType": "DISTRIBUTION"
+  },
+  "name": "num_tags_loaded",
+  "description": "The number of tags loaded",
+  "valueExtractor": "REGEXP_EXTRACT(jsonPayload.message, \"loaded ([0-9]+) tags\")"
+}
