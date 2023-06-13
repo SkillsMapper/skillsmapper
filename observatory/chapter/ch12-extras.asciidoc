@@ -1,0 +1,10 @@
+=== Activities
+
+=== Create a Monitoring Dashboard
+
+In the management project created in the last chapter...
+
+* Create a dashboard
+* Adding metrics
+* Adding tags
+* Viewing billing

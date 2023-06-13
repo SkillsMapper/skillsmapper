@@ -10,11 +10,11 @@ steps:
     entrypoint: go
     args: [ 'mod', 'download' ]
 
-  - id: 'go_get'
-    name: "gcr.io/cloud-builders/go:1.20"
-    dir: '${_SERVICE_NAME}'
-    entrypoint: go
-    args: [ 'get', './...' ]
+  #- id: 'Go get'
+  #  name: "gcr.io/cloud-builders/go:1.20"
+  #  dir: '${_SERVICE_NAME}'
+  #  entrypoint: go
+  #  args: [ 'get', './...' ]
 
   #  - id: 'lint'
   #    name: 'golangci/golangci-lint:v1.53.1'

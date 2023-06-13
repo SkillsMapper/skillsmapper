@@ -1,0 +1,31 @@
+displayName: $SERVICE_NAME ($MONITORED_PROJECT_ID)
+mosaicLayout:
+  columns: 12
+  tiles:
+    - height: 4
+      widget:
+        title: Request count
+        xyChart:
+          chartOptions:
+            mode: COLOR
+          dataSets:
+            - legendTemplate: ${metric.labels.response_code_class}
+              minAlignmentPeriod: 60s
+              plotType: LINE
+              targetAxis: Y1
+              timeSeriesQuery:
+                timeSeriesFilter:
+                  aggregation:
+                    crossSeriesReducer: REDUCE_SUM
+                    groupByFields:
+                      - metric.label.response_code_class
+                    perSeriesAligner: ALIGN_RATE
+                  filter: metric.type="run.googleapis.com/request_count" resource.type="cloud_run_revision"
+                    resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID"
+                    resource.labels.location="$REGION"
+                  secondaryAggregation: { }
+                unitOverride: count/s
+          xAxis:
+            scale: LINEAR
+      width: 6
+      yPos: 4

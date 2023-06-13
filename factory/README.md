@@ -108,7 +108,7 @@ export RELEASE_TIMESTAMP=$(date '+%Y%m%d-%H%M%S')
 
 ```shell
 gcloud builds submit \
-  --config cloudbuild-cicd.yaml \
+  --config cloudbuild.yaml \
   --substitutions=_RELEASE_TIMESTAMP=${RELEASE_TIMESTAMP} .
 ```
 
@@ -121,7 +121,7 @@ gcloud beta builds triggers create cloud-source-repositories \
   --name=${SKILL_SERVICE_NAME} \
   --repo=$REPO_NAME \
   --branch-pattern=main \
-  --build-config=${SKILL_SERVICE_NAME}/cloudbuild-cicd.yaml
+  --build-config=${SKILL_SERVICE_NAME}/cloudbuild.yaml
 ```
 ### Comparison
 

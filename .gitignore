@@ -10,5 +10,6 @@
 /factory/terraform/modules/environment/tags.csv
 /observatory/.env
 /factory/terraform/secrets/github-token.txt
-/observatory/skill-service-dashboard.yaml
+/observatory/service-dashboard.yaml
 /skill-service/.env.cloudbuild
+/observatory/tag-dashboard.yaml
