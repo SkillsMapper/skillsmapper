@@ -8,3 +8,16 @@ In the management project created in the last chapter...
 * Adding metrics
 * Adding tags
 * Viewing billing
+
+* Labels and Annotations for tracking
+* Tracing
+* Logging
+* Monitoring / metrics
+* Keeping an inventory with
+
+* Metrics Explorer
+* Cloud Monitoring
+* Cloud Monitoring workspaces
+* Assume dev and prod are different teams
+* Cloud Logging Logging Agent in the nginx?
+* Cloud Debugger (if still exists)

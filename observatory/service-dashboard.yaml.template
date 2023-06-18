@@ -89,7 +89,7 @@ mosaicLayout:
       xPos: 6
     - height: 4
       widget:
-        title: Request count
+        title: Request Count
         xyChart:
           chartOptions:
             mode: COLOR
@@ -116,6 +116,20 @@ mosaicLayout:
       yPos: 4
     - height: 4
       widget:
+        title: Unsuccessful Request Percentage
+        scorecard:
+          gaugeView:
+            lowerBound: 0.0
+            upperBound: 1.0
+          timeSeriesQuery:
+            timeSeriesFilterRatio:
+              denominatorFilter: metric.type="run.googleapis.com/request_count" resource.type="cloud_run_revision" resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID" resource.labels.location="$REGION"
+              numeratorFilter: metric.type="run.googleapis.com/request_count" metric.label.response_code_class="5xx" resource.type="cloud_run_revision" resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID" resource.labels.location="$REGION"
+              secondaryAggregation: {}
+      width: 6
+      yPos: 8
+    - height: 4
+      widget:
         logsPanel:
           filter: |-
             resource.type = "cloud_run_revision"
@@ -124,6 +138,6 @@ mosaicLayout:
           resourceNames:
             - projects/$MONITORED_PROJECT_ID
         title: Cloud Run Logs
-      width: 6
+      width: 12
       xPos: 6
       yPos: 4
