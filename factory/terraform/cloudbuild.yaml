@@ -1,12 +1,15 @@
 steps:
   - id: init
     name: 'hashicorp/terraform:1.5'
+    dir: 'factory/terraform'
     args: [ 'init' ]
   - id: validate
     name: 'hashicorp/terraform:1.5'
+    dir: 'factory/terraform'
     args: [ 'validate' ]
   - id: plan
     name: 'hashicorp/terraform:1.5'
+    dir: 'factory/terraform'
     args: [ 'plan' ]
 #  - name: 'hashicorp/terraform:1.5'
 #    args: ['apply', '-auto-approve']
