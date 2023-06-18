@@ -15,6 +15,10 @@ variable "dev_project_name" {
   type = string
 }
 
+variable "state_bucket" {
+  type = string
+}
+
 variable "github_repo" {
   type = string
 }

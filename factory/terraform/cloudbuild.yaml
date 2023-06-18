@@ -10,6 +10,31 @@ steps:
   - id: plan
     name: 'hashicorp/terraform:1.5'
     dir: 'factory/terraform'
-    args: [ 'plan' ]
-#  - name: 'hashicorp/terraform:1.5'
-#    args: ['apply', '-auto-approve']
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        export TF_VAR_region="${_REGION}"
+        export TF_VAR_app_installation_id="${_APP_INSTALLATION_ID}"
+        export TF_VAR_github_repo="${_GITHUB_REPO}"
+        export TF_VAR_prefix="${_PREFIX}"
+        export TF_VAR_domain="${_DOMAIN}"
+        export TF_VAR_api_key="${_API_KEY}"
+        export TF_VAR_billing_account="${_BILLING_ACCOUNT}"
+        export TF_VAR_management_project_id="${_MANAGEMENT_PROJECT_ID}"
+        export TF_VAR_management_project_name="${_MANAGEMENT_PROJECT_NAME}"
+        export TF_VAR_dev_project_id="${_DEV_PROJECT_ID}"
+        export TF_VAR_dev_project_name="${_DEV_PROJECT_NAME}"
+        export TF_VAR_state_bucket="${_STATE_BUCKET}"
+        terraform init
+        terraform apply -auto-approve
+  #- name: 'hashicorp/terraform:1.5'
+  #  entrypoint: 'sh'
+  #  args:
+  #    - '-c'
+  #    - |
+  #      export TF_VAR_region="${_REGION}"
+  #      terraform init
+   #     terraform apply -auto-approve
+substitutions:
+  _REGION: 'us-central1'

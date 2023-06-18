@@ -1,6 +1,8 @@
 terraform {
   required_version = ">= 0.12.0, < 2.0.0"
-
+  backend "gcs" {
+    bucket  = "skillsmapper-terraform-state-262018307079"
+  }
   required_providers {
     google = {
       source  = "hashicorp/google"
