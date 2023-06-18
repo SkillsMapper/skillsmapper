@@ -29,3 +29,9 @@ variable "service_names" {
   description = "List of service names"
   type        = list(string)
 }
+
+variable "github_token" {
+  description = "GitHub token"
+  type        = string
+  sensitive   = true
+}

@@ -23,6 +23,12 @@ variable "github_repo" {
   type = string
 }
 
+variable "github_token" {
+  description = "GitHub token"
+  type        = string
+  sensitive   = true
+}
+
 variable "container_repo" {
   default = "skillsmapper"
   type    = string

@@ -39,3 +39,9 @@ variable "cloudbuild_connection_name" {
   default = "skillsmapper-github-connection"
   type    = string
 }
+
+variable "github_token" {
+  description = "GitHub token"
+  type        = string
+  sensitive   = true
+}
