@@ -1,7 +1,7 @@
 steps:
   - id: init
     name: 'hashicorp/terraform:1.5'
-    init: 'terraform init'
+    args: [ 'init' ]
   - id: validate
     name: 'hashicorp/terraform:1.5'
     args: [ 'validate' ]
