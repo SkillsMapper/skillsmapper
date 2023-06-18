@@ -1,22 +1,11 @@
 
 
 
+=== Retrieve the YAML configuration of the existing service
 
+==== Deploying Services with Cloud Deploy
 
-
-
-
-
-
-
-
-
-
-==== Retrieve the YAML configuration of the existing service
-
-===== Deploying Services with Cloud Deploy
-
-===== Build Initial Images for Each Service
+==== Build Initial Images for Each Service
 
 Can these be added and stored in the factory?
 The Concept of a warehouse is like an Artifact repository.
@@ -51,27 +40,6 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 --role="roles/clouddeploy.jobRunner"
 ----
 
-==== Terraform
-
-The tool we will be using to automate the creating of infrastructure is Terraform.
-This is an example of an Infrastructure as Code (IaC) tool.
-While Google Cloud does have a similar tool, Google Deployment Managerfootnote:https://cloud.google.com/deployment-manager, this only supports Google Cloud.
-Terraform supports all public clouds and many other types of infrastructure so is much more widely used even in the Google Cloud world.
-
-Terraform is declarative much like Kubernetes in that you declare the desired state and the tool does its best to achieve that.
-This is in contrast to the gcloud commands you have used in previous which are imperative, telling the tool explicitly what to do.
-
-What Terraform is doing in this case is taking the blueprints defined in the configuration and building out the Citadel the entire secure environment.
-
-* Infrastructure as Code (IaC)
-* Multiple environments: dev, qa, prod
-
-* CI with CLoud Build
-* PubSub
-* Continuous Delivery (Cloud Deploy)
-
-* Canary
-* Continuous Deployment
 
 === Pre-requisites
 
@@ -147,8 +115,6 @@ Whereas with the inner loop we want to be fast with the outer loop we can be mor
 * Lint the code: https://github.com/golangci/golangci-lint
 * Run Tests
 * Build the container
-
-
 
 ==== Tasks
 

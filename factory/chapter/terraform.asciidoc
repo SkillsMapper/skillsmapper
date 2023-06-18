@@ -1,0 +1,6 @@
+[[chapter_11a]]
+== Deploying with Terraform
+
+Just has you can use Cloud Build to deploy your application, you can also use it to deploy your infrastructure. In this section, you will use it to deploy the infrastructure for your application.
+
+Terraform is an Open Source provided by Hashicorp. It allows you to define your infrastructure as code. It is a declarative language that allows you to define the resources you want to create and their configuration. Terraform will then create the resources for you.
