@@ -4,6 +4,7 @@ variable "management_project_id" {
 }
 
 variable "management_project_name" {
+  default = "SkillsMapper Management"
   type = string
 }
 
@@ -12,6 +13,7 @@ variable "dev_project_id" {
 }
 
 variable "dev_project_name" {
+  default = "SkillsMapper Development"
   type = string
 }
 
