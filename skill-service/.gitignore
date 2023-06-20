@@ -103,5 +103,5 @@ go.work
 /.env
 /.env.yaml
 /.env-test.yaml
-/clouddeploy.yaml
+/factory/clouddeploy.yaml
 /cloudbuild.yaml.old
