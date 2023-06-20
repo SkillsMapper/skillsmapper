@@ -1,15 +1,21 @@
 steps:
+  - id: 'Go Version'
+    name: "gcr.io/cloud-builders/go:1.20"
+    dir: '${_SERVICE_NAME}'
+    entrypoint: go
+    args: [ "version" ]
+
   - id: 'Download Dependencies'
     name: "gcr.io/cloud-builders/go:1.20"
     dir: '${_SERVICE_NAME}'
     entrypoint: go
     args: [ 'mod', 'download' ]
 
-  - id: 'Run Linting'
-    name: "gcr.io/cloud-builders/go:1.20"
+  - id: 'Run Linting Checks'
+    name: "golangci/golangci-lint"
     dir: '${_SERVICE_NAME}'
-    entrypoint: golint
-    args: [ './...' ]
+    entrypoint: golangci-lint
+    args: [ 'run' ]
 
   - id: 'Run Unit Tests'
     name: "gcr.io/cloud-builders/go:1.20"
@@ -21,6 +27,12 @@ steps:
       - 'OBJECT_NAME=test'
       - 'SERVICE_NAME=skill-service-test'
       - 'PROJECT_ID=test'
+
+  - id: 'Run Security Checks'
+    name: "securego/gosec"
+    dir: '${_SERVICE_NAME}'
+    entrypoint: gosec
+    args: [ './...' ]
 
   - id: 'Build Container Image'
     name: 'gcr.io/k8s-skaffold/pack'
