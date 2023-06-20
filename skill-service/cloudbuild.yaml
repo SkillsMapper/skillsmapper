@@ -26,6 +26,11 @@ steps:
     dir: '${_SERVICE_NAME}'
     entrypoint: go
     args: [ 'test', '-v', './...' ]
+    env:
+      - 'BUCKET_NAME=test'
+      - 'OBJECT_NAME=test'
+      - 'SERVICE_NAME=skill-service-test'
+      - 'PROJECT_ID=test'
 
   - id: 'Build Container Image'
     name: 'gcr.io/k8s-skaffold/pack'
