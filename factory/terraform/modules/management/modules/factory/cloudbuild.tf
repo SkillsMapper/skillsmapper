@@ -17,7 +17,7 @@ resource "google_secret_manager_secret_version" "github-token-secret-version" {
 data "google_iam_policy" "p4sa-secretAccessor" {
   provider = google-beta
   binding {
-    role = "roles/secretmanager.secretAccessor"
+    role    = "roles/secretmanager.secretAccessor"
     members = [
       "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
     ]
@@ -67,11 +67,14 @@ resource "google_cloudbuild_trigger" "service_trigger" {
     }
   }
   substitutions = {
-    _SERVICE_NAME = each.key
-    _LOCATION     = var.region
-    _REPO         = var.container_repo
+    _SERVICE_NAME           = each.key
+    _REGION                 = var.region
+    _REPOSITORY             = var.container_repo
+    _IMAGE_NAME             = each.key
+    _DESTINATION_PROJECT_ID = var.dev_project_id
+
   }
 
-  filename = "${each.key}/cloudbuild-cicd.yaml"
+  filename = "${each.key}/cloudbuild.yaml"
 }
 
