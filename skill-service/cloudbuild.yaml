@@ -7,6 +7,7 @@ steps:
 
   - id: 'lint'
     name: 'golangci/golangci-lint:v1.53.1'
+    dir: '${_SERVICE_NAME}'
     entrypoint: 'golangci-lint'
     args: [ 'run', './...' ]
 
