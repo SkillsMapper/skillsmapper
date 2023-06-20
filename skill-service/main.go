@@ -41,7 +41,6 @@ func init() {
 	serviceName := internal.MustGetenv("SERVICE_NAME")
 
 	ctx := context.Background()
-
 	projectID := os.Getenv("PROJECT_ID")
 	if projectID == "" {
 		projID, err := metadata.ProjectID()
@@ -53,9 +52,7 @@ func init() {
 
 	loggingClient, err := logging.NewClient(ctx, projectID,
 		option.WithoutAuthentication(),
-		option.WithGRPCDialOption(
-			grpc.WithTransportCredentials(insecure.NewCredentials()),
-		))
+		option.WithGRPCDialOption(grpc.WithTransportCredentials(insecure.NewCredentials())))
 	if err != nil {
 		log.Fatalf("failed to create client: %v", err)
 	}
@@ -145,7 +142,7 @@ func autocompleteHandler(trie *autocomplete.Trie) func(w http.ResponseWriter, r 
 
 		// Return the results as a JSON response
 		response := autocompleteResponse{Results: results}
-		responseJson, err := json.Marshal(response)
+		responseJSON, err := json.Marshal(response)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -156,7 +153,7 @@ func autocompleteHandler(trie *autocomplete.Trie) func(w http.ResponseWriter, r 
 			Severity: logging.Debug,
 			Payload:  fmt.Sprintf("autocomplete for %s took %v", prefix, duration)})
 		w.Header().Set("Content-Type", "application/json")
-		if _, err := w.Write(responseJson); err != nil {
+		if _, err := w.Write(responseJSON); err != nil {
 			logger.Log(logging.Entry{
 				Severity: logging.Error,
 				Payload:  fmt.Sprintf("error writing JSON response: %v", err)})
