@@ -95,13 +95,7 @@ export BADGE_URL=${BADGER_ENDPOINT}'/build/status?project='${PROJECT_ID}'&id='${
 
 Construct an image URL using the badger service URL, trigger id, and project id. Example:
 
-https://badger-6bn2iswfgq-ue.a.run.app/build/status?project=hightowerlabs&id=1c96a91a-bb98-49d8-b43
-
-curl ${BADGER_ENDPOINT}/test/build/status -d 'project=${PROJECT_ID}' -d 'id=success'
-
 ```shell
 echo ${BADGER_ENDPOINT}'/test/build/status?project='${PROJECT_ID}'&id='${TRIGGER_ID}
 ```
 
-```shell
-```

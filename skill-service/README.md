@@ -32,11 +32,17 @@ Create an environment variable for the name of the service account `SKILL_SERVIC
 export SKILL_SERVICE_SA=[SKILL_SERVICE_SA]
 ```
 
+Create a `.env.yaml` file from the `.env.yaml.template`.
+
+```shell
+envsubst < .env.yaml.template > .env.yaml
+```
+
 Create a service account for the Skill Service:
 
 ```shell
 gcloud iam service-accounts create ${SKILL_SERVICE_SA} \
-  --display-name "Service account for ${SKILL_SERVICE}"
+  --display-name "Service account for ${SKILL_SERVICE_NAME}"
 ```
 
 Grant the service account the `objectViewer` role for the bucket that contains `tags.csv`:
@@ -53,7 +59,15 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --role=roles/logging.logWriter
 ```
 
-## Create a Cloud Run Service
+## Running Locally 
+
+To test locally using the Cloud Run Emulator.
+
+```shell
+gcloud beta code dev
+```
+
+## Deploying the Cloud Run Service
 
 Set the default region for Cloud Run:
 
