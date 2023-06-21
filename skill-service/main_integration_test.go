@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 	"net/http/httptest"
-	"skillsmapper.org/skill-service/internal/skill/autocomplete"
+	"skillsmapper.org/skill-service/internal/autocomplete"
 	"testing"
 )
 

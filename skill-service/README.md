@@ -16,7 +16,7 @@ Then set the project to the current project:
 gcloud config set project $PROJECT_ID
 ```
 
-## Installation
+## Running in Cloud Run
 
 Create an environment variable to store the `SKILL_SERVICE_NAME` e.g. `skill-service`:
 
@@ -24,18 +24,17 @@ Create an environment variable to store the `SKILL_SERVICE_NAME` e.g. `skill-ser
 export SKILL_SERVICE_NAME=[SKILL_SERVICE_NAME]
 ```
 
-## Create a Service Account
+Then create a `.env.yaml` file from the `.env.yaml.template`:
+
+```shell
+envsubst < .env.yaml.template > .env.yaml
+
+### Create and Configure a Service Account
 
 Create an environment variable for the name of the service account `SKILL_SERVICE_SA` e.g. `skill-service-sa`:
 
 ```shell
 export SKILL_SERVICE_SA=[SKILL_SERVICE_SA]
-```
-
-Create a `.env.yaml` file from the `.env.yaml.template`.
-
-```shell
-envsubst < .env.yaml.template > .env.yaml
 ```
 
 Create a service account for the Skill Service:
@@ -59,15 +58,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --role=roles/logging.logWriter
 ```
 
-## Running Locally 
-
-To test locally using the Cloud Run Emulator.
-
-```shell
-gcloud beta code dev
-```
-
-## Deploying the Cloud Run Service
+### Deploying the Cloud Run Service
 
 Set the default region for Cloud Run:
 
@@ -78,8 +69,23 @@ gcloud config set run/region $REGION
 Build and deploy the Cloud Run service:
 
 ```shell
-gcloud run deploy $SKILL_SERVICE_NAME --source . --env-vars-file=.env.yaml --service-account $SKILL_SERVICE_SA@$PROJECT_ID.iam.gserviceaccount.com --allow-unauthenticated
+gcloud run deploy $SKILL_SERVICE_NAME --source . \
+  --env-vars-file=.env.yaml \
+  --service-account $SKILL_SERVICE_SA@$PROJECT_ID.iam.gserviceaccount.com \
+  --allow-unauthenticated
 ```
+
+## Testing
+
+### Unit Testing
+
+Run the unit tests:
+
+```shell
+BUCKET_NAME=test OBJECT_NAME=test SERVICE_NAME=skill-service-test PROJECT_ID=test go test ./...
+```
+
+### Smoke Testing
 
 Set the `SKILL_SERVICE_URL` environment variable:
 
@@ -87,13 +93,21 @@ Set the `SKILL_SERVICE_URL` environment variable:
 export SKILL_SERVICE_URL=$(gcloud run services describe $SKILL_SERVICE_NAME --format='value(status.url)')
 ```
 
-Test with curl:
+Test with cURL:
 
 ```shell
 curl -X GET "${SKILL_SERVICE_URL}/autocomplete?prefix=java"
 ```
 
-## Manual Trigger Cloud Build
+## Running Locally
+
+To test locally using the Cloud Run Emulator run:
+
+```shell
+gcloud beta code dev
+```
+
+## Manually Trigger Cloud Build
 
 To manually trigger Cloud Build:
 

@@ -18,8 +18,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"skillsmapper.org/skill-service/internal"
-	"skillsmapper.org/skill-service/internal/skill/autocomplete"
+	"skillsmapper.org/skill-service/internal/autocomplete"
 	"sync/atomic"
 	"time"
 )
@@ -36,9 +35,9 @@ var (
 )
 
 func init() {
-	bucketName = internal.MustGetenv("BUCKET_NAME")
-	objectName = internal.MustGetenv("OBJECT_NAME")
-	serviceName := internal.MustGetenv("SERVICE_NAME")
+	bucketName = mustGetenv("BUCKET_NAME")
+	objectName = mustGetenv("OBJECT_NAME")
+	serviceName := mustGetenv("SERVICE_NAME")
 
 	ctx := context.Background()
 	projectID := os.Getenv("PROJECT_ID")
@@ -64,7 +63,6 @@ func init() {
 			Severity: logging.Error,
 			Payload:  fmt.Sprintf("failed to create storage client: %v", err)})
 	}
-
 }
 
 func main() {
@@ -107,8 +105,16 @@ func main() {
 		Severity: logging.Info,
 		Payload:  "service is ready"})
 
+	gracefulShutdown(server)
+}
+
+/*
+Listen for SIGINT to shut down gracefully.
+Cloud Run gives apps 10 seconds for shutdown.
+*/
+func gracefulShutdown(server *http.Server) {
+
 	ctx := context.Background()
-	// Listen for SIGINT to gracefully shutdown.
 	nctx, stop := signal.NotifyContext(ctx, os.Interrupt, os.Kill)
 	defer stop()
 	<-nctx.Done()
@@ -116,12 +122,10 @@ func main() {
 		Severity: logging.Info,
 		Payload:  "shutdown initiated"})
 
-	// Cloud Run gives apps 10 seconds to shutdown. See
-	// https://cloud.google.com/blog/topics/developers-practitioners/graceful-shutdowns-cloud-run-deep-dive for more details.
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
-		log.Printf("HTTP server Shutdown error: %v", err)
+		log.Printf("HTTP server shutdown error: %v", err)
 	}
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
@@ -171,11 +175,12 @@ func closeReader(reader io.Closer) {
 func populate(trie autocomplete.Trie, bucketName string, objectName string) {
 	start := time.Now()
 
-	// err is pre-declared to avoid shadowing client.
+	// err is pre-declared to avoid shadowing the client.
 	var err error
 
 	// Get a handle to the bucket
 	bucket := storageClient.Bucket(bucketName)
+
 	// Get a handle to the object
 	object := bucket.Object(objectName)
 
@@ -193,7 +198,7 @@ func populate(trie autocomplete.Trie, bucketName string, objectName string) {
 	defer closeReader(reader)
 
 	scanner := bufio.NewScanner(reader)
-	scanner.Text() // skip first line
+	scanner.Text() // skip the first line
 	count := 0
 	for scanner.Scan() {
 		tag := scanner.Text()
@@ -231,4 +236,12 @@ func readinessHandler(isReady *atomic.Value) http.HandlerFunc {
 
 func livenessHandler(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
+}
+
+func mustGetenv(k string) string {
+	v := os.Getenv(k)
+	if v == "" {
+		log.Fatalf("statup failed: %s environment variable not set.", k)
+	}
+	return v
 }

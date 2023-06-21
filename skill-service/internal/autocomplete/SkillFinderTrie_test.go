@@ -2,7 +2,7 @@ package autocomplete_test
 
 import (
 	"github.com/stretchr/testify/assert"
-	"skillsmapper.org/skill-service/internal/skill/autocomplete"
+	"skillsmapper.org/skill-service/internal/autocomplete"
 	"testing"
 )
 
