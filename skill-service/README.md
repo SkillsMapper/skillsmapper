@@ -104,7 +104,12 @@ curl -X GET "${SKILL_SERVICE_URL}/autocomplete?prefix=java"
 To test locally using the Cloud Run Emulator run:
 
 ```shell
-gcloud beta code dev
+gcloud auth application-default login
+```
+Then:
+
+```shell
+gcloud beta code dev --application-default-credential
 ```
 
 ## Manually Trigger Cloud Build
