@@ -10,6 +10,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/metric/instrument"
+	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/metric"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -28,10 +36,11 @@ type autocompleteResponse struct {
 }
 
 var (
-	bucketName    string
-	objectName    string
-	logger        *logging.Logger
-	storageClient *storage.Client
+	bucketName        string
+	objectName        string
+	logger            *logging.Logger
+	storageClient     *storage.Client
+	dataLoadedCounter instrument.Int64Counter
 )
 
 func init() {
@@ -63,6 +72,35 @@ func init() {
 			Severity: logging.Error,
 			Payload:  fmt.Sprintf("failed to create storage client: %v", err)})
 	}
+
+	traceExporter, err := otlptrace.New(ctx, otlptracegrpc.NewClient(otlptracegrpc.WithInsecure()))
+	if err != nil {
+		log.Fatalf("failed to create trace exporter: %s", err)
+	}
+
+	tp := sdktrace.NewTracerProvider(
+		sdktrace.WithSampler(sdktrace.AlwaysSample()),
+		sdktrace.WithSpanProcessor(sdktrace.NewBatchSpanProcessor(traceExporter)),
+	)
+	defer tp.Shutdown(ctx)
+	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(propagation.TraceContext{})
+
+	exporter, err := otlpmetricgrpc.New(ctx, otlpmetricgrpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("failed to create exporter: %s", err)
+	}
+	provider := metric.NewMeterProvider(
+		metric.WithReader(metric.NewPeriodicReader(exporter)),
+	)
+	defer provider.Shutdown(ctx)
+
+	meter := provider.Meter(fmt.Sprintf("%s/metrics", serviceName))
+	dataLoadedCounter, err = meter.Int64Counter("data-loaded-counter")
+	if err != nil {
+		log.Fatalf("error creating counter: %s", err)
+	}
+
 }
 
 func main() {
@@ -219,6 +257,7 @@ func populate(trie autocomplete.Trie, bucketName string, objectName string) {
 		Severity: logging.Debug,
 		Payload:  fmt.Sprintf("populate tags took %.2fs", duration)})
 
+	dataLoadedCounter.Add(context.Background(), 1)
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
 		Payload:  fmt.Sprintf("loaded %d tags", count)})
