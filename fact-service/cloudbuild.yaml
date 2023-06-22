@@ -1,7 +1,7 @@
 ---
 steps:
-  - id: Print Java Version
-    name: 'gcr.io/cloud-builders/java'
+  - id: Print Maven Version
+    name: 'gcr.io/cloud-builders/mvn'
     args: ['version']
   - id: Download Dependencies
     name: 'gcr.io/cloud-builders/mvn'
