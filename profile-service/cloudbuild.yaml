@@ -30,10 +30,8 @@ steps:
       - -v
       - ./...
     env:
-      - BUCKET_NAME=test
-      - OBJECT_NAME=test
-      - SERVICE_NAME=skill-service-test
-      - PROJECT_ID=test
+      - PROJECT_ID=${_DESTINATION_PROJECT_ID}
+      - SERVICE_NAME=profile-service-test
   - id: Run Security Checks
     name: securego/gosec
     dir: ${_SERVICE_NAME}

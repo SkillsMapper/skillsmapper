@@ -1,18 +1,26 @@
 package main
 
 import (
+	"cloud.google.com/go/compute/metadata"
 	"cloud.google.com/go/firestore"
+	"cloud.google.com/go/logging"
 	"context"
 	"encoding/base64"
 	"encoding/json"
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
+	"fmt"
+	"github.com/gorilla/mux"
+	"google.golang.org/api/option"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/status"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
 	"sync/atomic"
 	"time"
@@ -42,9 +50,32 @@ type Profile struct {
 	Used       []string `firestore:"used"`
 }
 
-func main() {
+var (
+	logger          *logging.Logger
+	authClient      *auth.Client
+	firestoreClient *firestore.Client
+)
+
+func init() {
+	serviceName := mustGetenv("SERVICE_NAME")
+
 	ctx := context.Background()
 	projectID := os.Getenv("PROJECT_ID")
+	if projectID == "" {
+		projID, err := metadata.ProjectID()
+		if err != nil {
+			log.Fatalf("unable to detect Project ID from PROJECT_ID or metadata server: %v", err)
+		}
+		projectID = projID
+	}
+
+	loggingClient, err := logging.NewClient(ctx, projectID,
+		option.WithoutAuthentication(),
+		option.WithGRPCDialOption(grpc.WithTransportCredentials(insecure.NewCredentials())))
+	if err != nil {
+		log.Fatalf("failed to create logging client: %v", err)
+	}
+	logger = loggingClient.Logger(serviceName, logging.RedirectAsJSON(os.Stderr))
 
 	conf := &firebase.Config{ProjectID: projectID}
 	app, err := firebase.NewApp(ctx, conf)
@@ -52,32 +83,63 @@ func main() {
 		log.Fatalf("Failed to create Firebase app: %v", err)
 	}
 
-	authClient, err := app.Auth(ctx)
+	authClient, err = app.Auth(ctx)
 	if err != nil {
 		log.Fatalf("Failed to create Firebase Auth client: %v", err)
 	}
 
 	// Set up Firestore client.
-	firestoreClient, err := firestore.NewClient(ctx, projectID)
+	firestoreClient, err = firestore.NewClient(ctx, projectID)
 	if err != nil {
 		log.Fatalf("Failed to create Firestore client: %v", err)
 	}
-	defer firestoreClient.Close()
+	defer func(firestoreClient *firestore.Client) {
+		err := firestoreClient.Close()
+		if err != nil {
+			log.Fatalf("Failed to close Firestore client: %v", err)
+		}
+	}(firestoreClient)
+}
 
-	// Set up the HTTP server.
-	http.HandleFunc("/factschanged", func(w http.ResponseWriter, r *http.Request) {
-		handleFactsChanged(w, r, firestoreClient)
-	})
-	http.HandleFunc("/api/profiles/me", corsMiddleware(func(w http.ResponseWriter, req *http.Request) {
-		handleGetMyProfile(ctx, firestoreClient, authClient, w, req)
-	}))
-
+func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
-	log.Printf("Starting HTTP server on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	server := &http.Server{
+		Addr: ":" + port,
+		// Add some defaults, should be changed to suit your use case.
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+	r := mux.NewRouter()
+	isReady := &atomic.Value{}
+	isReady.Store(false)
+
+	r.HandleFunc("/liveness", livenessHandler)
+	r.HandleFunc("/readiness", readinessHandler(isReady))
+	r.HandleFunc("/factschanged", func(w http.ResponseWriter, r *http.Request) {
+		handleFactsChanged(w, r, firestoreClient)
+	})
+	r.HandleFunc("/api/profiles/me", corsMiddleware(func(w http.ResponseWriter, req *http.Request) {
+		ctx := context.Background()
+		handleGetMyProfile(ctx, firestoreClient, authClient, w, req)
+	}))
+	server.Handler = r
+
+	logger.Log(logging.Entry{
+		Severity: logging.Info,
+		Payload:  "starting HTTP server"})
+
+	isReady.Store(true)
+
+	logger.Log(logging.Entry{
+		Severity: logging.Info,
+		Payload:  "service is ready"})
+
+	gracefulShutdown(server)
+
 }
 func handleFactsChanged(w http.ResponseWriter, r *http.Request, firestoreClient *firestore.Client) {
 	type Message struct {
@@ -151,7 +213,13 @@ func createOrUpdateProfile(ctx context.Context, firestoreClient *firestore.Clien
 	}
 
 	var profile Profile
-	doc.DataTo(&profile)
+	err = doc.DataTo(&profile)
+	if err != nil {
+		logger.Log(logging.Entry{
+			Severity: logging.Error,
+			Payload:  fmt.Sprintf("error retrieving profile: %v", err)})
+		return nil
+	}
 
 	profile.Interested = []string{}
 	profile.Learning = []string{}
@@ -228,7 +296,13 @@ func handleGetMyProfile(ctx context.Context, firestoreClient *firestore.Client, 
 		log.Printf("Error getting profile: %v", err)
 		return
 	} else {
-		doc.DataTo(&profile)
+		err := doc.DataTo(&profile)
+		if err != nil {
+			logger.Log(logging.Entry{
+				Severity: logging.Error,
+				Payload:  fmt.Sprintf("error retrieving profile: %v", err)})
+			return
+		}
 	}
 
 	// Retrieve the user's display name and photo URL from the token
@@ -239,10 +313,16 @@ func handleGetMyProfile(ctx context.Context, firestoreClient *firestore.Client, 
 	if picture, ok := token.Claims["picture"].(string); ok {
 		profile.PhotoURL = picture
 	}
-	json.NewEncoder(w).Encode(profile)
+	err = json.NewEncoder(w).Encode(profile)
+	if err != nil {
+		logger.Log(logging.Entry{
+			Severity: logging.Error,
+			Payload:  fmt.Sprintf("failed to encode profile: %v", err)})
+		return
+	}
 }
 
-func readiness(isReady *atomic.Value) http.HandlerFunc {
+func readinessHandler(isReady *atomic.Value) http.HandlerFunc {
 	return func(w http.ResponseWriter, _ *http.Request) {
 		if isReady == nil || !isReady.Load().(bool) {
 			http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
@@ -252,7 +332,7 @@ func readiness(isReady *atomic.Value) http.HandlerFunc {
 	}
 }
 
-func liveness(w http.ResponseWriter, _ *http.Request) {
+func livenessHandler(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -272,4 +352,35 @@ func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		// Otherwise, continue with the next handler
 		next(w, r)
 	}
+}
+
+func mustGetenv(k string) string {
+	v := os.Getenv(k)
+	if v == "" {
+		log.Fatalf("statup failed: %s environment variable not set.", k)
+	}
+	return v
+}
+
+/*
+Listen for SIGINT to shut down gracefully.
+Cloud Run gives apps 10 seconds for shutdown.
+*/
+func gracefulShutdown(server *http.Server) {
+	ctx := context.Background()
+	nctx, stop := signal.NotifyContext(ctx, os.Interrupt, os.Kill)
+	defer stop()
+	<-nctx.Done()
+	logger.Log(logging.Entry{
+		Severity: logging.Info,
+		Payload:  "shutdown initiated"})
+
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		log.Printf("HTTP server shutdown error: %v", err)
+	}
+	logger.Log(logging.Entry{
+		Severity: logging.Info,
+		Payload:  "shutdown complete"})
 }

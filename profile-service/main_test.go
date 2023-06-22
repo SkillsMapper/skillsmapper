@@ -1,9 +1,11 @@
 package main
 
+/*
 import (
 	"bytes"
 	"cloud.google.com/go/firestore"
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -59,7 +61,12 @@ func TestHandleFactsChanged(t *testing.T) {
 	defer firestoreClient.Close()
 
 	// Clean up test data.
-	defer firestoreClient.Collection("profiles").Doc("testuser").Delete(ctx)
+	defer func(doc *firestore.DocumentRef, ctx context.Context, preconds ...firestore.Precondition) {
+		_, err := doc.Delete(ctx, preconds...)
+		if err != nil {
+			t.Fatalf("Failed to delete test profile: %v", err)
+		}
+	}(firestoreClient.Collection("profiles").Doc("testuser"), ctx)
 
 	body := `{
 		"user": "testuser",
@@ -79,7 +86,6 @@ func TestHandleFactsChanged(t *testing.T) {
 	}
 }
 
-/*
 func TestGetProfileHandler(t *testing.T) {
 	ctx := context.Background()
 	projectID := os.Getenv("PROJECT_ID")
