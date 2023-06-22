@@ -6,7 +6,7 @@ variable "region" {
   type = string
 }
 
-variable "instance_name" {
+variable "fact_database_instance" {
   type    = string
   default = "facts-instance"
 }
@@ -21,9 +21,8 @@ variable "disk_size" {
   default = 10
 }
 
-variable "database_name" {
+variable "fact_database_name" {
   type    = string
-  default = "facts"
 }
 
 variable "fact_service_user" {
@@ -58,5 +57,9 @@ variable "management_project_id" {
 }
 
 variable "container_repo" {
+  type = string
+}
+
+variable "fact_database_user" {
   type = string
 }

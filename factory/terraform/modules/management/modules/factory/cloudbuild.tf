@@ -72,7 +72,11 @@ resource "google_cloudbuild_trigger" "service_trigger" {
     _REPOSITORY             = var.container_repo
     _IMAGE_NAME             = each.key
     _DESTINATION_PROJECT_ID = var.dev_project_id
-
+    _PROFILE_DATABASE_NAME  = var.profile_database_name
+    _FACT_DATABASE_USER     = var.fact_database_user
+    _FACT_DATABASE_NAME     = var.fact_database_name
+    _FACT_DATABASE_INSTANCE = var.fact_database_instance
+    _FACT_CHANGED_TOPIC     = var.fact_changed_topic
   }
 
   filename = "${each.key}/cloudbuild.yaml"

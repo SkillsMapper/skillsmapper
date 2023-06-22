@@ -35,3 +35,20 @@ variable "github_token" {
   type        = string
   sensitive   = true
 }
+
+variable "profile_database_name" {
+  type = string
+}
+
+variable "fact_database_user" {
+  type        = string
+}
+variable "fact_database_name" {
+  type        = string
+}
+variable "fact_database_instance" {
+  type        = string
+}
+variable "fact_changed_topic" {
+  type        = string
+}

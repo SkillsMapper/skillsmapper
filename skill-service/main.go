@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"cloud.google.com/go/compute/metadata"
 	"cloud.google.com/go/logging"
+	monitoring "cloud.google.com/go/monitoring/apiv3/v2"
 	"cloud.google.com/go/storage"
 	"context"
 	_ "embed"
@@ -28,10 +29,11 @@ type autocompleteResponse struct {
 }
 
 var (
-	bucketName    string
-	objectName    string
-	logger        *logging.Logger
-	storageClient *storage.Client
+	bucketName       string
+	objectName       string
+	logger           *logging.Logger
+	storageClient    *storage.Client
+	monitoringClient *monitoring.MetricClient
 )
 
 func init() {
@@ -53,7 +55,7 @@ func init() {
 		option.WithoutAuthentication(),
 		option.WithGRPCDialOption(grpc.WithTransportCredentials(insecure.NewCredentials())))
 	if err != nil {
-		log.Fatalf("failed to create client: %v", err)
+		log.Fatalf("failed to create logging client: %v", err)
 	}
 	logger = loggingClient.Logger(serviceName, logging.RedirectAsJSON(os.Stderr))
 
@@ -62,6 +64,11 @@ func init() {
 		logger.Log(logging.Entry{
 			Severity: logging.Error,
 			Payload:  fmt.Sprintf("failed to create storage client: %v", err)})
+	}
+
+	monitoringClient, err = monitoring.NewMetricClient(ctx)
+	if err != nil {
+		log.Fatalf("failed to create monitoring client: %v", err)
 	}
 }
 
@@ -113,7 +120,6 @@ Listen for SIGINT to shut down gracefully.
 Cloud Run gives apps 10 seconds for shutdown.
 */
 func gracefulShutdown(server *http.Server) {
-
 	ctx := context.Background()
 	nctx, stop := signal.NotifyContext(ctx, os.Interrupt, os.Kill)
 	defer stop()

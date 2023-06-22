@@ -18,6 +18,9 @@ module "environment" {
   profile_service_version = var.profile_service_dev_version
   container_repo          = var.container_repo
   project_name            = var.dev_project_name
+  profile_database_name   = var.profile_database_name
+  fact_database_name      = var.fact_database_name
+  fact_database_user      = var.fact_database_user
 }
 
 provider "google" {

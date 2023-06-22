@@ -59,19 +59,19 @@ locals {
     },
     {
       name  = "DATABASE_USER"
-      value = var.fact_service_user
+      value = var.fact_database_user
     },
     {
       name  = "DATABASE_NAME"
-      value = var.database_name
+      value = var.fact_database_name
     },
     {
       name  = "DATABASE_CONNECTION_NAME"
-      value = "${var.project_id}:${var.region}:${google_sql_database_instance.instance.name}"
+      value = "${var.project_id}:${var.region}:${var.fact_database_instance}"
     },
     {
       name  = "FACT_CHANGED_TOPIC"
-      value = "fact-changed"
+      value = var.fact_changed_topic
     },
     {
       name  = "LOGGING_LEVEL_ORG_SKILLSMAPPER"

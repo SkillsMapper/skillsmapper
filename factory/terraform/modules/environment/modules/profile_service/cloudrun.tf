@@ -13,7 +13,7 @@ resource "google_cloud_run_service" "profile_service" {
 
         env {
           name  = "DATABASE_NAME"
-          value = var.database_name
+          value = var.profile_database_name
         }
 
         env {

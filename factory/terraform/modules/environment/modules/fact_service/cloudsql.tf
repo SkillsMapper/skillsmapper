@@ -1,6 +1,6 @@
 resource "google_sql_database_instance" "instance" {
   project          = var.project_id
-  name             = var.instance_name
+  name             = var.fact_database_instance
   database_version = "POSTGRES_14"
   region           = var.region
 
@@ -23,7 +23,7 @@ resource "google_sql_database_instance" "instance" {
 resource "google_sql_database" "database" {
   project  = var.project_id
   instance = google_sql_database_instance.instance.name
-  name     = var.database_name
+  name     = var.fact_database_name
 }
 
 resource "google_sql_user" "fact_service_user" {

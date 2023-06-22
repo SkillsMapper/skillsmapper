@@ -12,3 +12,8 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
 --member="serviceAccount:${CLOUD_BUILD_SERVICE_AGENT}" \
 --role="roles/secretmanager.admin"
 -----
+
+```
+gcloud builds submit --config fact-service/cloudbuild.yaml . \
+--substitutions=REPOSITORY=$CONTAINER_REPO,_REGION=$REGION,_SERVICE_NAME=$SERVICE_NAME,_IMAGE_NAME=$IMAGE_NAME,COMMIT_SHA=$(git rev-parse HEAD)
+```

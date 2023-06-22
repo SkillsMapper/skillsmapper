@@ -4,7 +4,7 @@ variable "project_id" {
 }
 
 variable "project_name" {
-  type        = string
+  type = string
 }
 
 variable "region" {
@@ -50,6 +50,10 @@ variable "profile_service_name" {
   description = "The name of the profile service."
 }
 
+variable "profile_database_name" {
+  type = string
+}
+
 variable "domain" {
   description = "The domain where the project will be hosted."
   type        = string
@@ -82,5 +86,12 @@ variable "fact_service_version" {
 }
 
 variable "container_repo" {
+  type = string
+}
+
+variable "fact_database_name" {
+  type = string
+}
+variable "fact_database_user" {
   type = string
 }

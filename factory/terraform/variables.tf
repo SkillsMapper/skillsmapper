@@ -5,7 +5,7 @@ variable "management_project_id" {
 
 variable "management_project_name" {
   default = "SkillsMapper Management"
-  type = string
+  type    = string
 }
 
 variable "dev_project_id" {
@@ -14,7 +14,7 @@ variable "dev_project_id" {
 
 variable "dev_project_name" {
   default = "SkillsMapper Development"
-  type = string
+  type    = string
 }
 
 variable "state_bucket" {
@@ -103,4 +103,27 @@ variable "profile_service_name" {
   type        = string
   default     = "profile-service"
   description = "The name of the profile service."
+}
+
+variable "profile_database_name" {
+  type        = string
+  default     = "(default)"
+  description = "The name of the profile FireStore database."
+}
+
+variable "fact_database_user" {
+  default = "fact_service_user"
+  type    = string
+}
+variable "fact_database_name" {
+  default = "facts"
+  type    = string
+}
+variable "fact_database_instance" {
+  default = "facts-instance"
+  type    = string
+}
+variable "fact_changed_topic" {
+  default = "fact-changed"
+  type    = string
 }

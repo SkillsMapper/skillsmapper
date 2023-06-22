@@ -1,12 +1,12 @@
-apiVersion: skaffold/v4beta2
+apiVersion: skaffold/v4beta5
 kind: Config
 build:
   artifacts:
     - image: fact-service-k8s
       jib:
-        fromImage: 'gcr.io/distroless/java:11'
+        fromImage: gcr.io/distroless/java:11
 manifests:
   rawYaml:
     - k8s/*.yaml
 deploy:
-  kubectl: { }
+  kubectl: {}

@@ -53,6 +53,8 @@ module "fact_service" {
   fact_service_version  = var.fact_service_version
   container_repo        = var.container_repo
   depends_on            = [module.skill_service]
+  fact_database_name    = var.fact_database_name
+  fact_database_user    = var.fact_database_user
 }
 
 module "profile_service" {
@@ -69,6 +71,7 @@ module "profile_service" {
   fact_changed_subscription = var.fact_changed_subscription
   container_repo            = var.container_repo
   depends_on                = [module.fact_service]
+  profile_database_name     = var.profile_database_name
 }
 
 module "user_interface" {

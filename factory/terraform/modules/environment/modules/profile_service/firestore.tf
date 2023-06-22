@@ -1,6 +1,6 @@
 resource "google_firestore_database" "default" {
   project                     = var.project_id
-  name                        = var.database_name
+  name                        = var.profile_database_name
   location_id                 = var.region
   type                        = "FIRESTORE_NATIVE"
   concurrency_mode            = "OPTIMISTIC"
