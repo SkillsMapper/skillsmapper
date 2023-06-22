@@ -130,13 +130,18 @@ func main() {
 
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
-		Payload:  "starting HTTP server"})
+		Payload:  "starting HTTP server on port " + port})
 
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Server closed: %v", err)
+		}
+	}()
 	isReady.Store(true)
 
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
-		Payload:  "service is ready"})
+		Payload:  "service is ready on port " + port})
 
 	gracefulShutdown(server)
 
