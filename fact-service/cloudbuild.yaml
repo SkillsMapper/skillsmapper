@@ -1,9 +1,5 @@
 ---
 steps:
-  - id: Print Maven Version
-    name: 'gcr.io/cloud-builders/mvn'
-    dir: ${_SERVICE_NAME}
-    args: [ 'version' ]
   - id: Download Dependencies
     name: 'gcr.io/cloud-builders/mvn'
     dir: ${_SERVICE_NAME}
