@@ -128,6 +128,12 @@ Create an environment variable to store the `FACT_SERVICE_NAME` e.g. `fact-servi
 export FACT_SERVICE_NAME='[FACT_SERVICE_NAME]'
 ```
 
+Then create a `.env.yaml` file from the `.env.yaml.template`:
+
+```shell
+envsubst < .env.yaml.template > .env.yaml
+```
+
 Deploy to Cloud Run:
 
 ```shell
@@ -277,12 +283,17 @@ gclo
 ## Database connection options
 
 
-
 ### Open API 
 
 http://localhost:8080/v3/api-docs/
 
 
+### CLoud Run
+
+```shell
+gcloud builds submit --config fact-service/cloudbuild.yaml . \
+  --substitutions=REPOSITORY=$CONTAINER_REPO,_REGION=$REGION,_SERVICE_NAME=$SERVICE_NAME,_IMAGE_NAME=$IMAGE_NAME,COMMIT_SHA=$(git rev-parse HEAD)
+```
 
 
 

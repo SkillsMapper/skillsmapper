@@ -1,8 +1,5 @@
 package org.skillsmapper.factservice;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,7 +24,7 @@ class FactControllerTests {
   public void shouldBeUnsuccessful_postWithoutToken() throws Exception {
     String factCreateRequestJson = "{\"skill\": \"Java\", \"level\": \"learning\"}";
 
-    mockMvc.perform(post("/facts")
+    mockMvc.perform(post("/api/facts")
             .contentType(MediaType.APPLICATION_JSON)
             .content(factCreateRequestJson))
         .andExpect(status().isUnauthorized());
@@ -36,7 +36,7 @@ class FactControllerTests {
       String factCreateRequestJson = "{\"skill\": \"Java\", \"level\": \"learning\"}";
 
       mockMvc
-          .perform(post("/facts")
+          .perform(post("/api/facts")
               .header("Authorization", "Bearer iam-a-token")
               .contentType(MediaType.APPLICATION_JSON)
               .content(factCreateRequestJson))

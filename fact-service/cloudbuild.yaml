@@ -1,0 +1,36 @@
+---
+steps:
+  - id: Print Java Version
+    name: 'gcr.io/cloud-builders/java'
+    args: ['version']
+  - id: Download Dependencies
+    name: 'gcr.io/cloud-builders/mvn'
+    args: ['dependency:go-offline']
+  - id: Run Linting Checks
+    name: 'docker.io/library/maven:3.8.3-openjdk-11'
+    entrypoint: mvn
+    args:
+      - checkstyle:checkstyle
+  - id: Run Unit Tests
+    name: 'gcr.io/cloud-builders/mvn'
+    args:
+      - test
+    env:
+      - FACT_CHANGED_TOPIC="test-topic"
+  - id: Build Container Image
+    name: 'gcr.io/cloud-builders/mvn'
+    args:
+      - compile
+      - com.google.cloud.tools:jib-maven-plugin:build
+      - -Dimage=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA
+  - id: Deploy to Cloud Run
+    name: gcr.io/cloud-builders/gcloud:latest
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - >
+        gcloud run deploy ${_SERVICE_NAME} \
+          --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA \
+          --project ${_DESTINATION_PROJECT_ID} \
+          --region ${_REGION}
+
