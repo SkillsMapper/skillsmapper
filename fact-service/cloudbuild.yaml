@@ -2,29 +2,35 @@
 steps:
   - id: Print Maven Version
     name: 'gcr.io/cloud-builders/mvn'
-    args: ['version']
+    dir: ${_SERVICE_NAME}
+    args: [ 'version' ]
   - id: Download Dependencies
     name: 'gcr.io/cloud-builders/mvn'
-    args: ['dependency:go-offline']
+    dir: ${_SERVICE_NAME}
+    args: [ 'dependency:go-offline' ]
   - id: Run Linting Checks
     name: 'docker.io/library/maven:3.8.3-openjdk-11'
+    dir: ${_SERVICE_NAME}
     entrypoint: mvn
     args:
       - checkstyle:checkstyle
   - id: Run Unit Tests
     name: 'gcr.io/cloud-builders/mvn'
+    dir: ${_SERVICE_NAME}
     args:
       - test
     env:
       - FACT_CHANGED_TOPIC="test-topic"
   - id: Build Container Image
     name: 'gcr.io/cloud-builders/mvn'
+    dir: ${_SERVICE_NAME}
     args:
       - compile
       - com.google.cloud.tools:jib-maven-plugin:build
       - -Dimage=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA
   - id: Deploy to Cloud Run
     name: gcr.io/cloud-builders/gcloud:latest
+    dir: ${_SERVICE_NAME}
     entrypoint: /bin/bash
     args:
       - -c
