@@ -25,7 +25,7 @@ steps:
         export TF_VAR_management_project_id="${_MANAGEMENT_PROJECT_ID}"
         export TF_VAR_dev_project_id="${_DEV_PROJECT_ID}"
         export TF_VAR_state_bucket="${_STATE_BUCKET}"
-        TF_LOG=DEBUG
+        export TF_LOG=TRACE
         terraform plan
   - id: apply
     name: 'hashicorp/terraform:1.5'
@@ -45,5 +45,5 @@ steps:
         export TF_VAR_management_project_id="${_MANAGEMENT_PROJECT_ID}"
         export TF_VAR_dev_project_id="${_DEV_PROJECT_ID}"
         export TF_VAR_state_bucket="${_STATE_BUCKET}"
-        TF_LOG=DEBUG
+        export TF_LOG=TRACE
         terraform apply -auto-approve
