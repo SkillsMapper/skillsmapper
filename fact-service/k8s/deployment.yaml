@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fact-service
+  labels:
+    app: fact-service
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  clusterIP: None
+  selector:
+    app: fact-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fact-service
+  labels:
+    app: fact-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fact-service
+  template:
+    metadata:
+      labels:
+        app: fact-service
+    spec:
+      containers:
+      - name: fact-service
+        image: fact-service
+        env:
+          - name: PROJECT_ID
+            value: test
+          - name: FACT_CHANGED_TOPIC
+            value: fact-changed
+          - name: SERVICE_NAME
+            value: fact-service
+          - name: LOGGING_LEVEL_ORG_SKILLSMAPPER
+            value: DEBUG
+          - name: SPRING_PROFILES_ACTIVE
+            value: h2

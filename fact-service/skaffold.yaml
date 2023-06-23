@@ -1,0 +1,16 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: fact-service
+build:
+  artifacts:
+    - image: fact-service
+      jib:
+        project: org.skillsmapper:fact-service
+manifests:
+  rawYaml:
+    - k8s/deployment.yaml
+portForward:
+  - resourceType: service
+    resourceName: fact-service
+    port: 8080
