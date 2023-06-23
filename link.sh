@@ -21,6 +21,7 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 # Chapters in Projects
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch04.asciidoc setup/chapter/ch04.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch05.asciidoc laboratory/chapter/ch05.asciidoc
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch05.asciidoc fact-service/chapter/ch05.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch06.asciidoc tag-updater/chapter/ch06.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch07.asciidoc skill-service/chapter/ch07.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch08a.asciidoc fact-service/chapter/ch08a.asciidoc
