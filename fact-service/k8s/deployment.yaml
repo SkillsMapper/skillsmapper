@@ -31,14 +31,3 @@ spec:
       containers:
       - name: fact-service
         image: fact-service
-        env:
-          - name: PROJECT_ID
-            value: test
-          - name: FACT_CHANGED_TOPIC
-            value: fact-changed
-          - name: SERVICE_NAME
-            value: fact-service
-          - name: LOGGING_LEVEL_ORG_SKILLSMAPPER
-            value: DEBUG
-          - name: SPRING_PROFILES_ACTIVE
-            value: h2
