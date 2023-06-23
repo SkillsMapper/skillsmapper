@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: skill-service
+  labels:
+    app: skill-service
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  clusterIP: None
+  selector:
+    app: skill-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skill-service
+  labels:
+    app: skill-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: skill-service
+  template:
+    metadata:
+      labels:
+        app: skill-service
+    spec:
+      containers:
+      - name: skill-service
+        image: skill-service

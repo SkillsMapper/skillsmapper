@@ -1,0 +1,16 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: skill-service
+build:
+  artifacts:
+    - image: skill-service
+      buildpacks:
+        builder: gcr.io/buildpacks/builder:v1
+manifests:
+  rawYaml:
+    - k8s/deployment.yaml
+portForward:
+  - resourceType: service
+    resourceName: skill-service
+    port: 8080
