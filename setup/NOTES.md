@@ -7,3 +7,7 @@ https://spring-gcp.saturnism.me/getting-started/gcloud-cli#quota-project
 
 # Frequently Used Commands
 https://spring-gcp.saturnism.me/additional-resources/cheet-sheets
+
+```shell
+gcloud projects get-iam-policy $PROJECT_ID
+```

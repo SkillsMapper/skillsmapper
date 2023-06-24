@@ -105,3 +105,4 @@ go.work
 /.env-test.yaml
 /factory/clouddeploy.yaml
 /cloudbuild.yaml.old
+/k8s/configmap.yaml

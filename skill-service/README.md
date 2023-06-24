@@ -7,7 +7,7 @@ First follow the instructions in the [setup](../setup/README.md) to get a projec
 If you are returning to this project after installation and have saved all environment variables in `.env` reinitialise environment variables using:
 
 ```shell
-set -a; source ../.env; source .env ;set +a
+set -a; source ../.env; source .env; set +a
 ```
 
 Then set the project to the current project:

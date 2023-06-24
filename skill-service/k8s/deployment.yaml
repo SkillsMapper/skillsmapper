@@ -6,8 +6,8 @@ metadata:
     app: skill-service
 spec:
   ports:
-  - port: 8080
-    protocol: TCP
+    - port: 8080
+      protocol: TCP
   clusterIP: None
   selector:
     app: skill-service
@@ -29,5 +29,9 @@ spec:
         app: skill-service
     spec:
       containers:
-      - name: skill-service
-        image: skill-service
+        - name: skill-service
+          image: skill-service
+          envFrom:
+            - configMapRef:
+                name: skill-service-config
+
