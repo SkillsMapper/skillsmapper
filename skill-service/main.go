@@ -53,6 +53,9 @@ func init() {
 		option.WithoutAuthentication(),
 		option.WithGRPCDialOption(grpc.WithTransportCredentials(insecure.NewCredentials())))
 	if err != nil {
+		logger.Log(logging.Entry{
+			Severity: logging.Error,
+			Payload:  fmt.Sprintf("failed to create logging client: %v", err)})
 		log.Fatalf("failed to create logging client: %v", err)
 	}
 	logger = loggingClient.Logger(serviceName, logging.RedirectAsJSON(os.Stderr))
@@ -62,6 +65,7 @@ func init() {
 		logger.Log(logging.Entry{
 			Severity: logging.Error,
 			Payload:  fmt.Sprintf("failed to create storage client: %v", err)})
+		log.Fatalf("failed to create storage client: %v", err)
 	}
 }
 
@@ -90,7 +94,7 @@ func main() {
 
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
-		Payload:  "starting HTTP server"})
+		Payload:  "starting HTTP server on port " + port})
 
 	populate(*trie, bucketName, objectName)
 
@@ -103,7 +107,7 @@ func main() {
 
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
-		Payload:  "service is ready"})
+		Payload:  "service is ready on port " + port})
 
 	gracefulShutdown(server)
 }
@@ -185,7 +189,7 @@ func populate(trie autocomplete.Trie, bucketName string, objectName string) {
 
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
-		Payload:  fmt.Sprintf("loading tags from %s", objectName)})
+		Payload:  fmt.Sprintf("loading tags from %s/%s", bucketName, objectName)})
 
 	// Read the contents of the object
 	reader, err := object.NewReader(context.Background())

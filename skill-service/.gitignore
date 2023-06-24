@@ -106,3 +106,6 @@ go.work
 /factory/clouddeploy.yaml
 /cloudbuild.yaml.old
 /k8s/configmap.yaml
+/skillsmapper-development-7ca9f720747f.json
+/skillsmapper-org-da9c89cb51cb.json
+/skill-service-sa.json

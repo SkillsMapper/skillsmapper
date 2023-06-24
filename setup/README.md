@@ -2,7 +2,7 @@
 
 This is a summary of [Chapter S1](../chapters/ch05.asciidoc). 
 
-It may be out of date. Please you the chapter rather than this README if you have access.
+It may be out of date. Please use the chapter rather than this README if you have access.
 
 ## Prerequisites
 
@@ -67,8 +67,6 @@ Link the Billing Account to the Project:
 ```shell
 gcloud beta billing projects link $PROJECT_ID --billing-account $BILLING_ACCOUNT_ID
 ```
-
----
 
 ## Setup Cloud Source Repositories
 
