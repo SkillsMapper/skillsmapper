@@ -160,3 +160,5 @@ terraform.rc
 /.env
 /secrets.txt
 /.env.yaml
+/k8s/configmap.yaml
+/fact-service-sa.json

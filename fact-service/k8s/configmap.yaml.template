@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fact-service-config
+data:
+  PROJECT_ID: '$PROJECT_ID'
+  SERVICE_NAME: '$FACT_SERVICE_NAME'
+  SPRING_PROFILES_ACTIVE: 'h2'
+  FACT_CHANGED_TOPIC: '$FACT_CHANGED_TOPIC'
+  LOGGING_LEVEL_ORG_SKILLSMAPPER: 'DEBUG'

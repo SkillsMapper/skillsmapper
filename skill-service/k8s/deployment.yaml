@@ -43,4 +43,4 @@ spec:
               mountPath: /var/secrets/google
           env:
             - name: GOOGLE_APPLICATION_CREDENTIALS
-              value: /var/secrets/google/key.json
+              value: /var/secrets/google/skill-service-sa.json

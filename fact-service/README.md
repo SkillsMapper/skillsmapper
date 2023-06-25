@@ -151,7 +151,7 @@ export FACT_SERVICE_URL=$(gcloud run services describe $FACT_SERVICE_NAME --form
 Create a service account:
 
 ```shell
-gcloud iam service-accounts create $FACT_SERVICE_SERVICE_ACCOUNT_NAME \
+gcloud iam service-accounts create $FACT_SERVICE_SA \
     --description="Service account for ${FACT_SERVICE_NAME}"
 ```
 
@@ -159,7 +159,7 @@ Grant the service account the `Cloud SQL Client` role:
 
 ```shell
 gcloud projects add-iam-policy-binding $PROJECT_ID \
---member=serviceAccount:$FACT_SERVICE_SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+--member=serviceAccount:$FACT_SERVICE_SA@$PROJECT_ID.iam.gserviceaccount.com \
 --role=roles/cloudsql.client
 ```
 
@@ -167,7 +167,7 @@ Grant the service account the `Secret Manager Secret Accessor` role:
 
 ```shell
 gcloud secrets add-iam-policy-binding $FACT_SERVICE_DB_PASSWORD_SECRET_NAME \
---member=serviceAccount:$FACT_SERVICE_SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+--member=serviceAccount:$FACT_SERVICE_SA@$PROJECT_ID.iam.gserviceaccount.com \
 --role=roles/secretmanager.secretAccessor
 ```
 
@@ -177,7 +177,7 @@ Update the Cloud Run service to connect to Cloud SQL and use the service account
 
 ```shell
 gcloud run services update $FACT_SERVICE_NAME \
-    --service-account ${FACT_SERVICE_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+    --service-account ${FACT_SERVICE_SA}@${PROJECT_ID}.iam.gserviceaccount.com \
     --add-cloudsql-instances ${PROJECT_ID}:${REGION}:${INSTANCE_NAME} \
     --update-secrets=DATABASE_PASSWORD=${FACT_SERVICE_DB_PASSWORD_SECRET_NAME}:latest
 ```
@@ -186,7 +186,7 @@ Redeploy:
 
 ```shell
 gcloud run deploy $FACT_SERVICE_NAME --source . --env-vars-file=.env.yaml \
---service-account ${FACT_SERVICE_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+--service-account ${FACT_SERVICE_SA}@${PROJECT_ID}.iam.gserviceaccount.com \
 --add-cloudsql-instances ${PROJECT_ID}:${REGION}:${INSTANCE_NAME} \
 --update-secrets=DATABASE_PASSWORD=${FACT_SERVICE_DB_PASSWORD_SECRET_NAME}:latest
 ```

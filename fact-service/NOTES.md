@@ -197,7 +197,7 @@ public void deleteFact_Forbidden() throws Exception {
 
 ```shell
 gcloud run deploy $FACT_SERVICE_NAME --source . \
---service-account ${FACT_SERVICE_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com \
+--service-account ${FACT_SERVICE_SA}@${PROJECT_ID}.iam.gserviceaccount.com \
 --add-cloudsql-instances ${PROJECT_ID}:${REGION}:${INSTANCE_NAME} \
 --env-vars-file=.env.yaml \
 --update-secrets=DATABASE_PASSWORD=${FACT_SERVICE_DB_PASSWORD_SECRET_NAME}:latest
