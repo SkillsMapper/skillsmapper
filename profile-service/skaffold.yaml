@@ -1,0 +1,15 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: profile-service
+build:
+  artifacts:
+    - image: profile-service
+      ko: {}
+manifests:
+  rawYaml:
+    - k8s/*.yaml
+portForward:
+  - resourceType: service
+    resourceName: profile-service
+    port: 8080

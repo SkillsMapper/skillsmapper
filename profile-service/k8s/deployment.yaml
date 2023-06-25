@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: profile-service
+  labels:
+    app: profile-service
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  clusterIP: None
+  selector:
+    app: profile-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profile-service
+  labels:
+    app: profile-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: profile-service
+  template:
+    metadata:
+      labels:
+        app: profile-service
+    spec:
+      volumes:
+        - name: google-cloud-key
+          secret:
+            secretName: profile-service-sa-key
+      containers:
+        - name: profile-service
+          image: profile-service
+          envFrom:
+            - configMapRef:
+                name: profile-service-config
+          volumeMounts:
+            - name: google-cloud-key
+              mountPath: /var/secrets/google
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /var/secrets/google/profile-service-sa.json

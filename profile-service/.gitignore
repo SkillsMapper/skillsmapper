@@ -101,3 +101,5 @@ fabric.properties
 go.work
 
 .env.yaml
+/profile-service-sa.json
+/k8s/configmap.yaml
