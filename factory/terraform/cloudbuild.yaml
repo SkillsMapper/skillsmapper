@@ -1,6 +1,6 @@
 steps:
   - id: check
-  - name: 'gcr.io/cloud-builders/curl'
+    name: 'gcr.io/cloud-builders/curl'
     args: ['-s', '-H', 'Metadata-Flavor:Google', 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/email']
   - id: init
     name: 'hashicorp/terraform:1.5'
