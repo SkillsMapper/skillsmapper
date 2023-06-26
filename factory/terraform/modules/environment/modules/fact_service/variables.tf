@@ -35,11 +35,6 @@ variable "secret_name" {
   default = "fact_service_db_password"
 }
 
-variable "fact_service_service_account_name" {
-  type    = string
-  default = "fact-service-sa"
-}
-
 variable "fact_service_name" {
   type = string
 }

@@ -5,7 +5,7 @@ resource "google_cloud_run_service" "skill_service" {
 
   template {
     spec {
-      service_account_name = google_service_account.skill_service.email
+      service_account_name = google_service_account.skill_service_sa.email
       containers {
         image = "${var.region}-docker.pkg.dev/${var.management_project_id}/${var.container_repo}/${var.skill_service_name}:${var.skill_service_version}"
         env {

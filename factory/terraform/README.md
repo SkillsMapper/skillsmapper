@@ -31,7 +31,6 @@ Enable the IAM Service Account Credentials API:
 gcloud services enable iamcredentials.googleapis.com
 ```
 
-
 Then apply the Terraform configuration:
 
 ```shell
