@@ -79,6 +79,7 @@ resource "google_cloudbuild_trigger" "service_trigger" {
     _FACT_CHANGED_TOPIC     = var.fact_changed_topic
   }
 
-  filename = "${each.key}/cloudbuild.yaml"
+  filename       = "${each.key}/cloudbuild.yaml"
+  included_files = ["${each.key}/**"]
 }
 

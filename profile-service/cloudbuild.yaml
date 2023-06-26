@@ -62,4 +62,5 @@ steps:
           --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$COMMIT_SHA \
           --project ${_DESTINATION_PROJECT_ID} \
           --region ${_REGION} \
+          --service-account ${_SERVICE_NAME}-sa@$PROJECT_ID.iam.gserviceaccount.com \
           --update-env-vars PROJECT_ID=${_DESTINATION_PROJECT_ID},SERVICE_NAME=${_SERVICE_NAME},DATABASE_NAME='${_PROFILE_DATABASE_NAME}'
