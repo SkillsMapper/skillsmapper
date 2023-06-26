@@ -1,6 +1,5 @@
 # Terraform Deployment
 
-
 ## Redeployment
 
 To redeploy with Terraform, two resources need to be manually deleted first.
@@ -86,3 +85,26 @@ Then use this service account with Terraform:
 export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=terraform@$MANAGEMENT_PROJECT_ID.iam.gserviceaccount.com
 ```
 https://cloud.google.com/blog/topics/developers-practitioners/using-google-cloud-service-account-impersonation-your-terraform-code
+
+## Terraform Trigger
+
+```shell
+set -a; source ../.env; source .env; source .env.trigger; set +a
+```
+
+```shell
+gcloud config set project $MANAGEMENT_PROJECT_ID
+```
+
+Remove existing trigger:
+
+```shell
+gcloud beta builds triggers delete $TRIGGER_NAME --region=$REGION
+```
+
+Create new trigger:
+
+```shell
+./create_terraform_trigger.sh
+```
+

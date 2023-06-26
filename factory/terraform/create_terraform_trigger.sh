@@ -19,9 +19,9 @@ substitutions=${substitutions:1}
 # Create the trigger
 gcloud beta builds triggers create github \
   --name=$TRIGGER_NAME \
-  --repository=projects/$PROJECT_ID/locations/$REGION/connections/$CONNECTION_NAME/repositories/$REPO_NAME \
+  --repository=projects/$MANAGEMENT_PROJECT_ID/locations/$REGION/connections/$CONNECTION_NAME/repositories/$REPO_NAME \
   --branch-pattern=$BRANCH_PATTERN \
   --build-config=$BUILD_CONFIG_FILE \
-  --included-files=["factory/terraform/**"] \
+  --included-files=$INCLUDED_FILES \
   --region=$REGION \
   --substitutions=$substitutions
