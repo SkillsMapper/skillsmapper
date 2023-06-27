@@ -1,0 +1,99 @@
+
+== Spanner
+
+Google Cloud Spanner is Google's fully managed, scalable, relational database service. Cloud Spanner is designed to offer the transactional consistency of a traditional relational database plus the scalability and performance of a NoSQL database.
+
+Unlikely Cloud SQL it is cloud native and can scale horizontally and globally. It can also be very expensive, but it is a good fit for large scale applications. While it is overkill for the fact service it is useful to demonstrate how to use it.
+
+The cloud-agnostic version of the fact service used in this chapter knows nothing about Google Cloud. Although it connects to a Cloud SQL database, it connects through a proxy. As far as the Spring application is concerned, there is a PostgreSQL instance running on the local host it can talk to using the PostgreSQL wire protocol. The Cloud SQL Proxy is taking care of all the networking, encryption, and authentication required.
+
+While it is possible to connect to Cloud Spanner natively using client libraries, it is also possible to connect to Cloud Spanner via a proxy similar to Cloud SQL. The PGAdapterfootnote:[https://cloud.google.com/spanner/docs/pgadapter] provides a PostgreSQL-compatible interface to Cloud Spanner as again the client application can treat it as a PostgreSQL database running on the localhost. There are several different options for running the PGAdapter as a standalone Java process, a Java library or as a Docker container. As the fact service uses Kubernetes, the easiest is to use the Docker image provided by Google as a sidecar container in the same way as the Cloud SQL Proxy.
+
+=== Create a Spanner Instance
+
+To use Cloud Spanner, first enable the Cloud Spanner API:
+
+[source,bash]
+----
+gcloud services enable spanner.googleapis.com
+----
+
+Create environment variables for the instance and database name for a Spanner instance in the same way you would for Cloud SQL.
+
+[source,bash]
+----
+SPANNER_INSTANCE='facts-instance'
+SPANNER_DATABASE='facts'
+----
+
+Spanner instances are configured to have a specified number of processing units. This computed capacity determines the amount of data throughput, queries per second (QPS), and storage limits of your instance. Previously, this was the number of nodes in the cluster with one node being equivalent to 1000 processing units and one node being the smallest configuration.
+
+This meant there was no cheap way of using Spanner. Now it is possible to specify a minimum of 100 processing units, which is equivalent to 0.1 nodes. This is a much more cost-effective way of using Spanner for small applications and for development and testing.
+
+Create a Spanner instance using the gcloud command line tool.
+
+[source,bash]
+----
+gcloud spanner instances create $SPANNER_INSTANCE --config=regional-$REGION --description="Fact Instance" --processing-units=100
+----
+
+You will notice that the Spanner instance is created almost instantly rather than the 15 minutes plus it can take for Cloud SQL to provision.
+
+=== Create a Spanner Database
+
+Create a database in the Spanner instance. Spanner supports two SQL dialects, Google tandard SQL and PostgreSQL. The fact service uses PostgreSQL so create the database using the PostgreSQL dialect.
+
+[source,bash]
+----
+gcloud spanner databases create $SPANNER_DATABASE --instance=$SPANNER_INSTANCE --database-dialect=POSTGRESQL
+----
+
+Again, database creation is near instant.
+
+=== Authenticate the Service Account
+
+Unlike Cloud SQL, Spanner does not have users, so you do not need to create a Kubernetes secret. However, the service account does require access to Spanner. Earlier you linked a Kubernetes service account to the service account you created for the fact service. Now you need to give that service account access to Spanner.
+
+[source,bash]
+----
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member=serviceAccount:${FACT_SERVICE_SA}@${PROJECT_ID}.iam.gserviceaccount.com \
+  --role=roles/spanner.databaseUser
+----
+
+The fact service will use the service account to authenticate with Spanner.
+
+## Considerations when Using Spanner
+
+There are a few things to consider when using Spanner. Although it is PostgreSQL compatible, it is not PostgreSQL there are some limitations.
+
+The first is it does not support sequences, so it is not possible to automatically generate primary keys. This version of the fact service uses UUIDs for primary keys, so this is not an issue.
+
+Also, Hibernate has a nice feature of automatically updating schemas. This is not supported by Spanner, so you need to manually create the schema. Fortunately, the table is simple, so this is not a big issue.
+
+In Google Cloud Spanner, you can use the TIMESTAMP data type to store timestamp values. However, there are some caveats when using timestamps in Spanner. The precision of TIMESTAMP data type is up to nanoseconds, but it does not store timezone information.
+
+To solve this issue, the common practice is to use two fields in your Entity: one for the timestamp and another for the timezone. You store the timestamp as a String in a certain standardized format, like ISO 8601, and you store the timezone as another String. When you retrieve the data, you can parse the timestamp and apply the timezone.
+
+These are the type of limitations you need to be aware of when using Spanner. It is not a drop-in replacement for PostgreSQL, so it is the case that if using PostgreSQL, and you work around these limitations, you will be able to use Spanner and Cloud SQL. If you just target PostgreSQL, you will not be able to use Spanner without modification.
+
+TIP
+
+This is the trade-off you make when using a cloud-native database. You get scalability and performance, but you lose some features of a traditional database. However, in this case the benefits are large and the limitation relatively small.
+
+
+## Deploy the Fact Service
+
+[source,bash]
+----
+envsubst < k8s-template/deployment-spanner.yaml > k8s/deployment.yaml
+----
+
+Deploy:
+
+[source,bash]
+----
+skaffold run
+----
+
+=== Test the Fact Service

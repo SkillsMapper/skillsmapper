@@ -1,28 +1,19 @@
 package org.skillsmapper.factservice;
 
-import java.time.LocalDateTime;
-import java.util.Map;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.ZonedDateTime;
+import java.util.Map;
 
 @Controller
 public class FactController {
@@ -68,7 +59,7 @@ public class FactController {
     Fact createFact(@RequestHeader Map<String, String> headers, @RequestBody FactDTO factDTO) {
         Fact fact = new Fact();
         fact.setUserUID(authenticateJwt(headers));
-        fact.setTimestamp(LocalDateTime.now());
+        fact.setTimestamp(ZonedDateTime.now());
         fact.setLevel(factDTO.getLevel());
         fact.setSkill(factDTO.getSkill());
         logger.info("Saving fact: " + fact.toString());
@@ -78,7 +69,7 @@ public class FactController {
     // Single item
     @GetMapping("/facts/{id}")
     @ResponseBody
-    Fact one(@PathVariable Long id) {
+    Fact one(@PathVariable String id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new FactNotFoundException(id));
@@ -86,7 +77,7 @@ public class FactController {
 
     @PutMapping("/facts/{id}")
     @ResponseBody
-    Fact replaceFact(@RequestBody Fact newFact, @PathVariable Long id) {
+    Fact replaceFact(@RequestBody Fact newFact, @PathVariable String id) {
 
         return repository.findById(id)
                 .map(fact -> {
@@ -102,7 +93,7 @@ public class FactController {
 
     @DeleteMapping("/facts/{id}")
     @ResponseBody
-    void deleteFact(@PathVariable Long id) {
+    void deleteFact(@PathVariable String id) {
         repository.deleteById(id);
     }
 

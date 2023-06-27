@@ -18,12 +18,12 @@ spec:
         iam.gke.io/gke-metadata-server-enabled: "true"
       containers:
         - name: fact-service
-          image: fact-service-k8s
+          image: $IMAGE
           env:
             - name: spring_profiles_active
               value: spanner
             - name: PROJECT_ID
-              value: skillsmapper-org
+              value: $PROJECT_ID
             - name: DATABASE_HOST
               value: "localhost"
             - name: DATABASE_PORT
@@ -57,9 +57,9 @@ spec:
           ports:
             - containerPort: 5432
           args:
-            - "-p skillsmapper-org"
-            - "-i facts-instance"
-            - "-d facts"
+            - "-p $PROJECT_ID"
+            - "-i $SPANNER_INSTANCE"
+            - "-d $SPANNER_DATABASE"
             - "-x"
           resources:
             requests:

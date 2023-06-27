@@ -4,7 +4,7 @@ build:
   artifacts:
     - image: fact-service-k8s
       jib:
-        fromImage: gcr.io/distroless/java:11
+        fromImage: gcr.io/distroless/java17-debian11
 manifests:
   rawYaml:
     - k8s/*.yaml

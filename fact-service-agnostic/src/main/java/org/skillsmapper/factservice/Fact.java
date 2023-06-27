@@ -1,23 +1,23 @@
 package org.skillsmapper.factservice;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "Facts")
 public class Fact {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String id;
 
-    private LocalDateTime timestamp;
+    private String timestamp;
+
+    private String timezone;
 
     private String userUID;
 
@@ -29,13 +29,16 @@ public class Fact {
     }
 
     public Fact(String userUID, String level, String skill) {
+        this.id = UUID.randomUUID().toString();
         this.userUID = userUID;
-        this.timestamp = LocalDateTime.now();
+        ZonedDateTime zonedDateTime = ZonedDateTime.now();
+        this.timestamp = DateTimeFormatter.ISO_INSTANT.format(zonedDateTime);
+        this.timezone = zonedDateTime.getZone().toString();
         this.level = level;
         this.skill = skill;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -51,12 +54,13 @@ public class Fact {
         return userUID;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public ZonedDateTime getTimestamp() {
+        return ZonedDateTime.parse(this.timestamp + "[" + this.timezone + "]", DateTimeFormatter.ISO_ZONED_DATE_TIME);
     }
 
-    public void setTimestamp(final LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp(final ZonedDateTime timestamp) {
+        this.timestamp = DateTimeFormatter.ISO_INSTANT.format(timestamp);
+        this.timezone = timestamp.getZone().toString();
     }
 
     @Override
@@ -71,16 +75,11 @@ public class Fact {
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final Fact fact = (Fact) o;
-        return Objects.equals(id, fact.id) && Objects.equals(timestamp, fact.timestamp) && Objects.equals(userUID, fact.userUID) && Objects.equals(level,
-                fact.level) && Objects.equals(skill, fact.skill);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Fact fact = (Fact) o;
+        return Objects.equals(id, fact.id) && Objects.equals(timestamp, fact.timestamp) && Objects.equals(userUID, fact.userUID) && Objects.equals(level, fact.level) && Objects.equals(skill, fact.skill);
     }
 
     @Override
@@ -100,7 +99,7 @@ public class Fact {
         this.level = type;
     }
 
-    public void setId(final Long id) {
+    public void setId(final String id) {
         this.id = id;
     }
 }
