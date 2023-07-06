@@ -1,0 +1,55 @@
+[[chapter_13]]
+
+== Scaling Up
+
+In the last chapter on observability we touched on the four Golden Signals of monitoring: latency, traffic, errors, and saturation. In this chapter, we can use those to help us scale and secure our applications.
+
+As the amount of traffic increases, we would expect resources to become more saturated and for latency to increase. If we are not careful, this can lead to errors and even downtime. We can use the Golden Signals to help us scale our applications to meet the demands of our users.
+
+So far, we have used a core of services from Google Cloud to build services. However, as the demands on our services increase, there are other options, and in this chapter, you will be introduced to some of these and the circumstances where introducing them would make sense.
+
+=== Skill Service
+
+At the moment, the skill service retrieves Stack Overflow tags from a storage bucket and holds them in memory. This is fine for what is a relatively small number of tags, but as the number of tags increases, the memory requirements will increase. We can use a database to store the tags and retrieve them on demand. This will allow us to scale the service horizontally and add more instances as the number of tags increases and only retrieve the tags when they are needed.
+
+This would be a good case for Cloud MemoryStore. Cloud MemoryStore is a managed Redis service. Redis is an in-memory data structure store, used as a database, cache and message broker. Redis has built-in replication, Lua scripting, LRU eviction, transactions and different levels of on-disk persistence.
+
+=== Fact Service
+
+While the
+
+
+* Running on GKE (see 8a)
+
+=== Profile Service
+
+* CDN
+
+=== UI
+
+=== Laboratory
+
+
+=== Citadel
+
+SkillsMapper is currently exposed using a Global Load Balancer. This gives us a single point of entry to the application, but it also means that all traffic is routed through a single point. By default, Google provides some protection against DDoS attacks, but we can also use Cloud Armor to provide additional protection.
+
+Cloud Armor is a service that provides additional security policies for Google Cloud HTTP(S) Load Balancing services. Cloud Armor allows you to create rules that allow or deny traffic based on attributes such as the IP address, IP range, or the country of origin. You can also use Cloud Armor to detect and block DDoS attacks.
+
+=== Factory
+
+We can also
+
+* Container Signing
+* Cloud Deploy (for GKE)
+
+=== Observatory
+
+=== Services Used
+
+* Cloud Spanner
+* Cloud Armour
+* Cloud MemoryStore
+* Cloud CDN
+
+=== Summary
