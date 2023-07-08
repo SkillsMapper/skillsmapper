@@ -174,3 +174,12 @@ Create new trigger:
 ./create_terraform_trigger.sh
 ```
 
+## Troubleshooting
+
+List Cloud Run:
+
+```shell
+gcloud run services list --region=$REGION
+```
+
+Remember to create images for the current commit before deploying.
