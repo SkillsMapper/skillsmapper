@@ -82,6 +82,14 @@ Delete the API Gateway Config:
 gcloud api-gateway api-configs delete ${API_NAME}-api-gw-config --api ${API_NAME}-api-gw
 ```
 
+If Cloud Build has run delete the services as it will be a newer version than the Terraform configuration:
+
+```shell
+gcloud run services delete skill-service --region ${REGION}
+gcloud run services delete fact-service --region ${REGION}
+gcloud run services delete profile-service --region ${REGION}
+```
+
 Then apply the Terraform configuration:
 
 ```shell
