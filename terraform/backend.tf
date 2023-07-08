@@ -1,7 +1,8 @@
+/*
 terraform {
   backend "gcs" {
-    bucket = "skillsmapper-management-2-tfstate"
+    bucket = "d87cf08d1d01901c-bucket-tfstate"
     prefix = "terraform/state"
   }
 }
-
+*/

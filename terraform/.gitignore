@@ -36,3 +36,4 @@ terraform.rc
 
 /modules/environment/.env
 /tags.csv
+/secrets/github-token.txt

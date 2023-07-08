@@ -34,3 +34,7 @@ resource "google_storage_bucket" "default" {
     enabled = true
   }
 }
+
+output "tfstate_bucket_name" {
+  value = google_storage_bucket.default.name
+}

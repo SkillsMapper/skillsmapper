@@ -11,7 +11,6 @@ terraform import google_project.management_project $MANAGEMENT_PROJECT_ID
 terraform import google_project.dev_project $DEV_PROJECT_ID
 ```
 
-
 ```shell
 set -a; source .env; set +a
 ```
@@ -57,15 +56,19 @@ terraform apply
 
 To redeploy with Terraform, two resources need to be manually deleted first.
 
-Run:
+Set local environment variables:
 
 ```shell
 set -a; source .env; set +a
 ```
 
+Set the current project to development:
+
 ```shell
 gcloud config set project $DEV_PROJECT_ID
 ```
+
+Delete the API Gateway:
 
 ```shell
 gcloud api-gateway gateways delete ${API_NAME}-gateway \
@@ -73,9 +76,19 @@ gcloud api-gateway gateways delete ${API_NAME}-gateway \
   --project=${DEV_PROJECT_ID}
 ```
 
+Delete the API Gateway Config:
+
 ```shell
 gcloud api-gateway api-configs delete ${API_NAME}-api-gw-config --api ${API_NAME}-api-gw
 ```
+
+Then apply the Terraform configuration:
+
+```shell
+terraform apply
+```
+
+## Other
 
 Enable the IAM Service Account Credentials API:
 
