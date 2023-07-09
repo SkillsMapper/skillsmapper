@@ -1,1 +1,0 @@
-/Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch08a.asciidoc

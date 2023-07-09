@@ -25,36 +25,3 @@ resource "google_project_iam_member" "project_service_account_user" {
   role    = "roles/iam.serviceAccountUser"
   member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
-
-
-/*
-resource "google_service_account" "factory_sa" {
-  account_id   = "factory-sa"
-  project      = var.project_id
-  display_name = "Factory Service Account"
-  description  = "Created by terraform"
-}
-
-data "google_iam_policy" "factory_sa_policy" {
-  binding {
-    role    = "roles/run.developer"
-    members = [
-      "serviceAccount:${google_service_account.factory_sa.email}",
-    ]
-  }
-
-  binding {
-    role    = "roles/iam.serviceAccountUser"
-    members = [
-      "serviceAccount:${google_service_account.factory_sa.email}",
-    ]
-  }
-
-  binding {
-    role    = "roles/clouddeploy.jobRunner"
-    members = [
-      "serviceAccount:${google_service_account.factory_sa.email}",
-    ]
-  }
-}
-*/

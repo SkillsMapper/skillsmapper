@@ -20,3 +20,8 @@ variable "skill_service_name" {
   type    = string
   default = "skill-service"
 }
+
+variable "profile_service_name" {
+  type    = string
+  default = "profile-service"
+}

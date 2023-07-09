@@ -21,3 +21,6 @@ In the management project created in the last chapter...
 * Assume dev and prod are different teams
 * Cloud Logging Logging Agent in the nginx?
 * Cloud Debugger (if still exists)
+
+
+Alerting: google_monitoring_alert_policy

@@ -2,8 +2,7 @@ displayName: $SERVICE_NAME ($MONITORED_PROJECT_ID)
 mosaicLayout:
   columns: 12
   tiles:
-    - height: 4
-      widget:
+    - widget:
         title: Container Instance Count
         xyChart:
           chartOptions:
@@ -30,9 +29,9 @@ mosaicLayout:
                 unitOverride: count
           xAxis:
             scale: LINEAR
+      height: 4
       width: 6
-    - height: 4
-      widget:
+    - widget:
         title: Request Latencies
         xyChart:
           chartOptions:
@@ -85,10 +84,10 @@ mosaicLayout:
                 unitOverride: ms
           xAxis:
             scale: LINEAR
+      height: 4
       width: 6
       xPos: 6
-    - height: 4
-      widget:
+    - widget:
         title: Request Count
         xyChart:
           chartOptions:
@@ -112,24 +111,33 @@ mosaicLayout:
                 unitOverride: count/s
           xAxis:
             scale: LINEAR
+      height: 4
       width: 6
       yPos: 4
-    - height: 4
-      widget:
-        title: Unsuccessful Request Percentage
-        scorecard:
-          gaugeView:
-            lowerBound: 0.0
-            upperBound: 1.0
-          timeSeriesQuery:
-            timeSeriesFilterRatio:
-              denominatorFilter: metric.type="run.googleapis.com/request_count" resource.type="cloud_run_revision" resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID" resource.labels.location="$REGION"
-              numeratorFilter: metric.type="run.googleapis.com/request_count" metric.label.response_code_class="5xx" resource.type="cloud_run_revision" resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID" resource.labels.location="$REGION"
-              secondaryAggregation: {}
-      width: 6
-      yPos: 8
-    - height: 4
-      widget:
+#    - widget:
+#        title: Unsuccessful Request Ratio
+#        xyChart:
+#          chartOptions:
+#            mode: COLOR
+#          dataSets:
+#            - timeSeriesQuery:
+#                timeSeriesFilterRatio:
+#                  numeratorFilter: metric.type="run.googleapis.com/request_count" metric.label.response_code_class=~"4.*|5.*" resource.type="cloud_run_revision" resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID" resource.labels.location="$REGION"
+#                  denominatorFilter: metric.type="run.googleapis.com/request_count" resource.type="cloud_run_revision" resource.labels.service_name="$SERVICE_NAME" resource.labels.project_id="$MONITORED_PROJECT_ID" resource.labels.location="$REGION"
+#                  secondaryAggregation: {}
+#              plotType: LINE
+#              minAlignmentPeriod: "60s"
+#              targetAxis: Y1
+#              legendTemplate: Unsuccessful Requests Ratio
+#          yAxis:
+#            - label: "Ratio"
+#              scale: LINEAR
+#        height: 4
+#        width: 6
+#        yPos: 4
+#        xPos: 6
+    - widget:
+        title: Cloud Run Logs
         logsPanel:
           filter: |-
             resource.type = "cloud_run_revision"
@@ -137,7 +145,6 @@ mosaicLayout:
             resource.labels.location="$REGION"
           resourceNames:
             - projects/$MONITORED_PROJECT_ID
-        title: Cloud Run Logs
       width: 12
-      xPos: 6
-      yPos: 4
+      height: 8
+      yPos: 8

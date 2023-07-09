@@ -1,5 +1,5 @@
 /.env
-!/skill-service/.env
+/skill-service/.env
 /fact-service-native/.env.yaml
 /user-interface/src/js/config.js
 /profile-service/.env
@@ -13,3 +13,7 @@
 /observatory/service-dashboard.yaml
 /skill-service/.env.cloudbuild
 /observatory/tag-dashboard.yaml
+/factory/terraform/.env.trigger
+/terraform/terraform.tfvars
+/terraform/.env.trigger
+/terraform/.env

@@ -1,4 +1,4 @@
-/*resource "google_cloud_scheduler_job" "job" {
+resource "google_cloud_scheduler_job" "job" {
   name             = var.job_name
   schedule         = "0 0 * * SUN"
   time_zone        = "GMT"
@@ -20,6 +20,6 @@
     google_project_service.cloudscheduler,
     google_cloudfunctions2_function.tags_updater_function
   ]
-}*/
+}
 
 
