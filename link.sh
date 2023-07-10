@@ -11,6 +11,7 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch08.asciidoc chapters/ch08.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch09.asciidoc chapters/ch09.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch10.asciidoc chapters/ch10.asciidoc
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch10b.asciidoc chapters/ch10b.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch11.asciidoc chapters/ch11.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch11a.asciidoc chapters/ch11a.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch12.asciidoc chapters/ch12.asciidoc
@@ -29,6 +30,7 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch05.asciidoc profile-service/chapter/ch05.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch09.asciidoc profile-service/chapter/ch09.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch10.asciidoc user-interface/chapter/ch10.asciidoc
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch10b.asciidoc citadel/chapter/ch10b.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch11.asciidoc factory/chapter/ch11.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch11a.asciidoc terraform/chapter/ch11a.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch04.asciidoc terraform/chapter/ch04.asciidoc
@@ -52,3 +54,9 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/continuous-integration.png chapters/images/continuous-integration.png
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/continuous-deployment.png chapters/images/continuous-deployment.png
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/loops.png chapters/images/loops.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-url-map.png chapters/images/chapter-6-url-map.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-neg.png chapters/images/chapter-6-neg.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-bg.png chapters/images/chapter-6-bg.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-fw.png chapters/images/chapter-6-fw.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-start.png chapters/images/chapter-6-start.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-solution.png chapters/images/chapter-6-solution.png
