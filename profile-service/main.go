@@ -93,12 +93,6 @@ func init() {
 	if err != nil {
 		log.Fatalf("Failed to create Firestore client: %v", err)
 	}
-	defer func(firestoreClient *firestore.Client) {
-		err := firestoreClient.Close()
-		if err != nil {
-			log.Fatalf("Failed to close Firestore client: %v", err)
-		}
-	}(firestoreClient)
 }
 
 func main() {
@@ -107,8 +101,7 @@ func main() {
 		port = "8080"
 	}
 	server := &http.Server{
-		Addr: ":" + port,
-		// Add some defaults, should be changed to suit your use case.
+		Addr:           ":" + port,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
@@ -384,6 +377,12 @@ func gracefulShutdown(server *http.Server) {
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
 		log.Printf("HTTP server shutdown error: %v", err)
+	}
+	if firestoreClient != nil {
+		err := firestoreClient.Close()
+		if err != nil {
+			log.Printf("Failed to close Firestore client: %v", err)
+		}
 	}
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
