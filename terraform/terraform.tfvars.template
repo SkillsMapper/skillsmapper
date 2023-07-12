@@ -1,0 +1,10 @@
+domain                = $DOMAIN
+region                = $REGION
+billing_account       = $BILLING_ACCOUNT_ID
+management_project_id = $MANAGEMENT_PROJECT_ID
+dev_project_id        = $DEV_PROJECT_ID
+api_key               = $API_KEY
+app_installation_id   = $APP_INSTALLATION_ID
+github_repo           = $GITHUB_REPO
+github_token          = $GITHUB_TOKEN
+

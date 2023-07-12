@@ -5,12 +5,16 @@ import (
 	"cloud.google.com/go/firestore"
 	"cloud.google.com/go/logging"
 	"context"
+	"contrib.go.opencensus.io/exporter/stackdriver"
+	"contrib.go.opencensus.io/exporter/stackdriver/propagation"
 	"encoding/base64"
 	"encoding/json"
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
 	"fmt"
 	"github.com/gorilla/mux"
+	"go.opencensus.io/plugin/ochttp"
+	"go.opencensus.io/trace"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -69,6 +73,16 @@ func init() {
 		projectID = projID
 	}
 
+	// Create and register a OpenCensus Stackdriver Trace exporter.
+	exporter, err := stackdriver.NewExporter(stackdriver.Options{
+		ProjectID: projectID,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	trace.RegisterExporter(exporter)
+	trace.ApplyConfig(trace.Config{DefaultSampler: trace.AlwaysSample()})
+
 	loggingClient, err := logging.NewClient(ctx, projectID,
 		option.WithoutAuthentication(),
 		option.WithGRPCDialOption(grpc.WithTransportCredentials(insecure.NewCredentials())))
@@ -106,6 +120,15 @@ func main() {
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
+
+	// Use an ochttp.Handler in order to instrument OpenCensus for incoming
+	// requests.
+	httpHandler := &ochttp.Handler{
+		// Use the Google Cloud propagation format.
+		Propagation: &propagation.HTTPFormat{},
+	}
+	server.Handler = httpHandler
+
 	r := mux.NewRouter()
 	isReady := &atomic.Value{}
 	isReady.Store(false)

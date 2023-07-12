@@ -14,7 +14,7 @@ if [ "${id_token}" == "null" ]; then
 fi
 
 # Replace with your Profile Builder Service URL
-PROFILE_SERVICE_URL=$(gcloud run services describe ${PROFILE_SERVICE_NAME} --format 'value(status.url)')
+PROFILE_SERVICE_URL=$(gcloud run services describe ${PROFILE_SERVICE_NAME} --region=${REGION} --format 'value(status.url)')
 echo "Profile Service URL: ${PROFILE_SERVICE_URL}"
 
 # Make the request to get the profile

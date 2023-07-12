@@ -32,6 +32,7 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch10.asciidoc user-interface/chapter/ch10.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch10b.asciidoc citadel/chapter/ch10b.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch11.asciidoc factory/chapter/ch11.asciidoc
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch11.asciidoc terraform/chapter/ch11.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch11a.asciidoc terraform/chapter/ch11a.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch04.asciidoc terraform/chapter/ch04.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch12.asciidoc observatory/chapter/ch12.asciidoc

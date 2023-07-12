@@ -1,5 +1,5 @@
 module "environment" {
-  source = "./modules/environment"
+  source     = "./modules/environment"
   depends_on = [module.management]
   providers = {
     google      = google.dev
