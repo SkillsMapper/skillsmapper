@@ -9,7 +9,12 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	texporter "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
 	"github.com/gorilla/mux"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -32,6 +37,7 @@ var (
 	objectName    string
 	logger        *logging.Logger
 	storageClient *storage.Client
+	tp            *sdktrace.TracerProvider
 )
 
 func init() {
@@ -67,6 +73,25 @@ func init() {
 			Payload:  fmt.Sprintf("failed to create storage client: %v", err)})
 		log.Fatalf("failed to create storage client: %v", err)
 	}
+
+	// set up OpenTelemetry
+	exporter, err := texporter.New(texporter.WithProjectID(projectID))
+	if err != nil {
+		log.Fatalf("texporter.New: %v", err)
+	}
+	// Identify your application using resource detection
+	res, err := resource.New(ctx,
+		resource.WithAttributes(semconv.ServiceNameKey.String(serviceName)),
+	)
+	if err != nil {
+		log.Fatalf("resource.New: %v", err)
+	}
+	// Create a new tracer provider with a batch span processor and the otlp exporter.
+	tp = sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(exporter),
+		sdktrace.WithResource(res),
+	)
+	otel.SetTracerProvider(tp)
 }
 
 func main() {
@@ -130,6 +155,11 @@ func gracefulShutdown(server *http.Server) {
 	if err := server.Shutdown(ctx); err != nil {
 		log.Printf("HTTP server shutdown error: %v", err)
 	}
+
+	if err := tp.ForceFlush(ctx); err != nil {
+		log.Printf("failed to flush spans: %v", err)
+	}
+
 	logger.Log(logging.Entry{
 		Severity: logging.Info,
 		Payload:  "shutdown complete"})
@@ -138,6 +168,12 @@ func gracefulShutdown(server *http.Server) {
 func autocompleteHandler(trie *autocomplete.Trie) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
+
+		ctx := r.Context()
+		tracer := otel.GetTracerProvider().Tracer("")
+		ctx, span := tracer.Start(ctx, "autocompleteHandler")
+		defer span.End()
+
 		// Get the prefix from the query string
 		prefix := r.URL.Query().Get("prefix")
 		if prefix == "" {
