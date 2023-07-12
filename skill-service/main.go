@@ -171,7 +171,7 @@ func autocompleteHandler(trie *autocomplete.Trie) func(w http.ResponseWriter, r 
 
 		ctx := r.Context()
 		tracer := otel.GetTracerProvider().Tracer("")
-		ctx, span := tracer.Start(ctx, "autocompleteHandler")
+		_, span := tracer.Start(ctx, "autocompleteHandler")
 		defer span.End()
 
 		// Get the prefix from the query string
