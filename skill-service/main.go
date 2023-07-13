@@ -174,7 +174,8 @@ func autocompleteHandler(trie *autocomplete.Trie) func(w http.ResponseWriter, r 
 		start := time.Now()
 
 		ctx := r.Context()
-		tracer := otel.GetTracerProvider().Tracer("")
+		traceContext := r.Header.Get("X-Cloud-Trace-Context")
+		tracer := otel.GetTracerProvider().Tracer(traceContext)
 		tracerCtx, span := tracer.Start(ctx, "autocomplete")
 		defer span.End()
 
