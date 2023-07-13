@@ -33,11 +33,11 @@ type autocompleteResponse struct {
 }
 
 var (
-	bucketName    string
-	objectName    string
-	logger        *logging.Logger
-	storageClient *storage.Client
-	tp            *sdktrace.TracerProvider
+	bucketName     string
+	objectName     string
+	logger         *logging.Logger
+	storageClient  *storage.Client
+	tracerProvider *sdktrace.TracerProvider
 )
 
 func init() {
@@ -79,19 +79,21 @@ func init() {
 	if err != nil {
 		log.Fatalf("texporter.New: %v", err)
 	}
-	// Identify your application using resource detection
+
+	// Identify the application using resource detection
 	res, err := resource.New(ctx,
 		resource.WithAttributes(semconv.ServiceNameKey.String(serviceName)),
 	)
 	if err != nil {
 		log.Fatalf("resource.New: %v", err)
 	}
+
 	// Create a new tracer provider with a batch span processor and the otlp exporter.
-	tp = sdktrace.NewTracerProvider(
+	tracerProvider = sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exporter),
 		sdktrace.WithResource(res),
 	)
-	otel.SetTracerProvider(tp)
+	otel.SetTracerProvider(tracerProvider)
 }
 
 func main() {
@@ -150,13 +152,15 @@ func gracefulShutdown(server *http.Server) {
 		Severity: logging.Info,
 		Payload:  "shutdown initiated"})
 
+	// We received an interrupt signal, shut down the server gracefully
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
 		log.Printf("HTTP server shutdown error: %v", err)
 	}
 
-	if err := tp.ForceFlush(ctx); err != nil {
+	// Force a flush of all finished spans.
+	if err := tracerProvider.ForceFlush(ctx); err != nil {
 		log.Printf("failed to flush spans: %v", err)
 	}
 
@@ -171,7 +175,7 @@ func autocompleteHandler(trie *autocomplete.Trie) func(w http.ResponseWriter, r 
 
 		ctx := r.Context()
 		tracer := otel.GetTracerProvider().Tracer("")
-		_, span := tracer.Start(ctx, "autocompleteHandler")
+		tracerCtx, span := tracer.Start(ctx, "autocomplete")
 		defer span.End()
 
 		// Get the prefix from the query string
@@ -181,7 +185,9 @@ func autocompleteHandler(trie *autocomplete.Trie) func(w http.ResponseWriter, r 
 			return
 		}
 
+		_, searchSpan := tracer.Start(tracerCtx, "autocomplete:search")
 		results := trie.Search(prefix, 10)
+		searchSpan.End()
 
 		// Return the results as a JSON response
 		response := autocompleteResponse{Results: results}
