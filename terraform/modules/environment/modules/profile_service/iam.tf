@@ -10,9 +10,15 @@ resource "google_project_iam_member" "project" {
   member  = "serviceAccount:${google_service_account.profile_service_sa.email}"
 }
 
-resource "google_project_iam_member" "skill_service_log_writer" {
+resource "google_project_iam_member" "profile_service_log_writer" {
   project = var.project_id
   role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.profile_service_sa.email}"
+}
+
+resource "google_project_iam_member" "profile_service_cloudtrace_agent" {
+  project = var.project_id
+  role    = "roles/cloudtrace.agent"
   member  = "serviceAccount:${google_service_account.profile_service_sa.email}"
 }
 

@@ -10,6 +10,12 @@ resource "google_project_iam_member" "fact_service_sql_client" {
   member  = "serviceAccount:${google_service_account.fact_service_sa.email}"
 }
 
+resource "google_project_iam_member" "fact_service_cloudtrace_agent" {
+  project = var.project_id
+  role    = "roles/cloudtrace.agent"
+  member  = "serviceAccount:${google_service_account.fact_service_sa.email}"
+}
+
 resource "google_secret_manager_secret_iam_member" "fact_service_secret_accessor" {
   secret_id  = google_secret_manager_secret.secret.id
   role       = "roles/secretmanager.secretAccessor"
