@@ -18,3 +18,4 @@
 /terraform/.env.trigger
 /terraform/.env
 /citadel/.env
+.DS_Store
