@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# This script creates symbolic links to the chapters in the main book repository.
 # Chapters
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch01.asciidoc chapters/ch01.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch02.asciidoc chapters/ch02.asciidoc
