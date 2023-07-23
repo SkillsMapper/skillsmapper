@@ -27,7 +27,7 @@ export SKILL_SERVICE_NAME=[SKILL_SERVICE_NAME]
 Then create a `.env.yaml` file from the `.env.yaml.template`:
 
 ```shell
-envsubst < .env.yaml.template > .env.yaml
+envsubst < env.yaml.template > .env.yaml
 
 ### Create and Configure a Service Account
 

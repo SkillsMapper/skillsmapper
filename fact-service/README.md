@@ -131,7 +131,7 @@ export FACT_SERVICE_NAME='[FACT_SERVICE_NAME]'
 Then create a `.env.yaml` file from the `.env.yaml.template`:
 
 ```shell
-envsubst < .env.yaml.template > .env.yaml
+envsubst < env.yaml.template > .env.yaml
 ```
 
 Deploy to Cloud Run:

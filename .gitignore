@@ -19,3 +19,5 @@
 /terraform/.env
 /citadel/.env
 .DS_Store
+/tag-updater/env.yaml
+/tag-updater/scripts/source/source.zip
