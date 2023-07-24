@@ -162,3 +162,4 @@ terraform.rc
 /.env.yaml
 /k8s/configmap.yaml
 /fact-service-sa.json
+/env.yaml
