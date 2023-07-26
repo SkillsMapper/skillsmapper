@@ -21,3 +21,4 @@
 .DS_Store
 /tag-updater/env.yaml
 /tag-updater/scripts/source/source.zip
+/profile-service/env.yaml
