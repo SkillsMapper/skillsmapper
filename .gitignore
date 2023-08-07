@@ -23,3 +23,6 @@
 /tag-updater/scripts/source/source.zip
 /profile-service/env.yaml
 /profile-service/examples/fact-changed.json
+/scaling/k8s/deployment.yaml
+/scaling/k8s/serviceaccount.yaml
+/observatory/dashboard.yaml
