@@ -1,0 +1,12 @@
+{
+  "filter": "resource.labels.service_name=skill-service AND jsonPayload.message=~\"loaded.*tags\"",
+  "metricDescriptor": {
+    "metricKind": "DELTA",
+    "name": "projects/$MONITORED_PROJECT_ID/metricDescriptors/logging.googleapis.com/user/num_tags_loaded",
+    "type": "logging.googleapis.com/user/tags_loaded_invocation_count",
+    "unit": "1",
+    "valueType": "INT64"
+  },
+  "name": "tags_loaded_invocation_count",
+  "description": "Count of the number of times loaded tags is invoked",
+}

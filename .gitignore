@@ -26,3 +26,5 @@
 /scaling/k8s/deployment.yaml
 /scaling/k8s/serviceaccount.yaml
 /observatory/dashboard.yaml
+/observatory/tags-loaded-invocation-count.json
+/observatory/tags-loaded-number-of-tags.json
