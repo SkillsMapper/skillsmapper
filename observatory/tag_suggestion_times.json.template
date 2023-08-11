@@ -1,0 +1,20 @@
+{
+  "bucketOptions": {
+    "exponentialBuckets": {
+      "growthFactor": 2.0,
+      "numFiniteBuckets": 64,
+      "scale": 0.01
+    }
+  },
+  "filter": "resource.labels.service_name=skill-service AND jsonPayload.message=~\"autocomplete for *\"",
+  "metricDescriptor": {
+    "metricKind": "DELTA",
+    "name": "projects/$MONITORED_PROJECT_ID/metricDescriptors/logging.googleapis.com/user/tag_suggestion_times",
+    "type": "logging.googleapis.com/user/tag_suggestion_times",
+    "unit": "1",
+    "valueType": "DISTRIBUTION"
+  },
+  "name": "tag_suggestion_times",
+  "description": "The times to produce suggestions",
+  "valueExtractor": "REGEXP_EXTRACT(jsonPayload.message, \"took\\\\s(\\\\d+\\\\.\\\\d+)\")"
+}

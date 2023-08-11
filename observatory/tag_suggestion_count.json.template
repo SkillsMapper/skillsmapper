@@ -1,0 +1,12 @@
+{
+  "filter": "resource.labels.service_name=skill-service AND jsonPayload.message=~\"autocomplete for *\"",
+  "metricDescriptor": {
+    "metricKind": "DELTA",
+    "name": "projects/$MONITORED_PROJECT_ID/metricDescriptors/logging.googleapis.com/user/num_tags_loaded",
+    "type": "logging.googleapis.com/user/tag_suggestion_count",
+    "unit": "1",
+    "valueType": "INT64"
+  },
+  "name": "tag_suggestion_count",
+  "description": "The number of times suggestions are given",
+}
