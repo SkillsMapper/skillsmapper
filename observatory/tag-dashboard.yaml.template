@@ -1,4 +1,4 @@
-displayName: $SERVICE_NAME performance ($MONITORED_PROJECT_ID)
+displayName: $SERVICE_NAME performance ($TARGET_PROJECT_ID)
 mosaicLayout:
   columns: 12
   tiles:

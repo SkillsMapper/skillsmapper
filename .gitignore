@@ -12,7 +12,7 @@
 /factory/terraform/secrets/github-token.txt
 /observatory/service-dashboard.yaml
 /skill-service/.env.cloudbuild
-/observatory/tag-dashboard.yaml
+/observatory/old/tag-dashboard.yaml
 /factory/terraform/.env.trigger
 /terraform/terraform.tfvars
 /terraform/.env.trigger
@@ -25,6 +25,9 @@
 /profile-service/examples/fact-changed.json
 /scaling/k8s/deployment.yaml
 /scaling/k8s/serviceaccount.yaml
-/observatory/dashboard.yaml
+/observatory/old/dashboard.yaml
 /observatory/tags-loaded-invocation-count.json
 /observatory/tags-loaded-number-of-tags.json
+/observatory/tag-dashboard.yaml
+/observatory/tag_suggestion_count.json
+/observatory/tag_suggestion_times.json
