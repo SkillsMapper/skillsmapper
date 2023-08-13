@@ -31,3 +31,7 @@
 /observatory/tag-dashboard.yaml
 /observatory/tag_suggestion_count.json
 /observatory/tag_suggestion_times.json
+/observatory/tags_loaded_number.json
+/observatory/email_notification_channel.yaml
+/observatory/tags_loaded_number_alert.yaml
+/observatory/tags_loaded_number_alert.json

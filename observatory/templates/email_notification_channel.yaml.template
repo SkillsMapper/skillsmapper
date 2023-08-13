@@ -1,0 +1,4 @@
+type: email
+displayName: "Email Notification Channel"
+labels:
+  email_address: $NOTIFICATION_EMAIL_ADDRESS

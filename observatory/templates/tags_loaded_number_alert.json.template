@@ -1,0 +1,33 @@
+{
+  "displayName": "Tags loaded number alert",
+  "userLabels": {},
+  "conditions": [
+    {
+      "displayName": "logging/user/tags_loaded_number",
+      "conditionThreshold": {
+        "filter": "resource.type = \"aws_ec2_instance\" AND metric.type = \"logging.googleapis.com/user/tags_loaded_number\"",
+        "aggregations": [
+          {
+            "alignmentPeriod": "60s",
+            "crossSeriesReducer": "REDUCE_NONE",
+            "perSeriesAligner": "ALIGN_PERCENTILE_50"
+          }
+        ],
+        "comparison": "COMPARISON_LT",
+        "duration": "0s",
+        "trigger": {
+          "count": 1
+        },
+        "thresholdValue": 10
+      }
+    }
+  ],
+  "alertStrategy": {
+    "autoClose": "604800s"
+  },
+  "combiner": "OR",
+  "enabled": true,
+  "notificationChannels": [
+    "projects/${MANAGEMENT_PROJECT_ID}/notificationChannels/${NOTIFICATION_CHANNEL_ID}"
+  ]
+}

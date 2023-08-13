@@ -1,5 +1,4 @@
 {
-  "bucketName": "projects/$MONITORED_PROJECT_ID/locations/global/buckets/_Default",
   "bucketOptions": {
     "exponentialBuckets": {
       "growthFactor": 2.0,
@@ -10,12 +9,12 @@
   "filter": "resource.labels.service_name=skill-service AND jsonPayload.message=~\"loaded.*tags\"",
   "metricDescriptor": {
     "metricKind": "DELTA",
-    "name": "projects/$MONITORED_PROJECT_ID/metricDescriptors/logging.googleapis.com/user/num_tags_loaded",
-    "type": "logging.googleapis.com/user/tags_loaded_number_of_tags",
+    "name": "projects/$MONITORED_PROJECT_ID/metricDescriptors/logging.googleapis.com/user/tags_loaded_number",
+    "type": "logging.googleapis.com/user/tags_loaded_number",
     "unit": "1",
     "valueType": "DISTRIBUTION"
   },
-  "name": "tags_loaded_number_of_tags",
+  "name": "tags_loaded_number",
   "description": "The number of tags loaded",
   "valueExtractor": "REGEXP_EXTRACT(jsonPayload.message, \"loaded ([0-9]+) tags\")"
 }
