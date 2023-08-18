@@ -8,11 +8,11 @@ variable "management_project_name" {
   type    = string
 }
 
-variable "dev_project_id" {
+variable "application_project_id" {
   type = string
 }
 
-variable "dev_project_name" {
+variable "application_project_name" {
   default = "SkillsMapper Development"
   type    = string
 }

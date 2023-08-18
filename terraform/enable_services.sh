@@ -6,7 +6,7 @@ gcloud services enable \
   run.googleapis.com \
   --project=${MANAGEMENT_PROJECT_ID}
 
-echo "Enabling services for project ${DEV_PROJECT_ID}"
+echo "Enabling services for project ${APPLICATION_PROJECT_ID}"
 gcloud services enable \
   apigateway.googleapis.com \
   artifactregistry.googleapis.com \
@@ -23,4 +23,4 @@ gcloud services enable \
   servicecontrol.googleapis.com \
   servicenetworking.googleapis.com \
   sqladmin.googleapis.com \
-  --project=${DEV_PROJECT_ID}
+  --project=${APPLICATION_PROJECT_ID}

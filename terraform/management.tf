@@ -2,7 +2,7 @@ module "management" {
   source                     = "./modules/management"
   app_installation_id        = var.app_installation_id
   github_repo                = var.github_repo
-  dev_project_id             = var.dev_project_id
+  dev_project_id             = var.application_project_id
   project_id                 = var.management_project_id
   region                     = var.region
   service_names              = var.service_names

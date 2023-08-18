@@ -26,7 +26,7 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch09.asciidoc skill-service/chapter/ch09.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch06.asciidoc skill-service/chapter/ch06.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch07.asciidoc fact-service/chapter/ch07.asciidoc
-ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch14.asciidoc fact-service-agnostic/chapter/ch14.asciidoc
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch14.asciidoc scaling/chapter/ch14.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch09.asciidoc profile-service/chapter/ch09.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch08.asciidoc profile-service/chapter/ch08.asciidoc
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/ch10.asciidoc user-interface/chapter/ch10.asciidoc
@@ -55,9 +55,9 @@ ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/continuous-integration.png chapters/images/continuous-integration.png
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/continuous-deployment.png chapters/images/continuous-deployment.png
 ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/loops.png chapters/images/loops.png
-ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-url-map.png chapters/images/chapter-6-url-map.png
-ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-neg.png chapters/images/chapter-6-neg.png
-ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-bg.png chapters/images/chapter-6-bg.png
-ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-fw.png chapters/images/chapter-6-fw.png
-ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-start.png chapters/images/chapter-6-start.png
-ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/chapter-6-solution.png chapters/images/chapter-6-solution.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/citadel-url-map.png chapters/images/citadel-url-map.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/citadel-neg.png chapters/images/citadel-neg.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/citadel-bg.png chapters/images/citadel-bg.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/citadel-fw.png chapters/images/citadel-fw.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/citadel-start.png chapters/images/citadel-start.png
+ln -s -f /Users/danielvaughan/Development/git/book/cloud-native-development-with-google-cloud/images/citadel-solution.png chapters/images/citadel-solution.png

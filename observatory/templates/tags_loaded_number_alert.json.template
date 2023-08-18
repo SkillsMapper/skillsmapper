@@ -1,11 +1,15 @@
 {
-  "displayName": "Tags loaded number alert",
+  "displayName": "Number of tags loaded lower than expected",
+  "documentation": {
+    "content": "Normally we would expect approximately 65,000 tags to be loaded by the skill-service in the region. On this occasion, less than ten thousand tags were loaded. This means something has gone wrong. For example, the tag.csv file was not fully loaded, or the tags.csv file contained less than ten thousand tags. In this case, investigate the tag-updater cloud function.",
+    "mimeType": "text/markdown"
+  },
   "userLabels": {},
   "conditions": [
     {
       "displayName": "logging/user/tags_loaded_number",
       "conditionThreshold": {
-        "filter": "resource.type = \"aws_ec2_instance\" AND metric.type = \"logging.googleapis.com/user/tags_loaded_number\"",
+        "filter": "resource.type = \"cloud_run_revision\" AND metric.type = \"logging.googleapis.com/user/tags_loaded_number\"",
         "aggregations": [
           {
             "alignmentPeriod": "60s",
@@ -18,7 +22,7 @@
         "trigger": {
           "count": 1
         },
-        "thresholdValue": 10
+        "thresholdValue": 60000
       }
     }
   ],
