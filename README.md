@@ -1,4 +1,8 @@
-# SkillsMapper
+# Skills Mapper
+
+[![](./logo/small-black.png)
+
+
 
 This repository contains the code for the book [Programming Cloud Native Applications with Google Cloud](https://www.oreilly.com/library/view/programming-cloud-native/9781098145071/) for technical review.
 
