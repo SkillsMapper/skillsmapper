@@ -128,3 +128,27 @@ variable "cloudbuild_connection_name" {
   default = "skillsmapper-github-connection"
   type    = string
 }
+
+variable "skill_service_max_instances" {
+  default = "5"
+}
+
+variable "skill_service_min_instances" {
+  default = "1"
+}
+
+variable "profile_service_min_instances" {
+  default = "0"
+}
+
+variable "profile_service_max_instances" {
+  default = "5"
+}
+
+variable "fact_service_min_instances" {
+  default = "1"
+}
+
+variable "fact_service_max_instances" {
+  default = "3"
+}

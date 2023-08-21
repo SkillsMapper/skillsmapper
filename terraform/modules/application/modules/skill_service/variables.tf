@@ -29,3 +29,10 @@ variable "skill_service_version" {
 variable "container_repo" {
   type = string
 }
+
+variable "max_instances" {
+  type = string
+}
+variable "min_instances" {
+  type = string
+}

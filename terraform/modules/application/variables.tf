@@ -92,6 +92,31 @@ variable "container_repo" {
 variable "fact_database_name" {
   type = string
 }
+
 variable "fact_database_user" {
+  type = string
+}
+
+variable "skill_service_max_instances" {
+  type = string
+}
+
+variable "skill_service_min_instances" {
+  type = string
+}
+
+variable "fact_service_max_instances" {
+  type = string
+}
+
+variable "fact_service_min_instances" {
+  type = string
+}
+
+variable "profile_service_max_instances" {
+  type = string
+}
+
+variable "profile_service_min_instances" {
   type = string
 }

@@ -1,3 +1,5 @@
 {
+    "extends": "@markdownlint/style",
+    "glob": "**/*.md",
     "MD013": false
 }

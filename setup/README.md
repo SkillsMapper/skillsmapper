@@ -1,8 +1,8 @@
 # Setup
 
-This is a summary of [Chapter S1](../chapters/ch05.asciidoc). 
+This is a summary of [Chapter 4](../chapters/ch04.asciidoc). 
 
-It may be out of date. Please use the chapter rather than this README if you have access.
+It may be out of date. Please use the chapter rather than this  page if you have access.
 
 ## Prerequisites
 
@@ -31,9 +31,7 @@ export PROJECT_ID=[PROJECT_ID]
 Alternatively set `PROJECT_ID` in `.env` file and then apply it using:
 
 ```shell
-set -a # automatically export all variables
-source .env
-set +a
+set -a; source .env; set +a
 ```
 
 Create the new project:
@@ -50,7 +48,7 @@ gcloud config set project $PROJECT_ID
 
 ## Enable Billing
 
-Find the `ACCOUNT_ID` of the open billing account you would like to use:
+Find the `ACCOUNT_ID` of an active billing account you would like to use:
 
 ```shell
 gcloud beta billing accounts list
@@ -66,16 +64,4 @@ Link the Billing Account to the Project:
 
 ```shell
 gcloud beta billing projects link $PROJECT_ID --billing-account $BILLING_ACCOUNT_ID
-```
-
-## Setup Cloud Source Repositories
-
-Clone this project to your Cloud Repo
-
-## Setup Cloud Workstations
-
-Enable the Cloud Workstation API:
-
-```shell
-gcloud beta services enable workstation.googleapis.com
 ```

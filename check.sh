@@ -1,2 +1,2 @@
 #!/bin/bash
-markdownlint *.md
+markdownlint **/*.md

@@ -3,6 +3,12 @@ resource "google_cloud_run_service" "profile_service" {
   location = var.region
 
   template {
+    metadata {
+      annotations = {
+        "autoscaling.knative.dev/maxScale" = var.max_instances
+        "autoscaling.knative.dev/minScale" = var.min_instances
+      }
+    }
     spec {
       service_account_name = google_service_account.profile_service_sa.email
       containers {

@@ -4,6 +4,12 @@ resource "google_cloud_run_service" "skill_service" {
   location   = var.region
 
   template {
+    metadata {
+      annotations = {
+        "autoscaling.knative.dev/maxScale" = var.max_instances
+        "autoscaling.knative.dev/minScale" = var.min_instances
+      }
+    }
     spec {
       service_account_name = google_service_account.skill_service_sa.email
       containers {
@@ -30,7 +36,6 @@ resource "google_cloud_run_service" "skill_service" {
       }
     }
   }
-
   traffic {
     percent         = 100
     latest_revision = true

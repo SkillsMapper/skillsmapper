@@ -37,6 +37,8 @@ resource "google_cloud_run_service" "fact_service" {
     metadata {
       annotations = {
         "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.instance.connection_name
+        "autoscaling.knative.dev/maxScale"      = var.max_instances
+        "autoscaling.knative.dev/minScale"      = var.min_instances
       }
     }
   }

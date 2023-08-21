@@ -22,6 +22,12 @@ module "application" {
   profile_database_name   = var.profile_database_name
   fact_database_name      = var.fact_database_name
   fact_database_user      = var.fact_database_user
+  skill_service_max_instances = var.skill_service_max_instances
+  skill_service_min_instances = var.skill_service_min_instances
+  fact_service_max_instances = var.fact_service_max_instances
+  fact_service_min_instances = var.fact_service_min_instances
+  profile_service_max_instances = var.profile_service_max_instances
+  profile_service_min_instances = var.profile_service_min_instances
 }
 
 provider "google" {

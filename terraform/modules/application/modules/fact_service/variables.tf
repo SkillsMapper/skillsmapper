@@ -58,3 +58,11 @@ variable "container_repo" {
 variable "fact_database_user" {
   type = string
 }
+
+variable "max_instances" {
+  type = string
+}
+
+variable "min_instances" {
+  type = string
+}

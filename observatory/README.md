@@ -1,7 +1,3 @@
-# Chapter 12 — Observatory
+# Observatory
 
-## Prerequisites
-
-```shell
-set -a; source ../.env; source .env; set +a
-```
+This is the code for the _Observatory_ used in [Chapter 13](../chapters/ch13.asciidoc) of the book [Cloud Native Development with Google Cloud](https://www.oreilly.com/library/view/cloud-native-development/9781098145071/).

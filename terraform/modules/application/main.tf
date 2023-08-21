@@ -42,6 +42,8 @@ module "skill_service" {
   skill_service_version = data.external.git_commit.result.sha
   container_repo        = var.container_repo
   depends_on            = [module.tag_updater]
+  max_instances         = var.skill_service_max_instances
+  min_instances         = var.skill_service_min_instances
 }
 
 module "fact_service" {
@@ -59,6 +61,8 @@ module "fact_service" {
   depends_on            = [module.skill_service]
   fact_database_name    = var.fact_database_name
   fact_database_user    = var.fact_database_user
+  max_instances         = var.fact_service_max_instances
+  min_instances         = var.fact_service_min_instances
 }
 
 module "profile_service" {
@@ -76,6 +80,8 @@ module "profile_service" {
   container_repo            = var.container_repo
   depends_on                = [module.fact_service]
   profile_database_name     = var.profile_database_name
+  max_instances             = var.profile_service_max_instances
+  min_instances             = var.profile_service_min_instances
 }
 
 module "user_interface" {

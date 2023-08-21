@@ -1,35 +1,37 @@
-# Skills Mapper
+# SkillsMapper
 
-[![](./logo/small-black.png)
+![SkillsMapper Logo](./logo/small-black.png)
 
+This repository contains the code to accompany the
+book [Cloud Native Development with Google Cloud](https://www.oreilly.com/library/view/cloud-native-development/9781098145071/).
 
+It is recommended that you read the book before attempting to use this repository. Please see the [book's website](https://cloudnativegcp.com) for more information about the book.
 
-This repository contains the code for the book [Programming Cloud Native Applications with Google Cloud](https://www.oreilly.com/library/view/programming-cloud-native/9781098145071/) for technical review.
+## Getting Started
 
-For technical reviewer instructions see: [REVIEWERS.md](./REVIEWERS.md). 
+To get started, please see Chapter 4 - Preparing Google Cloud in the book. However there is a brief summary in [README.md](./setup/README.md).
 
-## Pre-requisites (Start here)
+## Code by Chapter
 
-### Chapter 5 - [Setup](./chapters/ch05.asciidoc)
+### Projects
 
-These are the basics of setting up a project on Google Cloud to use for deployment of the projects. It assumes the reader already has a Google Cloud account. It also introduces the projects and some key Google Cloud concepts that are used throughout the project chapters.
+* *[Chapter 5](./chapters/ch05.asciidoc)* - Project 1 - [Tag Updater](./tag-updater/README.md)
+* *[Chapter 6](./chapters/ch06.asciidoc)* - Project 2 - [Skill Service](./skill-service/README.md)
+* *[Chapter 7](./chapters/ch07.asciidoc)* - Project 3 - [Fact Service](./fact-service/README.md)
+* *[Chapter 8](./chapters/ch08.asciidoc)* - Project 4 - [Profile Service](./profile-service/README.md)
+* *[Chapter 9](./chapters/ch09.asciidoc)* - Project 5 - [User Interface](./user-interface/README.md)
 
-## Projects
+### Facilities
 
-Please follow the projects in order as they build on each other.
+* *[Chapter 10](./chapters/ch10.asciidoc)* - [Laboratory](./laboratory/README.md)
+* *[Chapter 11](./chapters/ch11.asciidoc)* - [Citadel](./citadel/README.md)
+* *[Chapter 12](./chapters/ch12.asciidoc)* - [Factory](./factory/README.md)
+* *[Chapter 13](./chapters/ch13.asciidoc)* - [Observatory](./observatory/README.md)
 
-### Chapter 6 - Project 1 [Tag Updater](./tag-updater) (Ready for testing)
-### Chapter 7 - Project 2 [Skill Lookup](./skill-service) (Ready for testing)
-### Chapter 8a - Project 3 [Fact Service](./fact-service) (Ready for testing)
-### Chapter 8b - Project 4 [Fact Service - Agnostic](./scaling) (Ready for testing)
-### Chapter 9 - Project 5 [Profile Builder](./profile-service) (Ready for testing)
-### Chapter 10 - Project 6 [User Interface](./user-interface) (Ready for testing)
+### Extra
 
-## Facilities
-
-1. [Laboratory](./laboratory/README.md) (Not started)
-2. [Factory](./factory/README.md) (In Progress)
-3. [Citadel](./citadel/README.md) (In Progress)
+* *[Chapter 14](./chapters/ch14.asciidoc)* - [Scaling](./scaling/README.md)
+* *[Appendix](./chapters/appendix.asciidoc)* - [Terraform](./terraform/README.md)
 
 ## Standards
 
