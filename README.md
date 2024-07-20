@@ -15,23 +15,23 @@ To get started, please see Chapter 4 - Preparing Google Cloud in the book. Howev
 
 ### Projects
 
-* *Chapter 5* - Project 1 - [Tag Updater](./tag-updater)
-* *Chapter 6* - Project 2 - [Skill Service](./skill-service)
-* *Chapter 7* - Project 3 - [Fact Service](./fact-service)
-* *Chapter 8* - Project 4 - [Profile Service](./profile-service)
-* *Chapter 9* - Project 5 - [User Interface](./user-interface)
+* **Chapter 5** - Project 1 - [Tag Updater](./tag-updater)
+* **Chapter 6** - Project 2 - [Skill Service](./skill-service)
+* **Chapter 7** - Project 3 - [Fact Service](./fact-service)
+* **Chapter 8** - Project 4 - [Profile Service](./profile-service)
+* **Chapter 9** - Project 5 - [User Interface](./user-interface)
 
 ### Facilities
 
-* *Chapter 10* - [Laboratory](./laboratory)
-* *Chapter 11* - [Citadel](./citadel)
-* *Chapter 12* - [Factory](./factory)
-* *Chapter 13* - [Observatory](./observatory)
+* **Chapter 10** - [Laboratory](./laboratory)
+* **Chapter 11** - [Citadel](./citadel)
+* **Chapter 12** - [Factory](./factory)
+* **Chapter 13** - [Observatory](./observatory)
 
 ### Extra
 
-* *Chapter 14 - [Scaling](./scaling)
-* *Appendix* - [Terraform](./terraform)
+* **Chapter 14** - [Scaling](./scaling)
+* **Appendix** - [Terraform](./terraform)
 
 ## Standards
 
