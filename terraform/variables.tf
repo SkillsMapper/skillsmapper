@@ -13,7 +13,7 @@ variable "application_project_id" {
 }
 
 variable "application_project_name" {
-  default = "SkillsMapper Development"
+  default = "SkillsMapper Application"
   type    = string
 }
 

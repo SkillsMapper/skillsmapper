@@ -15,23 +15,23 @@ To get started, please see Chapter 4 - Preparing Google Cloud in the book. Howev
 
 ### Projects
 
-* *[Chapter 5](./chapters/ch05.asciidoc)* - Project 1 - [Tag Updater](./tag-updater)
-* *[Chapter 6](./chapters/ch06.asciidoc)* - Project 2 - [Skill Service](./skill-service)
-* *[Chapter 7](./chapters/ch07.asciidoc)* - Project 3 - [Fact Service](./fact-service)
-* *[Chapter 8](./chapters/ch08.asciidoc)* - Project 4 - [Profile Service](./profile-service)
-* *[Chapter 9](./chapters/ch09.asciidoc)* - Project 5 - [User Interface](./user-interface)
+* *Chapter 5* - Project 1 - [Tag Updater](./tag-updater)
+* *Chapter 6* - Project 2 - [Skill Service](./skill-service)
+* *Chapter 7* - Project 3 - [Fact Service](./fact-service)
+* *Chapter 8* - Project 4 - [Profile Service](./profile-service)
+* *Chapter 9* - Project 5 - [User Interface](./user-interface)
 
 ### Facilities
 
-* *[Chapter 10](./chapters/ch10.asciidoc)* - [Laboratory](./laboratory)
-* *[Chapter 11](./chapters/ch11.asciidoc)* - [Citadel](./citadel)
-* *[Chapter 12](./chapters/ch12.asciidoc)* - [Factory](./factory)
-* *[Chapter 13](./chapters/ch13.asciidoc)* - [Observatory](./observatory)
+* *Chapter 10* - [Laboratory](./laboratory)
+* *Chapter 11* - [Citadel](./citadel)
+* *Chapter 12* - [Factory](./factory)
+* *Chapter 13* - [Observatory](./observatory)
 
 ### Extra
 
-* *[Chapter 14](./chapters/ch14.asciidoc)* - [Scaling](./scaling)
-* *[Appendix](./chapters/appendix.asciidoc)* - [Terraform](./terraform)
+* *Chapter 14 - [Scaling](./scaling)
+* *Appendix* - [Terraform](./terraform)
 
 ## Standards
 

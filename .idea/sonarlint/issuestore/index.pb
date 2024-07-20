@@ -150,3 +150,9 @@ F
 chapters/ch12.asciidoc,c/7/c7db7b0e202f65d770ea0c259914e1128c0f65e6
 P
  chapters/quiz_questions.asciidoc,c/9/c98e802cbf60206e04516aa97c064477f3abc864
+Z
+*terraform/modules/application/variables.tf,5/8/582e34608a4009f2c9d890602ed5099da6fb54cb
+F
+terraform/variables.tf,0/1/01d84c99873568e2425a17dfd3c2507334c283f1
+K
+setup/chapter/ch04.asciidoc,c/a/caa3a8fca687a1a92ac0b887b4f40beaa6444369
